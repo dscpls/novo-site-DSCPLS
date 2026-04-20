@@ -288,16 +288,16 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
 
           {/* CHANNELS */}
           <div className={`absolute inset-0 z-1 w-full h-full ${channel === 1 ? 'flex' : 'hidden'} flex-col justify-center items-center bg-[repeating-linear-gradient(90deg,#fff_0,#fff_14.2%,#ffed00_14.2%,#ffed00_28.4%,#0ff_28.4%,#0ff_42.6%,#0f0_42.6%,#0f0_56.8%,#f0f_56.8%,#f0f_71%,#f00_71%,#f00_85.2%,#00f_85.2%,#00f_100%)]`}>
-            <h1 className="bg-black text-white py-4 px-12 text-6xl text-center tracking-[10px] animate-[jit2_0.1s_infinite]">LIXO BRASILEIRO<br/>VOCÊ ESTÁ SINTONIZADO</h1>
+            <h1 className="bg-black text-white py-2 md:py-4 px-4 md:px-12 text-3xl md:text-6xl text-center tracking-[5px] md:tracking-[10px] animate-[jit2_0.1s_infinite]">LIXO BRASILEIRO<br/>VOCÊ ESTÁ SINTONIZADO</h1>
           </div>
 
           <div className={`absolute inset-0 z-1 w-full h-full ${channel === 2 ? 'flex' : 'hidden'} flex-col justify-center items-center bg-[#111]`}>
             {channel === 2 && <BrigasFuteisGame />}
           </div>
 
-          <div className={`absolute inset-0 z-1 w-full h-full ${channel === 3 ? 'flex' : 'hidden'} flex-col items-start justify-start p-[5%_10%] bg-[#0000aa] text-white text-3xl`}>
-            <div className={`absolute top-[5%] right-[5%] text-5xl ${audioPlaying ? 'animate-[blk_1s_infinite]' : ''}`}>{audioPlaying ? 'PLAY' : 'STOP'}</div>
-            <ul className="list-none mt-[10vh] w-full space-y-2">
+          <div className={`absolute inset-0 z-1 w-full h-full ${channel === 3 ? 'flex' : 'hidden'} flex-col items-start justify-start p-[5%_10%] bg-[#0000aa] text-white text-xl md:text-3xl overflow-y-auto pb-20`}>
+            <div className={`absolute top-[5%] md:top-[8%] right-[5%] text-2xl md:text-5xl ${audioPlaying ? 'animate-[blk_1s_infinite]' : ''}`}>{audioPlaying ? 'PLAY' : 'STOP'}</div>
+            <ul className="list-none mt-[15vh] md:mt-[10vh] w-full space-y-2">
               {[
                 { name: 'BROCKHAMPTON_nao_lancada.mp3', url: 'https://cdn.discordapp.com/attachments/1409724404795183131/1495283989987065998/14_-_HUMAN.mp3?ex=69e657fc&is=69e5067c&hm=4c563eec6e8862b00a0a65908ef8e3a22e509257c5680125c6fb5118f6899613&' },
                 { name: 'SANTO-nao-vai-ser-lancada.mp3', url: 'https://cdn.discordapp.com/attachments/1137467200245088317/1495561838442578061/SANTO.mp3?ex=69e6b200&is=69e56080&hm=c24e0ada2ba64f759d0a92b75e11aff2a1af71e9f90eec140cedd57460f447e1&' },
@@ -305,22 +305,28 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
               ].map((trk, i) => (
                 <li 
                   key={i} 
-                  className={`p-2.5 cursor-pointer border border-transparent hover:bg-white hover:text-[#0000aa] ${activeLi === i ? 'bg-white !text-[#0000aa]' : ''}`}
+                  className={`p-2.5 cursor-pointer border border-transparent hover:bg-white hover:text-[#0000aa] whitespace-nowrap overflow-hidden text-ellipsis ${activeLi === i ? 'bg-white !text-[#0000aa]' : ''}`}
                   onClick={(e) => { e.stopPropagation(); loadAudio(i, trk.url); }}
                 >
                   [ ] {trk.name}
                 </li>
               ))}
             </ul>
-            {audioError && <div className="mt-4 text-red-600 bg-black px-4 py-1 animate-[jit2_0.1s_infinite]">{audioError}</div>}
-            <div className="mt-auto w-full border-t-4 border-white pt-8 flex items-center gap-4">
-              <button className="vbtn bg-transparent border-2 border-white text-white font-vt323 text-2xl py-1 md:py-2 px-3 md:px-6 cursor-pointer hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); playMusic()}}>PLAY</button>
-              <button className="vbtn bg-transparent border-2 border-white text-white font-vt323 text-2xl py-1 md:py-2 px-3 md:px-6 cursor-pointer hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); pauseMusic()}}>STOP</button>
-              <button className="vbtn bg-transparent border-2 border-white text-white font-vt323 text-2xl py-1 md:py-2 px-3 md:px-6 cursor-pointer hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); rewMusic()}}>REW</button>
-              <div className="flex-grow h-[15px] border-2 border-white flex">
-                <div className="h-full bg-white transition-[width] duration-100 ease-linear" style={{ width: `${audioProgress}%` }}></div>
+            {audioError && <div className="mt-4 text-red-600 bg-black px-4 py-1 animate-[jit2_0.1s_infinite] break-words whitespace-normal">{audioError}</div>}
+            
+            <div className="mt-auto w-full border-t-4 border-white pt-4 md:pt-8 flex flex-row flex-wrap items-center gap-2 md:gap-4 fixed md:static bottom-0 left-0 p-4 md:p-0 bg-[#0000aa]/90 md:bg-transparent">
+              <div className="flex gap-2 w-full md:w-auto">
+                <button className="vbtn flex-1 md:flex-none bg-transparent border-2 border-white text-white font-vt323 text-lg md:text-2xl py-1 px-2 md:px-6 hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); playMusic()}}>PLAY</button>
+                <button className="vbtn flex-1 md:flex-none bg-transparent border-2 border-white text-white font-vt323 text-lg md:text-2xl py-1 px-2 md:px-6 hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); pauseMusic()}}>STOP</button>
+                <button className="vbtn flex-1 md:flex-none bg-transparent border-2 border-white text-white font-vt323 text-lg md:text-2xl py-1 px-2 md:px-6 hover:bg-white hover:text-[#0000aa]" onClick={(e)=>{e.stopPropagation(); rewMusic()}}>REW</button>
               </div>
-              <span className="text-xl md:text-2xl">{audioTime}</span>
+              
+              <div className="flex-grow w-full md:w-auto flex items-center gap-2 md:gap-4 mt-2 md:mt-0">
+                <div className="flex-grow h-[10px] md:h-[15px] border-2 border-white flex">
+                  <div className="h-full bg-white transition-[width] duration-100 ease-linear" style={{ width: `${audioProgress}%` }}></div>
+                </div>
+                <span className="text-sm md:text-2xl w-24 md:w-auto shrink-0 text-right">{audioTime}</span>
+              </div>
             </div>
           </div>
 

@@ -14,7 +14,7 @@ export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () 
       if (target && target.id === 'easter-logo') {
         setClickCount(prev => {
           const newCount = prev + 1;
-          if (newCount >= 5) {
+          if (newCount >= 3) {
             setTimeout(() => onTrigger(), 0);
             return 0;
           }
@@ -24,7 +24,7 @@ export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () 
         clearTimeout(clickTimer);
         clickTimer = setTimeout(() => {
           setClickCount(0);
-        }, 800);
+        }, 1200);
       }
     };
 

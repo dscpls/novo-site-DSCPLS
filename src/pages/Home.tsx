@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import Newsletter from '../components/Newsletter';
 
 export default function Home() {
   return (
@@ -83,6 +84,8 @@ export default function Home() {
             ></iframe>
           </div>
         </div>
+
+        <Newsletter />
       </motion.div>
     </motion.div>
   );
