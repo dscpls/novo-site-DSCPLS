@@ -30,6 +30,18 @@ export default function Sobre() {
           <p>
             Lançado em 28 de agosto de 2025, <strong>Fases</strong> é um álbum-conceito que acompanha a trajetória emocional de um relacionamento através do protagonista Ícaro, da atração ao encerramento. Em primeiro de janeiro de 2026, chegou <strong>Receita de Preparo da Nova Geração</strong>, conhecido pela sigla RDPDNG, trabalho que amplia o escopo temático do grupo, abordando ansiedade geracional, identidade e o peso de crescer em um mundo em transformação.
           </p>
+          
+          <div className="w-full break-inside-avoid my-8 border-4 border-white relative overflow-hidden group">
+            <img 
+              src="/duo.jpg" 
+              alt="Henriz e Gebriel" 
+              className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>
+            <span className="absolute bottom-4 left-4 bg-black text-white px-3 py-1 font-mono text-xs border border-white/30 tracking-widest uppercase shadow-md">O ENCONTRO (2026)</span>
+          </div>
+
           <p>
             Em 23 de março de 2026, Henriz e Gebriel se encontraram pessoalmente pela primeira vez, enquanto Henriz estava em São Paulo para o Lollapalooza, onde assistiu a uma apresentação de Tyler, the Creator. Os dois passaram a tarde juntos no bairro da Liberdade. Uma amizade de quase uma década finalmente ocupando espaço físico.
           </p>
@@ -56,16 +68,15 @@ export default function Sobre() {
             </div>
             
             {/* Foto Placeholder */}
-            <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500">
-              {/* SUBSTITUIR SRC PELA FOTO REAL DEPOIS */}
+            <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1607513746994-51f730a44832?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src="/henriz.jpg" 
                 alt="Henriz" 
-                className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen"
+                className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen"
+                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1607513746994-51f730a44832?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>
-              <span className="relative z-10 text-white/50 font-mono tracking-widest uppercase text-xs border border-white/20 p-2 backdrop-blur-sm">FOTO: HENRIZ [UPLOAD PENDENTE]</span>
             </div>
             
             <div className="p-8 flex-1 flex flex-col">
@@ -100,16 +111,15 @@ export default function Sobre() {
             </div>
             
             {/* Foto Placeholder */}
-            <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500">
-              {/* SUBSTITUIR SRC PELA FOTO REAL DEPOIS */}
+            <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src="/gebriel.webp" 
                 alt="Gebriel" 
-                className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen"
+                className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen"
+                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>
-              <span className="relative z-10 text-white/50 font-mono tracking-widest uppercase text-xs border border-white/20 p-2 backdrop-blur-sm">FOTO: GEBRIEL [UPLOAD PENDENTE]</span>
             </div>
             
             <div className="p-8 flex-1 flex flex-col">

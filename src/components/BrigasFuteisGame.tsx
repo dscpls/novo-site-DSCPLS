@@ -4,11 +4,22 @@ export default function BrigasFuteisGame() {
   const [p1, setP1] = useState({ x: 20, hp: 100, punching: false, hit: false, facing: 1 }); // 1 = right, -1 = left
   const [p2, setP2] = useState({ x: 70, hp: 100, punching: false, hit: false, facing: -1 });
   const [winner, setWinner] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   
   const keys = useRef<{ [key: string]: boolean }>({});
   const p1Ref = useRef(p1);
   const p2Ref = useRef(p2);
   const winnerRef = useRef(winner);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || navigator.maxTouchPoints > 0);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Sound function using Web Audio API to avoid CORS or fetch issues (Instant retro SFX)
   const playSound = (type: 'punch' | 'hit' | 'win') => {
@@ -156,6 +167,55 @@ export default function BrigasFuteisGame() {
           >
             REMATCH
           </button>
+        </div>
+      )}
+
+      {/* Mobile Touch Controls */}
+      {isMobile && winner === 0 && (
+        <div className="absolute inset-0 pointer-events-none z-[80] flex justify-between items-end pb-[10vh] px-[5vw]">
+          {/* P1 Controls */}
+          <div className="flex gap-2">
+            <div className="flex bg-white/10 rounded-full border-2 border-white/30 backdrop-blur-sm pointer-events-auto overflow-hidden">
+              <button 
+                className="w-14 h-14 md:w-16 md:h-16 bg-transparent text-white font-bold text-2xl active:bg-white/30 touch-none"
+                onTouchStart={(e) => { e.preventDefault(); keys.current['KeyA'] = true; }}
+                onTouchEnd={(e) => { e.preventDefault(); keys.current['KeyA'] = false; }}
+              >◄</button>
+              <div className="w-[2px] bg-white/30"></div>
+              <button 
+                className="w-14 h-14 md:w-16 md:h-16 bg-transparent text-white font-bold text-2xl active:bg-white/30 touch-none"
+                onTouchStart={(e) => { e.preventDefault(); keys.current['KeyD'] = true; }}
+                onTouchEnd={(e) => { e.preventDefault(); keys.current['KeyD'] = false; }}
+              >►</button>
+            </div>
+            <button 
+              className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#ff3e3e]/40 border-2 border-[#ff3e3e] text-white font-bold pointer-events-auto active:bg-[#ff3e3e]/80 backdrop-blur-sm touch-none"
+              onTouchStart={(e) => { e.preventDefault(); keys.current['Space'] = true; }}
+              onTouchEnd={(e) => { e.preventDefault(); keys.current['Space'] = false; }}
+            >👊</button>
+          </div>
+
+          {/* P2 Controls */}
+          <div className="flex gap-2">
+            <button 
+              className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#00ffff]/40 border-2 border-[#00ffff] text-white font-bold pointer-events-auto active:bg-[#00ffff]/80 backdrop-blur-sm touch-none"
+              onTouchStart={(e) => { e.preventDefault(); keys.current['Enter'] = true; }}
+              onTouchEnd={(e) => { e.preventDefault(); keys.current['Enter'] = false; }}
+            >👊</button>
+            <div className="flex bg-white/10 rounded-full border-2 border-white/30 backdrop-blur-sm pointer-events-auto overflow-hidden">
+              <button 
+                className="w-14 h-14 md:w-16 md:h-16 bg-transparent text-white font-bold text-2xl active:bg-white/30 touch-none"
+                onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowLeft'] = true; }}
+                onTouchEnd={(e) => { e.preventDefault(); keys.current['ArrowLeft'] = false; }}
+              >◄</button>
+              <div className="w-[2px] bg-white/30"></div>
+              <button 
+                className="w-14 h-14 md:w-16 md:h-16 bg-transparent text-white font-bold text-2xl active:bg-white/30 touch-none"
+                onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowRight'] = true; }}
+                onTouchEnd={(e) => { e.preventDefault(); keys.current['ArrowRight'] = false; }}
+              >►</button>
+            </div>
+          </div>
         </div>
       )}
 

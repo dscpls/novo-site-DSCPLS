@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
+import { db } from '../lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setStatus('loading');
     
-    // Fake API call
-    setTimeout(() => {
+    try {
+      await addDoc(collection(db, 'newsletter_subs'), {
+        email: email.trim(),
+        createdAt: serverTimestamp()
+      });
+      
       setStatus('success');
       setEmail('');
       
       // Reset back to idle after a while
       setTimeout(() => setStatus('idle'), 5000);
-    }, 1200);
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    }
   };
 
   return (

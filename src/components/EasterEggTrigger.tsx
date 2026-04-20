@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () => void, active: boolean }) {
   const [clickCount, setClickCount] = useState(0);
-  const [keySequence, setKeySequence] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     if (active) return;
+    if (location.pathname === '/quiz') return; // Do not trigger CRT on the quiz page
 
     let clickTimer: ReturnType<typeof setTimeout>;
 
@@ -28,15 +30,15 @@ export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () 
       }
     };
 
+    let keySeq = '';
     const handleKeyDown = (e: KeyboardEvent) => {
-      setKeySequence(prev => {
-        let seq = prev + e.key.toUpperCase();
-        if (seq.length > 6) seq = seq.slice(-6);
-        if (seq === 'DSCPLS') {
-          setTimeout(() => onTrigger(), 0);
-        }
-        return seq;
-      });
+      // Ignore keydown when typing in inputs
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      keySeq = (keySeq + e.key.toUpperCase()).slice(-6);
+      if (keySeq === 'DSCPLS') {
+        setTimeout(() => onTrigger(), 0);
+      }
     };
 
     document.addEventListener('click', handleGlobalClick);
@@ -47,7 +49,7 @@ export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () 
       document.removeEventListener('click', handleGlobalClick);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [active, onTrigger]);
+  }, [active, onTrigger, location.pathname]);
 
   return null;
 }

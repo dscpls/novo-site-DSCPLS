@@ -11,8 +11,13 @@ export const provider = new GoogleAuthProvider();
 export const login = async () => {
   try {
     await signInWithPopup(auth, provider);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login Error", error);
+    if (error.code === 'auth/unauthorized-domain') {
+      alert("ERRO DE DOMÍNIO: Para fazer login, você precisa adicionar este URL atual lá no painel do Firebase Console em: Authentication > Settings > Authorized Domains.");
+    } else {
+      alert("Erro ao fazer login: " + error.message + " | Se estiver no celular/iframe, tente abrir o site em uma nova aba.");
+    }
   }
 };
 

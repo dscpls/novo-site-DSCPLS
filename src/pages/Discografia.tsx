@@ -3,11 +3,46 @@ import { motion } from 'motion/react';
 
 const albums = [
   {
+    title: "BRIGAS FÚTEIS",
+    type: "SINGLE",
+    year: "2026",
+    cover: "https://i.imgur.com/lZHQbP4.jpeg",
+    link: "https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q"
+  },
+  {
     title: "Receita de Preparo da Nova Geração",
     type: "ÁLBUM",
     year: "2026",
     cover: "https://i.imgur.com/ScuuOEo.png",
     link: "https://open.spotify.com/intl-pt/album/5bAVtGW4hYrVpQ9ALYhPza?si=779N4WK_R7uvCk4Jd49-cQ"
+  },
+  {
+    title: "flores",
+    type: "SINGLE",
+    year: "2025",
+    cover: "https://i.imgur.com/ZnoOycl.jpeg",
+    link: "https://open.spotify.com/album/4Ts0gwYGzmMU77jnjyNJiZ?si=DmnYfHfbR3ath9Ur4kAbEA"
+  },
+  {
+    title: "Teseu",
+    type: "SINGLE",
+    year: "2025",
+    cover: "https://i.imgur.com/E3Vynib.png",
+    link: "https://open.spotify.com/album/66P49668DzpOCYy4Ftci6W?si=45aWOiETQTmRKAnFQpPe6w"
+  },
+  {
+    title: "Amor Adolescente",
+    type: "SINGLE",
+    year: "2025",
+    cover: "https://i.imgur.com/3glZR5y.jpeg",
+    link: "https://open.spotify.com/intl-pt/album/2CKzzOCpqjV1DaSHT2DYa9?si=ultQfO4ORmK3vtCFk7ESrw"
+  },
+  {
+    title: "Potencial",
+    type: "SINGLE",
+    year: "2025",
+    cover: "https://i.imgur.com/rjJQKbJ.jpeg",
+    link: "https://open.spotify.com/album/6q5lIDeaZZg2lItSx6cfXu?si=UHszJufkSBid88SrLWg7FQ"
   },
   {
     title: "Fases",
@@ -17,11 +52,11 @@ const albums = [
     link: "https://open.spotify.com/intl-pt/album/45gyNaXtCRSIucznnFi2wp?si=4lqhVrY3QW-flVMQEERPxg"
   },
   {
-    title: "BRIGAS FÚTEIS",
+    title: "BRILHO",
     type: "SINGLE",
-    year: "2026",
-    cover: "https://i.imgur.com/lZHQbP4.jpeg",
-    link: "https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q"
+    year: "2025",
+    cover: "https://i.imgur.com/NW1eokh.jpeg",
+    link: "https://open.spotify.com/intl-pt/album/3qTFuIfhBZLIEO94QzDj98?si=EiwDfLCgSlKpMD9eXbjUvA"
   }
 ];
 
