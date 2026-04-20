@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { db } from '../lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Newsletter() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
@@ -13,52 +15,57 @@ export default function Newsletter() {
     setStatus('loading');
     
     try {
+      // Using ISO string instead of serverTimestamp to prevent infinite hanging when offline
       await addDoc(collection(db, 'newsletter_subs'), {
         email: email.trim(),
-        createdAt: serverTimestamp()
+        createdAt: new Date().toISOString()
       });
       
       setStatus('success');
       setEmail('');
       
-      // Reset back to idle after a while
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
       console.error(error);
+      if(error instanceof Error && error.message.includes('the client is offline')) {
+         alert("Você precisa estar online ou com o firebase configurado para se inscrever na newsletter.")
+      }
       setStatus('error');
+      // Show error briefly before resetting
+      setTimeout(() => setStatus('idle'), 3000);
     }
   };
 
   return (
-    <div className="w-full bg-[#ff3e3e] border-y-4 border-white mt-24 flex flex-col md:flex-row items-center justify-between font-sans">
-      <div className="w-full md:w-1/2 p-10 md:p-16 text-black border-b-4 md:border-b-0 md:border-r-4 border-white flex flex-col justify-center">
-        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-4">
-          NÃO PERCA<br/>O SINAL
+    <div className="w-full bg-[#ff3e3e] border-y-4 border-white my-10 flex flex-col md:flex-row items-stretch justify-between font-sans shadow-lg shadow-red-500/10">
+      <div className="w-full md:w-1/2 p-8 md:p-12 text-black border-b-4 md:border-b-0 md:border-r-4 border-white flex flex-col justify-center">
+        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-4 whitespace-pre-line">
+          {t('news.title')}
         </h2>
-        <p className="text-lg md:text-xl font-bold tracking-tight mb-8">
-          ASSINE O NOSSO CULTO (NEWSLETTER). ATUALIZAÇÕES, DROPS E SINAIS DE RÁDIO INTERROMPIDOS.
+        <p className="text-base md:text-lg font-bold tracking-tight mb-8">
+          {t('news.desc')}
         </p>
         
         {status === 'success' ? (
-          <div className="bg-black text-white p-6 border-4 border-black font-mono text-sm md:text-base animate-[jit2_0.1s_infinite]">
-            [SISTEMA]: E-MAIL REGISTRADO COM SUCESSO. FIQUE ATENTO À SUA CAIXA DE ENTRADA. NÓS VEMOS VOCÊ.
+          <div className="bg-black text-white p-6 border-4 border-black font-mono text-sm shadow-[8px_8px_0_0_rgba(0,0,0,1)] uppercase">
+            {t('news.success')}
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-0 group">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full bg-black sm:bg-transparent shadow-none sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black sm:border-none group">
             <input 
               type="email" 
-              placeholder="SEU MELHOR E-MAIL AQUI" 
+              placeholder={t('news.placeholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="flex-1 bg-black text-white px-6 py-4 outline-none border-4 border-black text-lg md:text-xl tracking-widest uppercase font-bold placeholder:text-gray-600 focus:bg-[#050505]"
+              className="flex-[2] min-w-0 bg-black text-white px-4 py-4 outline-none border-b-4 sm:border-y-4 sm:border-l-4 sm:border-r-0 border-black text-base tracking-widest uppercase font-bold placeholder:text-gray-600 focus:bg-[#111]"
             />
             <button 
               type="submit" 
               disabled={status === 'loading'}
-              className="bg-transparent text-black border-4 border-l-4 sm:border-l-0 border-t-0 sm:border-t-4 border-black px-8 py-4 font-black uppercase text-xl hover:bg-black hover:text-white transition-colors tracking-widest disabled:opacity-50"
+              className="flex-1 bg-[#ff3e3e] sm:bg-transparent text-black sm:border-y-4 sm:border-r-4 border-black px-6 py-4 font-black uppercase text-base sm:text-lg hover:bg-white transition-colors tracking-widest disabled:opacity-50 min-w-max"
             >
-              {status === 'loading' ? 'ENVIANDO...' : 'INSCREVER'}
+              {status === 'loading' ? t('news.wait') : (status === 'error' ? 'ERRO' : t('news.subscribe'))}
             </button>
           </form>
         )}
@@ -66,14 +73,11 @@ export default function Newsletter() {
 
       <div className="w-full md:w-1/2 min-h-[300px] bg-[#050505] p-10 flex flex-col justify-center items-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.2)_0%,transparent_70%)] pointer-events-none"></div>
-        <div className="font-mono text-[#ff3e3e] text-xs md:text-sm tracking-[0.3em] uppercase opacity-70 z-10 text-center space-y-4">
-          <p>{"// TEMPLATE INTERNAL MESSAGE LOG"}</p>
-          <p>Subj: NOVO LANÇAMENTO DSCPLS</p>
-          <p className="max-w-md bg-black/50 p-4 border border-[#ff3e3e]/30 inline-block text-left">
-            Saudações do estúdio.<br/><br/>
-            Se você recebeu esta transmissão, você faz parte do núcleo.<br/>
-            Temos novidades em breve. Fiquem vivos.<br/><br/>
-            - H & G
+        <div className="font-mono text-[#ff3e3e] text-xs md:text-sm tracking-[0.3em] uppercase opacity-70 z-10 text-center space-y-4 max-w-full">
+          <p>{"// LOG_INTERNO_TEMPLATE"}</p>
+          <p>{t('news.log_title')}</p>
+          <p className="max-w-md w-full bg-black/50 p-4 border border-[#ff3e3e]/30 inline-block text-left text-xs sm:text-sm break-words sm:break-normal whitespace-pre-line">
+            {t('news.log_body')}
           </p>
         </div>
         {/* Grain overlay for side block */}

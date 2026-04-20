@@ -1,31 +1,65 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const normalizeStr = (str: string) => {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 };
 
-const questions = [
-  {
-    q: "QUAL A MAIOR INSPIRAÇÃO DA BANDA?",
-    ans: ["brockhampton"]
-  },
-  {
-    q: "QUAL A MELHOR BOYBAND DESDE O ONE DIRECTION?",
-    ans: ["brockhampton"]
-  },
-  {
-    q: "QUAL A MELHOR BOYBAND DESDE O BROCKHAMPTON?",
-    ans: ["discipulos", "dscpls"]
-  }
-];
-
 export default function Quiz() {
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(0);
   const [inputVal, setInputVal] = useState('');
   const [errorShake, setErrorShake] = useState(false);
   const [factVisible, setFactVisible] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const questions = [
+    {
+      q: t('quiz.q1'),
+      ans: ["brockhampton"]
+    },
+    {
+      q: t('quiz.q2'),
+      ans: ["brockhampton"]
+    },
+    {
+      q: t('quiz.q3'),
+      ans: ["discipulos", "dscpls"]
+    }
+  ];
+
+  const playSound = (success: boolean) => {
+     try {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (success) {
+           osc.type = 'sine';
+           osc.frequency.setValueAtTime(440, ctx.currentTime); 
+           osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1); 
+           gain.gain.setValueAtTime(0.2, ctx.currentTime);
+           gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+           osc.start(ctx.currentTime);
+           osc.stop(ctx.currentTime + 0.2);
+        } else {
+           osc.type = 'sawtooth';
+           osc.frequency.setValueAtTime(200, ctx.currentTime); 
+           osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2); 
+           gain.gain.setValueAtTime(0.2, ctx.currentTime);
+           gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+           osc.start(ctx.currentTime);
+           osc.stop(ctx.currentTime + 0.2);
+        }
+     } catch(e) {
+       console.log('Audio error:', e);
+     }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +69,12 @@ export default function Quiz() {
     const validAnswers = questions[currentStep].ans;
 
     if (validAnswers.includes(normalizedInput)) {
+      playSound(true);
       setInputVal('');
       setErrorShake(false);
       setCurrentStep(s => s + 1);
     } else {
+      playSound(false);
       setErrorShake(true);
       setTimeout(() => setErrorShake(false), 500);
     }
@@ -71,7 +107,7 @@ export default function Quiz() {
                 autoFocus
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="SUA RESPOSTA..."
+                placeholder={t('quiz.answer')}
                 className="w-full bg-transparent border-b-4 border-white text-3xl md:text-5xl text-center text-[#ff3e3e] font-black uppercase focus:outline-none focus:border-[#ff3e3e] transition-colors pb-4 placeholder-white/20"
               />
             </form>
@@ -85,11 +121,11 @@ export default function Quiz() {
             className="w-full max-w-4xl flex flex-col items-center"
           >
             <h1 className="text-5xl md:text-7xl font-black text-[#00ffff] uppercase mb-6 tracking-tighter drop-shadow-[5px_5px_0_#ff3e3e] animate-pulse">
-              VOCÊ É UM VERDADEIRO DISCÍPULO.
+              {t('quiz.success')}
             </h1>
             
             <p className="text-xl md:text-2xl font-bold text-white mb-12 uppercase tracking-widest bg-black p-4 border border-white/20">
-              Parabéns! Aproveite um unreleased de BROCKHAMPTON que o Henriz gosta muito.
+              {t('quiz.reward')}
             </p>
 
             <div className="w-full max-w-md bg-[#111] border-4 border-[#ff3e3e] p-6 shadow-[8px_8px_0_#fff]">
@@ -112,8 +148,8 @@ export default function Quiz() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-12 p-4 border-l-4 border-[#00ffff] bg-black/50 text-left max-w-2xl"
                 >
-                  <p className="text-gray-300 font-mono text-sm leading-relaxed">
-                    <span className="text-[#00ffff] font-bold">fato curioso:</span> essa música se chama background, e a comunidade se juntou pra comprar 57 músicas não lançadas de um leaker não tão confiável... o fandom de brockhampton é incrível, né? gosto muito de participar :)
+                  <p className="text-gray-300 font-mono text-sm leading-relaxed whitespace-pre-line">
+                    <span className="text-[#00ffff] font-bold">fato curioso / fun fact:</span> {t('quiz.fact')}
                     <br/><br/>
                     <span className="text-white">- Henriz</span>
                   </p>

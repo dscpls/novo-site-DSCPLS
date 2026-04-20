@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { auth, login, logout, db } from '../lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { db } from '../lib/firebase';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import Newsletter from '../components/Newsletter';
+import { useAdminAuth } from '../lib/authUtils';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Admin() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { isAdmin, loginAdmin, logoutAdmin } = useAdminAuth();
   const [subscribers, setSubscribers] = useState<string[]>([]);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const { t } = useLanguage();
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsAdmin(currentUser?.email === 'henrikingames@gmail.com');
-    });
-    return () => unsub();
-  }, []);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -46,6 +43,17 @@ export default function Admin() {
     alert("DICA: Como não temos um servidor SMTP pago configurado, isso vai abrir seu aplicativo de e-mail (Gmail/Outlook) com todos os contatos em Cópia Oculta (BCC). É o jeito mais fácil e seguro de disparar os e-mails grátis e garantir que cheguem sem cair no SPAM!");
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginAdmin(username, password)) {
+      setLoginError(false);
+      setUsername('');
+      setPassword('');
+    } else {
+      setLoginError(true);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -55,25 +63,38 @@ export default function Admin() {
       className="max-w-4xl mx-auto pt-10 pb-40"
     >
       <div className="flex items-center gap-4 mb-12">
-        <h1 className="text-3xl tracking-[0.2em] font-light text-red-500">SISTEMA ADMIN</h1>
+        <h1 className="text-3xl tracking-[0.2em] font-light text-red-500">{t('admin.title')}</h1>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
-        {user ? (
-          <button onClick={logout} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">LOGOUT</button>
-        ) : (
-          <button onClick={login} className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1">LOGIN</button>
+        {isAdmin && (
+          <button onClick={logoutAdmin} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">{t('diario.logout_btn')}</button>
         )}
       </div>
 
-      {!user ? (
-        <div className="text-center p-20 border border-[#333] bg-[#111]">
-          <h2 className="text-2xl font-black uppercase mb-4">Acesso Restrito</h2>
-          <p className="text-gray-400">Faça login com sua conta de administrador para continuar.</p>
-          <button onClick={login} className="mt-8 bg-red-600 font-bold uppercase text-white px-8 py-3 tracking-widest hover:bg-red-500">Autorizar Acesso</button>
-        </div>
-      ) : !isAdmin ? (
-        <div className="text-center p-20 border border-red-500 bg-red-500/10 text-red-500">
-          <h2 className="text-2xl font-black uppercase mb-4">ACESSO NEGADO</h2>
-          <p>Você ({user.email}) não é o administrador do sistema.</p>
+      {!isAdmin ? (
+        <div className="text-center p-8 md:p-20 border border-[#333] bg-[#111]">
+          <h2 className="text-2xl font-black uppercase mb-4 text-white">{t('admin.restricted')}</h2>
+          <p className="text-gray-400 mb-8">{t('admin.credentials')}</p>
+          
+          <form onSubmit={handleLogin} className="max-w-xs mx-auto flex flex-col gap-4">
+            <input 
+              type="text"
+              placeholder={t('admin.user')}
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-red-500 outline-none text-center font-mono placeholder:text-gray-600"
+            />
+            <input 
+              type="password"
+              placeholder={t('admin.pass')}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-red-500 outline-none text-center font-mono placeholder:text-gray-600"
+            />
+            {loginError && <p className="text-red-500 text-xs font-bold uppercase mt-2">{t('admin.auth_invalid')}</p>}
+            <button type="submit" className="mt-4 bg-red-600 font-bold uppercase text-white px-8 py-3 tracking-widest hover:bg-red-500">
+              {t('admin.auth_btn')}
+            </button>
+          </form>
         </div>
       ) : (
         <div className="space-y-12">

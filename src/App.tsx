@@ -12,6 +12,7 @@ import Bonus from './pages/Bonus';
 import Navigation from './components/Navigation';
 import CrtMode from './components/CrtMode';
 import EasterEggTrigger from './components/EasterEggTrigger';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -98,23 +99,25 @@ export default function App() {
   const [crtActive, setCrtActive] = useState(false);
 
   return (
-    <BrowserRouter>
-      <GlobalWordTrigger />
-      {/* Background grain/noise globally */}
-      <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise"></div>
-      
-      {!crtActive && (
-        <div className="main-layout flex flex-col min-h-screen bg-gradient-radial from-[#1a1a1a] to-[#050505] text-[#e0e0e0] font-sans">
-          <Navigation />
-          <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8 relative">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
-      )}
+    <LanguageProvider>
+      <BrowserRouter>
+        <GlobalWordTrigger />
+        {/* Background grain/noise globally */}
+        <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise"></div>
+        
+        {!crtActive && (
+          <div className="main-layout flex flex-col min-h-screen bg-gradient-radial from-[#1a1a1a] to-[#050505] text-[#e0e0e0] font-sans">
+            <Navigation />
+            <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8 relative">
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+          </div>
+        )}
 
-      <EasterEggTrigger onTrigger={() => setCrtActive(true)} active={crtActive} />
-      {crtActive && <CrtMode onClose={() => setCrtActive(false)} />}
-    </BrowserRouter>
+        <EasterEggTrigger onTrigger={() => setCrtActive(true)} active={crtActive} />
+        {crtActive && <CrtMode onClose={() => setCrtActive(false)} />}
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

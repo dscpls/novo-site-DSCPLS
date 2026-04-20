@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const albums = [
   {
@@ -61,6 +62,8 @@ const albums = [
 ];
 
 export default function Discografia() {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -71,7 +74,7 @@ export default function Discografia() {
     >
       <div className="flex items-center gap-4 mb-20">
         <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-red-500/50"></div>
-        <h1 className="text-3xl tracking-[0.2em] font-light text-white text-center">DISCOGRAFIA</h1>
+        <h1 className="text-3xl tracking-[0.2em] font-light text-white text-center">{t('disc.title')}</h1>
         <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-red-500/50"></div>
       </div>
 
@@ -95,8 +98,8 @@ export default function Discografia() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
-                <span className="text-[#1db954] border border-[#1db954] px-6 py-2 text-xs tracking-widest bg-black/50 backdrop-blur-sm shadow-[0_0_15px_rgba(29,185,84,0.3)]">
-                  OUVIR NO SPOTIFY
+                <span className="text-[#1db954] border border-[#1db954] px-6 py-2 text-xs tracking-widest bg-black/50 backdrop-blur-sm shadow-[0_0_15px_rgba(29,185,84,0.3)] uppercase">
+                  {t('disc.listen')}
                 </span>
               </div>
             </div>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { auth, db, login, logout } from '../lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { db } from '../lib/firebase';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
+import { useAdminAuth } from '../lib/authUtils';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DiaryEntry {
   id: string;
@@ -12,19 +13,11 @@ interface DiaryEntry {
 }
 
 export default function Diario() {
-  const [user, setUser] = useState<User | null>(null);
+  const { isAdmin, logoutAdmin } = useAdminAuth();
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsAdmin(currentUser?.email === 'henrikingames@gmail.com');
-    });
-    return () => unsub();
-  }, []);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const q = query(collection(db, 'diario'), orderBy('createdAt', 'desc'));
@@ -75,34 +68,34 @@ export default function Diario() {
       className="max-w-4xl mx-auto pt-10 pb-40"
     >
       <div className="flex items-center gap-4 mb-12">
-        <h1 className="text-3xl tracking-[0.2em] font-light text-white">DIÁRIO</h1>
+        <h1 className="text-3xl tracking-[0.2em] font-light text-white">{t('diario.title')}</h1>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
-        {user ? (
-          <button onClick={logout} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">LOGOUT</button>
+        {isAdmin ? (
+          <button onClick={logoutAdmin} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">{t('diario.logout_btn')}</button>
         ) : (
-          <button onClick={login} className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1">ADMIN LOGIN</button>
+          <a href="/admin" className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1 cursor-pointer">{t('diario.admin_btn')}</a>
         )}
       </div>
 
       {isAdmin && (
         <div className="bg-[#111] border border-[#222] p-6 mb-12 space-y-4">
-          <h2 className="text-red-500 text-sm tracking-widest">{">"} NOVA ENTRADA</h2>
+          <h2 className="text-red-500 text-sm tracking-widest">{">"} {t('diario.new_entry')}</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input 
               value={title}
               onChange={e => setTitle(e.target.value)}
-              placeholder="Título do registro"
+              placeholder={t('diario.entry_title')}
               className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-red-500 transition-colors"
             />
             <textarea 
               value={content}
               onChange={e => setContent(e.target.value)}
-              placeholder="Sua mensagem para o mundo..."
+              placeholder={t('diario.entry_msg')}
               rows={5}
               className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-red-500 transition-colors resize-none"
             />
             <button type="submit" className="bg-red-900/50 text-white py-3 border border-red-500 hover:bg-red-500 transition-colors tracking-widest text-sm">
-              PUBLICAR
+              {t('diario.publish')}
             </button>
           </form>
         </div>
@@ -118,7 +111,7 @@ export default function Diario() {
                 <button 
                   onClick={() => handleDelete(entry.id)}
                   className="absolute -left-10 top-2 text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="Apagar post"
+                  title={t('diario.delete')}
                 >
                   ✕
                 </button>

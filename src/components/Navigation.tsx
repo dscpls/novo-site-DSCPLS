@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { Globe } from 'lucide-react';
 
 export default function Navigation() {
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const { lang, setLang, t } = useLanguage();
   
   // If we're not on Home, nav is always open. If we are on Home, it starts closed.
   const [navRevealed, setNavRevealed] = useState(!isHome);
@@ -23,6 +26,12 @@ export default function Navigation() {
       e.preventDefault();
       setNavRevealed(true);
     }
+  };
+
+  const cycleLanguage = () => {
+    if (lang === 'pt') setLang('en');
+    else if (lang === 'en') setLang('es');
+    else setLang('pt');
   };
 
   return (
@@ -58,20 +67,26 @@ export default function Navigation() {
             className="flex flex-col md:flex-row items-end md:items-center gap-4 md:gap-8 text-lg md:text-2xl tracking-tighter uppercase font-bold mt-4 md:mt-0"
           >
             <Link to="/sobre" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
-              Sobre
+              {t('nav.sobre')}
             </Link>
             <Link to="/discografia" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
-              Discografia
+              {t('nav.discografia')}
             </Link>
             <Link to="/jogos" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
-              Jogos
+              {t('nav.jogos')}
             </Link>
             <Link to="/diario" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
-              Diário
+              {t('nav.diario')}
             </Link>
-            <a href="https://www.dscpls.shop" target="_blank" rel="noopener noreferrer" className="text-[#1db954] hover:text-[#0a0a0a] border-4 border-[#1db954] px-6 py-2 hover:bg-[#1db954] hover:shadow-[8px_8px_0px_#1db954] transition-all font-black">
-              ACESSAR LOJA
-            </a>
+            
+            <button 
+              onClick={cycleLanguage}
+              className="flex items-center gap-2 hover:text-[#ff3e3e] transition-colors ml-4"
+              title="Change Language"
+            >
+              <Globe size={24} />
+              <span className="text-sm font-mono uppercase font-bold">{lang}</span>
+            </button>
           </motion.nav>
         )}
       </AnimatePresence>

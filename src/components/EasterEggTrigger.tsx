@@ -35,6 +35,8 @@ export default function EasterEggTrigger({ onTrigger, active }: { onTrigger: () 
       // Ignore keydown when typing in inputs
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
+      if (location.pathname === '/quiz') return; // Do not trigger keyboard DSCPLS on quiz page
+
       keySeq = (keySeq + e.key.toUpperCase()).slice(-6);
       if (keySeq === 'DSCPLS') {
         setTimeout(() => onTrigger(), 0);

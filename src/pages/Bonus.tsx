@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Bonus() {
   const [revealed, setRevealed] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -36,7 +38,7 @@ export default function Bonus() {
           >
             <div className="flex flex-col md:flex-row items-center gap-8 bg-[#111] p-8 border-4 border-white/20">
               <p className="text-white font-bold text-lg md:text-xl leading-relaxed flex-1">
-                Parabéns por ser <span className="text-[#ff3e3e]">MUITO</span> fã dessa banda! Aproveite os clipes / visualizers de Fases, e como bônus, o clipe de "A Calmaria Antes da Tempestade", que o Henriz nunca lançou por achar "cringe" (palavras dele, no caso, minhas palavras, já q sou eu q to escrevendo isso)
+                {t('bonus.p1')} <span className="text-[#ff3e3e]">{t('bonus.p2')}</span> {t('bonus.p3')}
               </p>
               <img src="https://i.imgur.com/18NBD10.png" alt="Assinatura Henriz" className="h-24 md:h-32 object-contain filter invert" />
             </div>
@@ -65,7 +67,7 @@ export default function Bonus() {
                 <h3 className="text-3xl font-black uppercase text-white tracking-tighter mb-2">flores</h3>
                 <div className="bg-black/50 p-6 border-l-4 border-[#ff3e3e]">
                   <p className="text-gray-300 font-bold leading-relaxed text-sm md:text-base">
-                    <span className="text-[#ff3e3e]">Fato curioso:</span> se existisse um deluxe de Fases, flores estaria no disco, pq a história dessa música condiz com o resto do álbum, e pelo momento da minha vida em q eu escrevi isso. Saudades Dezembro 2025.... 
+                    <span className="text-[#ff3e3e]">{t('bonus.fact_title')}</span> {t('bonus.fact1')}
                     <br/><br/>
                     <span className="text-white font-mono">- Henriz</span>
                   </p>
@@ -85,7 +87,7 @@ export default function Bonus() {
                 <h3 className="text-3xl lg:text-4xl font-black uppercase text-white tracking-tighter mb-2">A Calmaria Antes da Tempestade</h3>
                 <span className="text-[#00ffff] font-mono font-bold tracking-widest text-sm mb-4 block">UNRELEASED / CRINGE</span>
                 <p className="text-gray-400 font-bold leading-relaxed">
-                  Esse vídeo nunca viu a luz do dia de forma oficial. O motivo? Henriz achou as atuações... questionáveis. Assista por sua conta e risco.
+                  {t('bonus.fact2')}
                 </p>
               </div>
             </div>

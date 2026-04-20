@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import PongGame from '../components/PongGame';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export default function Jogos() {
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [target, setTarget] = useState({ x: 50, y: 50 });
@@ -55,20 +57,20 @@ export default function Jogos() {
       className="max-w-4xl mx-auto pt-10 pb-40"
     >
       <div className="flex items-center gap-4 mb-12">
-        <h1 className="text-3xl tracking-[0.2em] font-light text-white">JOGOS / ARCADE</h1>
+        <h1 className="text-3xl tracking-[0.2em] font-light text-white uppercase">{t('nav.jogos')}</h1>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
       </div>
 
       <div className="bg-[#111] border border-[#222] rounded-lg p-6 flex flex-col items-center">
-        <h2 className="text-xl text-gray-300 font-medium tracking-widest mb-4">DSCPLS AIM TRAINER</h2>
+        <h2 className="text-xl text-gray-300 font-medium tracking-widest mb-4 uppercase">{t('jogos.aim.title')}</h2>
         <p className="text-sm text-gray-500 mb-8 max-w-md text-center">
-          Um mini-game simples para passar o tempo enquanto ouve a banda. Clique nos círculos vermelhos o mais rápido possível.
+          {t('jogos.aim.desc')}
         </p>
 
         <div className="flex justify-between w-full max-w-2xl mb-4 text-white">
-          <span>PONTOS: {score}</span>
-          {!isPlaying && <button onClick={startGame} className="text-[#ff3e3e] hover:underline">INICIAR JOGO</button>}
-          {isPlaying && <button onClick={() => setIsPlaying(false)} className="text-gray-500 hover:text-white">PARAR</button>}
+          <span className="uppercase">{t('jogos.aim.pts')}: {score}</span>
+          {!isPlaying && <button onClick={startGame} className="text-[#ff3e3e] hover:underline uppercase">{t('jogos.aim.start')}</button>}
+          {isPlaying && <button onClick={() => setIsPlaying(false)} className="text-gray-500 hover:text-white uppercase">{t('jogos.aim.stop')}</button>}
         </div>
 
         <div 
@@ -77,7 +79,7 @@ export default function Jogos() {
         >
           {!isPlaying && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-10 backdrop-blur-sm">
-              <span className="text-gray-400 tracking-widest text-sm">PRESSIONE "INICIAR" PARA JOGAR</span>
+              <span className="text-gray-400 tracking-widest text-sm uppercase">{t('jogos.aim.msg')}</span>
             </div>
           )}
 
