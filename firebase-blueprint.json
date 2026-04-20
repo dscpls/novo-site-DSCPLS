@@ -1,0 +1,21 @@
+{
+  "entities": {
+    "diaryEntry": {
+      "title": "Diary Entry",
+      "description": "A post in the band's diary",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["title", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "diario/{entryId}": {
+      "schema": { "$ref": "#/entities/diaryEntry" },
+      "description": "Diary entries visible to the public, created by the admin."
+    }
+  }
+}
