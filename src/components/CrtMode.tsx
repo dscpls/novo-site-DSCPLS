@@ -162,28 +162,20 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
     setActiveLi(idx);
     setAudioError('');
     
-    // Init Audio effects if not done
+    // Play static noise when audio plays (to simulate CRT filter) without tainting the canvas
     if (!_actx) {
       _actx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const _src = _actx.createMediaElementSource(vAudio);
-      const _flt = _actx.createBiquadFilter();
-      _flt.type = 'bandpass';
-      _flt.frequency.value = 1200;
-      _flt.Q.value = 0.8;
-      const _dist = _actx.createWaveShaper();
-      let k = 10, n = 44100, c = new Float32Array(n), deg = Math.PI / 180;
-      for (let i = 0; i < n; ++i) { let x = i * 2 / n - 1; c[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x)); }
-      _dist.curve = c; _dist.oversample = '4x';
-      _src.connect(_dist); _dist.connect(_flt); _flt.connect(_actx.destination);
       
       const nb = _actx.createBuffer(1, _actx.sampleRate * 2, _actx.sampleRate);
       const od = nb.getChannelData(0);
-      for (let i = 0; i < od.length; i++) od[i] = (Math.random() * 2 - 1) * 0.03;
+      // Reduced Amplitude substantially for softer noise
+      for (let i = 0; i < od.length; i++) od[i] = (Math.random() * 2 - 1) * 0.006;
       const _nz = _actx.createBufferSource(); _nz.buffer = nb; _nz.loop = true;
       const _ng = _actx.createGain(); _ng.gain.value = 0;
       _nz.connect(_ng); _ng.connect(_actx.destination); _nz.start();
       
-      vAudio.addEventListener('play', () => _ng.gain.value = 1);
+      // Kept gain low even when active
+      vAudio.addEventListener('play', () => _ng.gain.value = 0.5);
       vAudio.addEventListener('pause', () => _ng.gain.value = 0);
       vAudio.addEventListener('ended', () => _ng.gain.value = 0);
     }
@@ -191,15 +183,12 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
     if (_actx && _actx.state === 'suspended') _actx.resume();
 
     try {
-      // Instead of fetching the blob (which causes CORS issues with Discord CDNs),
-      // we can just set the src directly since we are feeding it through MediaElementSource.
       if (curBlobRef.current) URL.revokeObjectURL(curBlobRef.current);
       curBlobRef.current = null;
       
-      // We use a CORS proxy to bypass exact cross-origin restrictions on Web Audio API filters
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-      vAudio.src = proxyUrl;
-      vAudio.crossOrigin = "anonymous";
+      // Use direct URL and don't enforce crossOrigin (prevents CORS blocking on Discord CDNs)
+      vAudio.removeAttribute('crossOrigin');
+      vAudio.src = url;
       
       vAudio.oncanplay = () => {
         setAudioProgress(0);

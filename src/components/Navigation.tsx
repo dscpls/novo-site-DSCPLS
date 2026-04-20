@@ -55,21 +55,21 @@ export default function Navigation() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="flex flex-col md:flex-row items-end md:items-center gap-4 md:gap-8 text-sm tracking-widest uppercase font-medium mt-4 md:mt-0"
+            className="flex flex-col md:flex-row items-end md:items-center gap-4 md:gap-8 text-lg md:text-2xl tracking-tighter uppercase font-bold mt-4 md:mt-0"
           >
-            <Link to="/sobre" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[1px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
+            <Link to="/sobre" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
               Sobre
             </Link>
-            <Link to="/discografia" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[1px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
+            <Link to="/discografia" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
               Discografia
             </Link>
-            <Link to="/jogos" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[1px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
+            <Link to="/jogos" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
               Jogos
             </Link>
-            <Link to="/diario" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-0 after:h-[1px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
+            <Link to="/diario" className="hover:text-[#ff3e3e] transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[4px] after:bg-[#ff3e3e] hover:after:w-full after:transition-all after:duration-300">
               Diário
             </Link>
-            <a href="https://www.dscpls.shop" target="_blank" rel="noopener noreferrer" className="text-[#1db954] hover:text-[#000] border border-[#1db954] px-4 py-1.5 hover:bg-[#1db954] hover:shadow-[0_0_15px_#1db954] transition-all">
+            <a href="https://www.dscpls.shop" target="_blank" rel="noopener noreferrer" className="text-[#1db954] hover:text-[#0a0a0a] border-4 border-[#1db954] px-6 py-2 hover:bg-[#1db954] hover:shadow-[8px_8px_0px_#1db954] transition-all font-black">
               ACESSAR LOJA
             </a>
           </motion.nav>

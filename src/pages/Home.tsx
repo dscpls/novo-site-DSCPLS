@@ -34,17 +34,17 @@ export default function Home() {
         className="w-full max-w-5xl flex flex-col gap-12 relative z-10"
       >
         {/* Lançamento: Brigas Fúteis */}
-        <div className="w-full flex flex-col md:flex-row gap-12 items-center bg-[#0a0a0a]/60 p-8 md:p-12 border border-white/5 backdrop-blur-md rounded-lg shadow-2xl">
+        <div className="w-full flex flex-col md:flex-row gap-12 items-center bg-[#050505] p-8 md:p-12 border-4 border-white/10 rounded-sm shadow-2xl">
           <div className="flex-1 space-y-6">
-            <div className="inline-block border border-[#ff3e3e] text-[#ff3e3e] px-4 py-1 text-xs tracking-[0.2em]">
+            <div className="inline-block border-2 border-[#ff3e3e] text-[#ff3e3e] px-4 py-1 text-sm font-bold tracking-widest uppercase">
               NOVO LANÇAMENTO
             </div>
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight text-white mb-4">BRIGAS FÚTEIS</h1>
-            <p className="text-gray-400 font-light leading-relaxed text-sm md:text-base">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter uppercase leading-none text-white mb-4">BRIGAS FÚTEIS</h1>
+            <p className="text-gray-400 font-bold leading-relaxed text-base md:text-lg">
               O novo single <strong className="text-white">"BRIGAS FÚTEIS"</strong> já está disponível. Assista ao conteúdo oficial e mergulhe em mais um fragmento audiovisual do projeto DSCPLS.
             </p>
             <div className="pt-2">
-               <a href="https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q" target="_blank" rel="noopener noreferrer" className="text-[#1db954] hover:text-[#000] border border-[#1db954] px-6 py-2 hover:bg-[#1db954] transition-all tracking-widest text-xs inline-block">
+               <a href="https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q" target="_blank" rel="noopener noreferrer" className="text-[#1db954] hover:text-[#0a0a0a] border-4 border-[#1db954] px-8 py-3 hover:bg-[#1db954] transition-all tracking-widest text-sm font-bold inline-block uppercase">
                 OUVIR NO SPOTIFY
                </a>
             </div>
@@ -52,7 +52,7 @@ export default function Home() {
           <div className="w-full md:w-1/2 flex items-center justify-center relative">
             <div className="absolute inset-0 bg-[#ff3e3e]/20 blur-3xl rounded-full"></div>
             <iframe 
-              className="w-full aspect-video border border-white/10 relative z-10 shadow-[0_0_30px_rgba(255,0,0,0.1)] rounded-sm grayscale hover:grayscale-0 transition-all duration-700"
+              className="w-full aspect-video border-4 border-white/20 relative z-10 shadow-[8px_8px_0px_rgba(255,0,0,0.5)] grayscale hover:grayscale-0 transition-all duration-300"
               src="https://www.youtube.com/embed/_RHGBo6Mqpg" 
               title="BRIGAS FÚTEIS" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -62,20 +62,20 @@ export default function Home() {
         </div>
 
         {/* Anterior: flores */}
-        <div className="w-full flex flex-col md:flex-row-reverse gap-12 items-center bg-[#0a0a0a]/60 p-8 md:p-12 border border-white/5 backdrop-blur-md rounded-lg shadow-2xl mt-8">
+        <div className="w-full flex flex-col md:flex-row-reverse gap-12 items-center bg-[#050505] p-8 md:p-12 border-4 border-white/10 rounded-sm shadow-2xl mt-8">
           <div className="flex-1 space-y-6">
-            <div className="inline-block border border-gray-500 text-gray-500 px-4 py-1 text-xs tracking-[0.2em]">
+            <div className="inline-block border-2 border-gray-500 text-gray-500 px-4 py-1 text-sm font-bold tracking-widest uppercase">
               DEZEMBRO DE 2025
             </div>
-            <h1 className="text-4xl md:text-5xl font-light tracking-tight text-white mb-4">flores</h1>
-            <p className="text-gray-400 font-light leading-relaxed text-sm md:text-base">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter uppercase leading-none text-white mb-4">flores</h1>
+            <p className="text-gray-400 font-bold leading-relaxed text-base md:text-lg">
               Uma peça mais antiga do quebra-cabeça. Explore a atmosfera estética de <strong className="text-white">"flores"</strong> na íntegra.
             </p>
           </div>
           <div className="w-full md:w-1/2 flex items-center justify-center relative">
             <div className="absolute inset-0 bg-blue-900/10 blur-3xl rounded-full"></div>
             <iframe 
-              className="w-full aspect-video border border-white/10 relative z-10 rounded-sm opacity-80 hover:opacity-100 transition-opacity duration-700 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+              className="w-full aspect-video border-4 border-white/20 relative z-10 shadow-[8px_8px_0px_rgba(255,255,255,0.2)] opacity-80 hover:opacity-100 transition-opacity duration-300"
               src="https://www.youtube.com/embed/WtwCkBN3i-M" 
               title="flores" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
