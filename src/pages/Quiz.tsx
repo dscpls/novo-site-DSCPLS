@@ -13,6 +13,7 @@ export default function Quiz() {
   const [errorShake, setErrorShake] = useState(false);
   const [factVisible, setFactVisible] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
 
   const questions = [
     {
@@ -31,9 +32,17 @@ export default function Quiz() {
 
   const playSound = (success: boolean) => {
      try {
-        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
+        if (!audioCtxRef.current) {
+          const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+          if (!AudioContextClass) return;
+          audioCtxRef.current = new AudioContextClass();
+        }
+        
+        const ctx = audioCtxRef.current;
+        if (ctx.state === 'suspended') {
+           ctx.resume();
+        }
+
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
@@ -128,17 +137,32 @@ export default function Quiz() {
               {t('quiz.reward')}
             </p>
 
-            <div className="w-full max-w-md bg-[#111] border-4 border-[#ff3e3e] p-6 shadow-[8px_8px_0_#fff]">
-              <audio 
-                ref={audioRef}
-                controls 
-                autoPlay 
-                onTimeUpdate={handleTimeUpdate}
-                className="w-full"
-                src="https://cdn.discordapp.com/attachments/1137467200245088317/1495847322620395651/background.mp3?ex=69e7bbe1&is=69e66a61&hm=34f92122e9fe795d6717588cd11ec2cedb0421bbf1a023b62074a85960173cd0&"
-              >
-                Seu navegador não suporta o áudio.
-              </audio>
+            <div className="w-full max-w-4xl flex flex-col gap-8 w-full max-w-2xl text-left bg-[#111] border-4 border-[#ff3e3e] p-6 shadow-[8px_8px_0_#fff]">
+              <div>
+                <h3 className="text-white mb-2 font-bold uppercase tracking-widest text-sm">BACKGROUND</h3>
+                <audio 
+                  ref={audioRef}
+                  controls 
+                  autoPlay 
+                  crossOrigin="anonymous"
+                  onTimeUpdate={handleTimeUpdate}
+                  className="w-full h-10 object-contain"
+                  src="https://audio.jukehost.co.uk/7b2arQLYzy4GHB2z68rlbO7oL9r4Kj6a"
+                >
+                  Seu navegador não suporta o áudio.
+                </audio>
+              </div>
+              <div>
+                <h3 className="text-white mb-2 font-bold uppercase tracking-widest text-sm">BRIGAS FÚTEIS REMIX (feat. NBA Younger & Kaio Valle)</h3>
+                <audio 
+                  controls 
+                  crossOrigin="anonymous"
+                  className="w-full h-10 object-contain"
+                  src="https://audio.jukehost.co.uk/rl7WpCUpB6B2Fphs3OuFfG2OuKMLoLGm"
+                >
+                  Seu navegador não suporta o áudio.
+                </audio>
+              </div>
             </div>
 
             <AnimatePresence>

@@ -9,6 +9,7 @@ import Diario from './pages/Diario';
 import Admin from './pages/Admin';
 import Quiz from './pages/Quiz';
 import Bonus from './pages/Bonus';
+import Faq from './pages/Faq';
 import Navigation from './components/Navigation';
 import CrtMode from './components/CrtMode';
 import EasterEggTrigger from './components/EasterEggTrigger';
@@ -28,6 +29,7 @@ function AnimatedRoutes() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/bonus" element={<Bonus />} />
+        <Route path="/faq" element={<Faq />} />
       </Routes>
     </AnimatePresence>
   );

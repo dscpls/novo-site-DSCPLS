@@ -148,9 +148,9 @@ export default function Home() {
 
           </div>
           <div className="mt-12 text-center">
-             <button className="border-4 border-white px-12 py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors text-xl">
+             <a href="https://dscpls.shop" target="_blank" rel="noopener noreferrer" className="inline-block border-4 border-white px-12 py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors text-xl">
                {t('home.merch.store')}
-             </button>
+             </a>
              <p className="text-gray-500 mt-4 tracking-widest uppercase text-sm">{t('home.merch.available')}</p>
           </div>
         </div>

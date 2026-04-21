@@ -36,9 +36,9 @@ export default function Sobre() {
           
           <div className="w-full break-inside-avoid my-8 border-4 border-white relative overflow-hidden group">
             <img 
-              src="/duo.jpg" 
+              src="https://i.imgur.com/6if7kHL.jpeg" 
               alt="Henriz e Gebriel" 
-              className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+              className="w-full h-auto object-cover transition-all duration-300"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>
@@ -73,10 +73,10 @@ export default function Sobre() {
             {/* Foto Placeholder */}
             <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
-                src="/henriz.jpg" 
+                src="https://i.imgur.com/7szM0kT.jpeg" 
                 alt="Henriz" 
                 className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen"
-                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1607513746994-51f730a44832?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>
@@ -113,10 +113,10 @@ export default function Sobre() {
             {/* Foto Placeholder */}
             <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
-                src="/gebriel.webp" 
+                src="https://i.imgur.com/BHaiolL.png" 
                 alt="Gebriel" 
                 className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-screen"
-                onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }}
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22 opacity=%220.3%22/%3E%3C/SVG%3E')] pointer-events-none mix-blend-overlay"></div>

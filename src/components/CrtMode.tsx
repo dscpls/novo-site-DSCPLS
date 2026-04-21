@@ -190,6 +190,10 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
       vAudio.removeAttribute('crossOrigin');
       vAudio.src = url;
       
+      // Some CDNs like discord require this to be able to fetch the audio directly 
+      // without failing due to sec-fetch-* and referer headers.
+      vAudio.referrerPolicy = 'no-referrer';
+      
       vAudio.oncanplay = () => {
         setAudioProgress(0);
         setAudioTime('00:00 / 00:00');
@@ -299,9 +303,9 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
             <div className={`absolute top-[5%] md:top-[8%] right-[5%] text-2xl md:text-5xl ${audioPlaying ? 'animate-[blk_1s_infinite]' : ''}`}>{audioPlaying ? 'PLAY' : 'STOP'}</div>
             <ul className="list-none mt-[15vh] md:mt-[10vh] w-full space-y-2">
               {[
-                { name: 'BROCKHAMPTON_nao_lancada.mp3', url: 'https://cdn.discordapp.com/attachments/1409724404795183131/1495283989987065998/14_-_HUMAN.mp3?ex=69e657fc&is=69e5067c&hm=4c563eec6e8862b00a0a65908ef8e3a22e509257c5680125c6fb5118f6899613&' },
-                { name: 'SANTO-nao-vai-ser-lancada.mp3', url: 'https://cdn.discordapp.com/attachments/1137467200245088317/1495561838442578061/SANTO.mp3?ex=69e6b200&is=69e56080&hm=c24e0ada2ba64f759d0a92b75e11aff2a1af71e9f90eec140cedd57460f447e1&' },
-                { name: 'track-album-solo-henriz.mp3',    url: 'https://cdn.discordapp.com/attachments/1137467200245088317/1495561957305094264/Corredor.mp3?ex=69e6b21c&is=69e5609c&hm=f7646c2e50891e0bf306496fa6f24bdbabb4d07879e62890851d0fd127ca533b&' }
+                { name: 'BROCKHAMPTON_nao_lancada.mp3', url: 'https://audio.jukehost.co.uk/RXVePVjLYVfMKtUr9u2fZ3elSwAODbTm' },
+                { name: 'SANTO-nao-vai-ser-lancada.mp3', url: 'https://audio.jukehost.co.uk/7ci7BvkpQ6sEcOVaY38wa9dr32ax6lg7' },
+                { name: 'track-album-solo-henriz.mp3',    url: 'https://audio.jukehost.co.uk/KrXFIc8Rp4VajY4OSX1mXybVVzx2j8Us' }
               ].map((trk, i) => (
                 <li 
                   key={i} 
