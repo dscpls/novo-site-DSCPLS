@@ -38,7 +38,7 @@ export default function Bonus() {
           >
             <div className="flex flex-col md:flex-row items-center gap-8 bg-[#111] p-8 border-4 border-white/20">
               <p className="text-white font-bold text-lg md:text-xl leading-relaxed flex-1">
-                {t('bonus.p1')} <span className="text-[#ff3e3e]">{t('bonus.p2')}</span> {t('bonus.p3')}
+                {t('bonus.p1')} <span className="text-[#00DF59]">{t('bonus.p2')}</span> {t('bonus.p3')}
               </p>
               <img src="https://i.imgur.com/18NBD10.png" alt="Assinatura Henriz" className="h-24 md:h-32 object-contain filter invert" />
             </div>
@@ -62,12 +62,12 @@ export default function Bonus() {
             </div>
 
             {/* Flores com Fato Curioso */}
-            <div className="flex flex-col md:flex-row gap-8 items-center bg-[#050505] p-8 border-4 border-[#ff3e3e]/30">
+            <div className="flex flex-col md:flex-row gap-8 items-center bg-[#050505] p-8 border-4 border-[#00DF59]/30">
               <div className="flex-1 flex flex-col gap-2">
                 <h3 className="text-3xl font-black uppercase text-white tracking-tighter mb-2">flores</h3>
-                <div className="bg-black/50 p-6 border-l-4 border-[#ff3e3e]">
+                <div className="bg-black/50 p-6 border-l-4 border-[#00DF59]">
                   <p className="text-gray-300 font-bold leading-relaxed text-sm md:text-base">
-                    <span className="text-[#ff3e3e]">{t('bonus.fact_title')}</span> {t('bonus.fact1')}
+                    <span className="text-[#00DF59]">{t('bonus.fact_title')}</span> {t('bonus.fact1')}
                     <br/><br/>
                     <span className="text-white font-mono">- Henriz</span>
                   </p>
@@ -79,13 +79,13 @@ export default function Bonus() {
             </div>
 
             {/* Calmaria ANTES DA TEMPESTADE */}
-            <div className="flex flex-col md:flex-row gap-8 items-center bg-[#00ffff]/5 p-8 border-4 border-[#00ffff]/30">
+            <div className="flex flex-col md:flex-row gap-8 items-center bg-[#FFE600]/5 p-8 border-4 border-[#FFE600]/30">
               <div className="w-full md:w-1/2 aspect-video border-4 border-white/10 bg-black shrink-0">
                 <iframe className="w-full h-full grayscale hover:grayscale-0 transition-all duration-500" src="https://drive.google.com/file/d/1XZPC9qJ6Iis7l0ItTKp-xe-LSBQWL-I5/preview" title="calmaria" allowFullScreen></iframe>
               </div>
               <div className="flex-1 flex flex-col gap-2">
                 <h3 className="text-3xl lg:text-4xl font-black uppercase text-white tracking-tighter mb-2">A Calmaria Antes da Tempestade</h3>
-                <span className="text-[#00ffff] font-mono font-bold tracking-widest text-sm mb-4 block">UNRELEASED / CRINGE</span>
+                <span className="text-[#FFE600] font-mono font-bold tracking-widest text-sm mb-4 block">UNRELEASED / CRINGE</span>
                 <p className="text-gray-400 font-bold leading-relaxed">
                   {t('bonus.fact2')}
                 </p>

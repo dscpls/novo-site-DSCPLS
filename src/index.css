@@ -12,27 +12,39 @@
     clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
   }
   .text-shadow-glitch {
-    text-shadow: 2px 0 red, -2px 0 cyan;
+    text-shadow: 2px 0 #00DF59, -2px 0 #FFE600;
+  }
+  .bg-wood-pattern {
+    background-color: #24140b;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(255, 255, 255, 0.02) 100%),
+      repeating-linear-gradient(0deg, #2b170c, #2b170c 3px, #1f0f07 3px, #1f0f07 6px);
+  }
+  .bg-radio-grill {
+    background-color: #120e0a;
+    background-image: radial-gradient(#3a2718 15%, transparent 16%),
+      radial-gradient(#20150d 15%, transparent 16%);
+    background-size: 8px 8px;
+    background-position: 0 0, 4px 4px;
   }
 }
 
 @layer base {
   body {
-    @apply bg-[#0a0a0a] text-[#e0e0e0];
+    @apply bg-[#080706] text-[#e0e0e0];
     font-family: var(--font-sans);
     overflow-x: hidden;
   }
 }
 
 .aberration {
-  text-shadow: 1px 0 1px #ff3e3e, -1px 0 1px #00ffff;
+  text-shadow: 1px 0 1px #00DF59, -1px 0 1px #FFE600;
   animation: jit 3s infinite alternate;
 }
 
 @keyframes jit {
-  0%, 95% { text-shadow: 1px 0 1px #ff3e3e, -1px 0 1px #00ffff; }
-  96% { text-shadow: -2px 1px 0 rgba(255, 0, 0, 0.8), 2px -1px 0 rgba(0, 255, 255, 0.8); }
-  100% { text-shadow: 2px 0 1px #ff3e3e, -2px 0 1px #00ffff; }
+  0%, 95% { text-shadow: 1px 0 1px #00DF59, -1px 0 1px #FFE600; }
+  96% { text-shadow: -2px 1px 0 rgba(0, 223, 89, 0.8), 2px -1px 0 rgba(255, 230, 0, 0.8); }
+  100% { text-shadow: 2px 0 1px #00DF59, -2px 0 1px #FFE600; }
 }
 
 @keyframes jit2 {

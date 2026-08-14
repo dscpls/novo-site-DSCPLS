@@ -58,7 +58,7 @@ export default function Jogos() {
     >
       <div className="flex items-center gap-4 mb-12">
         <h1 className="text-3xl tracking-[0.2em] font-light text-white uppercase">{t('nav.jogos')}</h1>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
+        <div className="h-[2px] flex-1 bg-white/20"></div>
       </div>
 
       <div className="bg-[#111] border border-[#222] rounded-lg p-6 flex flex-col items-center">
@@ -67,9 +67,9 @@ export default function Jogos() {
           {t('jogos.aim.desc')}
         </p>
 
-        <div className="flex justify-between w-full max-w-2xl mb-4 text-white">
-          <span className="uppercase">{t('jogos.aim.pts')}: {score}</span>
-          {!isPlaying && <button onClick={startGame} className="text-[#ff3e3e] hover:underline uppercase">{t('jogos.aim.start')}</button>}
+        <div className="flex justify-between w-full max-w-2xl mb-4 text-white font-mono">
+          <span className="uppercase text-[#FFE600]">{t('jogos.aim.pts')}: {score}</span>
+          {!isPlaying && <button onClick={startGame} className="text-[#00DF59] hover:underline uppercase font-bold">{t('jogos.aim.start')}</button>}
           {isPlaying && <button onClick={() => setIsPlaying(false)} className="text-gray-500 hover:text-white uppercase">{t('jogos.aim.stop')}</button>}
         </div>
 
@@ -86,10 +86,10 @@ export default function Jogos() {
           {isPlaying && (
             <div 
               onClick={hitTarget}
-              className="absolute w-12 h-12 rounded-full border border-[#ff3e3e] flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 cursor-crosshair group hover:bg-red-900/50 transition-colors duration-75"
+              className="absolute w-12 h-12 rounded-full border border-[#00DF59] flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 cursor-crosshair group hover:bg-[#00DF59]/20 transition-colors duration-75"
               style={{ left: `${target.x}%`, top: `${target.y}%` }}
             >
-              <div className="w-4 h-4 bg-[#ff3e3e] rounded-full group-active:scale-50 transition-transform"></div>
+              <div className="w-4 h-4 bg-[#00DF59] rounded-full group-active:scale-50 transition-transform"></div>
             </div>
           )}
         </div>

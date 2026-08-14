@@ -117,7 +117,7 @@ export default function Quiz() {
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder={t('quiz.answer')}
-                className="w-full bg-transparent border-b-4 border-white text-3xl md:text-5xl text-center text-[#ff3e3e] font-black uppercase focus:outline-none focus:border-[#ff3e3e] transition-colors pb-4 placeholder-white/20"
+                className="w-full bg-transparent border-b-4 border-white text-3xl md:text-5xl text-center text-[#00DF59] font-black uppercase focus:outline-none focus:border-[#00DF59] transition-colors pb-4 placeholder-white/20"
               />
             </form>
           </motion.div>
@@ -129,7 +129,7 @@ export default function Quiz() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full max-w-4xl flex flex-col items-center"
           >
-            <h1 className="text-5xl md:text-7xl font-black text-[#00ffff] uppercase mb-6 tracking-tighter drop-shadow-[5px_5px_0_#ff3e3e] animate-pulse">
+            <h1 className="text-5xl md:text-7xl font-black text-[#FFE600] uppercase mb-6 tracking-tighter drop-shadow-[5px_5px_0_#00DF59] animate-pulse">
               {t('quiz.success')}
             </h1>
             
@@ -137,9 +137,9 @@ export default function Quiz() {
               {t('quiz.reward')}
             </p>
 
-            <div className="w-full max-w-4xl flex flex-col gap-8 w-full max-w-2xl text-left bg-[#111] border-4 border-[#ff3e3e] p-6 shadow-[8px_8px_0_#fff]">
+            <div className="w-full max-w-4xl flex flex-col gap-8 w-full max-w-2xl text-left bg-[#111] border-4 border-[#00DF59] p-6 shadow-[8px_8px_0_#FFE600]">
               <div>
-                <h3 className="text-white mb-2 font-bold uppercase tracking-widest text-sm">BACKGROUND</h3>
+                <h3 className="text-[#00DF59] mb-2 font-bold uppercase tracking-widest text-sm font-mono">BACKGROUND</h3>
                 <audio 
                   ref={audioRef}
                   controls 
@@ -153,7 +153,7 @@ export default function Quiz() {
                 </audio>
               </div>
               <div>
-                <h3 className="text-white mb-2 font-bold uppercase tracking-widest text-sm">BRIGAS FÚTEIS REMIX (feat. NBA Younger & Kaio Valle)</h3>
+                <h3 className="text-[#FFE600] mb-2 font-bold uppercase tracking-widest text-sm font-mono">BRIGAS FÚTEIS REMIX (feat. NBA Younger & Kaio Valle)</h3>
                 <audio 
                   controls 
                   crossOrigin="anonymous"
@@ -170,12 +170,12 @@ export default function Quiz() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-12 p-4 border-l-4 border-[#00ffff] bg-black/50 text-left max-w-2xl"
+                  className="mt-12 p-4 border-l-4 border-[#FFE600] bg-black/70 text-left max-w-2xl"
                 >
                   <p className="text-gray-300 font-mono text-sm leading-relaxed whitespace-pre-line">
-                    <span className="text-[#00ffff] font-bold">fato curioso / fun fact:</span> {t('quiz.fact')}
+                    <span className="text-[#FFE600] font-bold">fato curioso / fun fact:</span> {t('quiz.fact')}
                     <br/><br/>
-                    <span className="text-white">- Henriz</span>
+                    <span className="text-[#00DF59] font-bold">- Henriz</span>
                   </p>
                 </motion.div>
               )}

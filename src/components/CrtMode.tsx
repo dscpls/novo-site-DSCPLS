@@ -190,9 +190,9 @@ export default function CrtMode({ onClose }: { onClose: () => void }) {
       vAudio.removeAttribute('crossOrigin');
       vAudio.src = url;
       
-      // Some CDNs like discord require this to be able to fetch the audio directly 
+      // Some CDNs require this to be able to fetch the audio directly 
       // without failing due to sec-fetch-* and referer headers.
-      vAudio.referrerPolicy = 'no-referrer';
+      (vAudio as any).referrerPolicy = 'no-referrer';
       
       vAudio.oncanplay = () => {
         setAudioProgress(0);

@@ -63,15 +63,15 @@ export default function Admin() {
       className="max-w-4xl mx-auto pt-10 pb-40"
     >
       <div className="flex items-center gap-4 mb-12">
-        <h1 className="text-3xl tracking-[0.2em] font-light text-red-500">{t('admin.title')}</h1>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
+        <h1 className="text-3xl tracking-[0.2em] font-light text-[#00DF59] font-mono">{t('admin.title')}</h1>
+        <div className="h-[2px] flex-1 bg-white/20"></div>
         {isAdmin && (
-          <button onClick={logoutAdmin} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">{t('diario.logout_btn')}</button>
+          <button onClick={logoutAdmin} className="text-xs text-[#FFE600] hover:text-white border border-[#FFE600]/30 px-3 py-1 font-mono">{t('diario.logout_btn')}</button>
         )}
       </div>
 
       {!isAdmin ? (
-        <div className="text-center p-8 md:p-20 border border-[#333] bg-[#111]">
+        <div className="text-center p-8 md:p-20 border-2 border-[#00DF59]/40 bg-[#111]">
           <h2 className="text-2xl font-black uppercase mb-4 text-white">{t('admin.restricted')}</h2>
           <p className="text-gray-400 mb-8">{t('admin.credentials')}</p>
           
@@ -81,17 +81,17 @@ export default function Admin() {
               placeholder={t('admin.user')}
               value={username}
               onChange={e => setUsername(e.target.value)}
-              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-red-500 outline-none text-center font-mono placeholder:text-gray-600"
+              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-[#00DF59] outline-none text-center font-mono placeholder:text-gray-600"
             />
             <input 
               type="password"
               placeholder={t('admin.pass')}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-red-500 outline-none text-center font-mono placeholder:text-gray-600"
+              className="bg-black border border-[#333] text-white px-4 py-3 focus:border-[#00DF59] outline-none text-center font-mono placeholder:text-gray-600"
             />
-            {loginError && <p className="text-red-500 text-xs font-bold uppercase mt-2">{t('admin.auth_invalid')}</p>}
-            <button type="submit" className="mt-4 bg-red-600 font-bold uppercase text-white px-8 py-3 tracking-widest hover:bg-red-500">
+            {loginError && <p className="text-[#FFE600] text-xs font-bold uppercase mt-2 font-mono">{t('admin.auth_invalid')}</p>}
+            <button type="submit" className="mt-4 bg-[#00DF59] font-black uppercase text-black px-8 py-3 tracking-widest hover:bg-[#00DF59]/80 font-mono transition-all">
               {t('admin.auth_btn')}
             </button>
           </form>
@@ -100,19 +100,19 @@ export default function Admin() {
         <div className="space-y-12">
           {/* Visualizing Newsletter Template */}
           <div className="bg-[#111] border border-[#222] p-8">
-            <h2 className="text-xl font-bold tracking-widest mb-2 border-b border-[#333] pb-4">O TEMPLATE OFICIAL DA NEWSLETTER</h2>
+            <h2 className="text-xl font-bold tracking-widest mb-2 border-b border-[#333] pb-4 text-[#00DF59] font-mono">O TEMPLATE OFICIAL DA NEWSLETTER</h2>
             <p className="text-sm text-gray-400 mb-6">Esta é a caixa de assinatura que os usuários veem. Você pode testar e ver como funciona.</p>
             <div className="scale-90 origin-top">
               <Newsletter />
             </div>
             
-            <div className="mt-8 bg-black border border-white/20 p-6">
-               <h3 className="text-red-500 font-bold uppercase tracking-widest mb-2">COMO ENVIAR EMAILS COM ESTE ESTILO:</h3>
+            <div className="mt-8 bg-black border border-[#FFE600]/30 p-6">
+               <h3 className="text-[#FFE600] font-bold uppercase tracking-widest mb-2 font-mono">COMO ENVIAR EMAILS COM ESTE ESTILO:</h3>
                <p className="text-gray-300 text-sm leading-relaxed mb-4">
                  Sempre que quiser disparar um email com a estética da Newsletter, copie este código HTML e cole no modo "Código Fonte" ou no corpo do email se seu disparador aceitar envio em HTML:
                </p>
                <pre className="bg-[#1a1a1a] p-4 text-xs font-mono text-gray-400 overflow-x-auto border border-[#333]">
-{`<div style="background-color: #ff3e3e; border-top: 4px solid white; border-bottom: 4px solid white; padding: 40px; color: black; font-family: sans-serif;">
+{`<div style="background-color: #00DF59; border-top: 4px solid #FFE600; border-bottom: 4px solid #FFE600; padding: 40px; color: black; font-family: sans-serif;">
   <h1 style="font-weight: 900; font-size: 32px; text-transform: uppercase; margin-bottom: 10px;">TITULO DA SUA NEWSLETTER</h1>
   <p style="font-weight: bold; font-size: 16px;">
     ESCREVA O CONTEÚDO DO SEU O SINAL AQUI.
@@ -127,28 +127,28 @@ export default function Admin() {
 
           {/* Seção Newsletter Disparo */}
           <div className="bg-[#111] border border-[#222] p-8">
-            <h2 className="text-xl font-bold tracking-widest mb-2 border-b border-[#333] pb-4">DISPARO DE NEWSLETTER</h2>
-            <p className="text-sm text-gray-400 mb-6">Inscritos totais: <span className="text-red-500 font-bold">{subscribers.length}</span></p>
+            <h2 className="text-xl font-bold tracking-widest mb-2 border-b border-[#333] pb-4 text-[#00DF59] font-mono">DISPARO DE NEWSLETTER</h2>
+            <p className="text-sm text-gray-400 mb-6 font-mono">Inscritos totais: <span className="text-[#FFE600] font-bold">{subscribers.length}</span></p>
 
             <div className="space-y-4">
               <input 
                 value={subject}
                 onChange={e => setSubject(e.target.value)}
                 placeholder="Assunto do E-mail..."
-                className="w-full bg-[#050505] border border-[#333] text-white p-3 font-bold focus:border-red-500 outline-none"
+                className="w-full bg-[#050505] border border-[#333] text-white p-3 font-bold focus:border-[#00DF59] outline-none font-mono"
               />
               <textarea 
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 placeholder="Corpo do E-mail. Você pode colar a mensagem aqui e disparar."
                 rows={10}
-                className="w-full bg-[#050505] border border-[#333] text-white p-3 focus:border-red-500 outline-none resize-none font-sans"
+                className="w-full bg-[#050505] border border-[#333] text-white p-3 focus:border-[#00DF59] outline-none resize-none font-sans"
               />
               
               <button 
                 onClick={handleSendEmail}
                 disabled={subscribers.length === 0}
-                className="w-full bg-red-900/50 hover:bg-red-600 text-white font-bold tracking-widest uppercase p-4 border border-red-500 transition-colors disabled:opacity-50"
+                className="w-full bg-[#00DF59] hover:bg-[#00DF59]/80 text-black font-black tracking-widest uppercase p-4 border-2 border-[#FFE600] transition-colors disabled:opacity-50 font-mono"
               >
                 PREPARAR DISPARO
               </button>
@@ -157,10 +157,10 @@ export default function Admin() {
           
           <div className="bg-[#111] border border-[#222] p-8 flex justify-between items-center">
              <div>
-               <h2 className="text-xl font-bold tracking-widest mb-2">GERENCIAR DIÁRIO</h2>
+               <h2 className="text-xl font-bold tracking-widest mb-2 font-mono">GERENCIAR DIÁRIO</h2>
                <p className="text-sm text-gray-400">Poste ou delete updates do Diário.</p>
              </div>
-             <a href="/diario" className="border border-white hover:bg-white hover:text-black py-2 px-6 font-bold tracking-widest uppercase transition-colors">Abrir Diário</a>
+             <a href="/diario" className="border-2 border-[#00DF59] text-[#00DF59] hover:bg-[#00DF59] hover:text-black py-2 px-6 font-bold tracking-widest uppercase transition-colors font-mono">Abrir Diário</a>
           </div>
         </div>
       )}

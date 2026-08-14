@@ -39,14 +39,14 @@ export default function Faq() {
       <div className="flex gap-4 mb-10 border-b-4 border-white/20 pb-4">
          <button 
            onClick={() => { setOpenSection('loja'); setOpenIndex(null); }}
-           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'loja' ? 'text-[#ff3e3e]' : 'text-gray-500 hover:text-white'}`}
+           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'loja' ? 'text-[#00DF59]' : 'text-gray-500 hover:text-white'}`}
          >
             {t('faq.section.loja')}
          </button>
          <span className="text-2xl text-white/20 font-black">/</span>
          <button 
            onClick={() => { setOpenSection('banda'); setOpenIndex(null); }}
-           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'banda' ? 'text-[#00ffff]' : 'text-gray-500 hover:text-white'}`}
+           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'banda' ? 'text-[#FFE600]' : 'text-gray-500 hover:text-white'}`}
          >
             {t('faq.section.banda')}
          </button>
@@ -65,7 +65,7 @@ export default function Faq() {
             {(openSection === 'loja' ? lojaFaqs : bandaFaqs).map((faq, index) => (
               <div 
                 key={index} 
-                className={`bg-[#111] border-2 transition-colors duration-300 ${openIndex === index ? (openSection === 'loja' ? 'border-[#ff3e3e]' : 'border-[#00ffff]') : 'border-white/10 hover:border-white/30'}`}
+                className={`bg-[#111] border-2 transition-colors duration-300 ${openIndex === index ? (openSection === 'loja' ? 'border-[#00DF59]' : 'border-[#FFE600]') : 'border-white/10 hover:border-white/30'}`}
               >
                 <button
                   className="w-full text-left p-6 flex items-center justify-between focus:outline-none"
@@ -87,7 +87,7 @@ export default function Faq() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className={`p-6 pt-0 text-base md:text-lg font-mono text-gray-300 leading-relaxed border-t-2 ${openSection === 'loja' ? 'border-[#ff3e3e]/20' : 'border-[#00ffff]/20'} mt-2`}>
+                      <div className={`p-6 pt-0 text-base md:text-lg font-mono text-gray-300 leading-relaxed border-t-2 ${openSection === 'loja' ? 'border-[#00DF59]/30' : 'border-[#FFE600]/30'} mt-2`}>
                         {faq.a}
                       </div>
                     </motion.div>

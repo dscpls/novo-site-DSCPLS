@@ -66,11 +66,11 @@ export default function Sobre() {
           
           {/* HENRIZ */}
           <div className="bg-[#111] border-4 border-white flex flex-col relative group">
-            <div className="absolute top-0 right-0 bg-white text-black px-4 py-1 font-black uppercase text-xl z-20 border-b-4 border-l-4 border-white group-hover:bg-red-500 group-hover:text-white transition-colors">
+            <div className="absolute top-0 right-0 bg-white text-black px-4 py-1 font-black uppercase text-xl z-20 border-b-4 border-l-4 border-white group-hover:bg-[#00DF59] group-hover:text-black transition-colors">
               01
             </div>
             
-            {/* Foto Placeholder */}
+            {/* Foto */}
             <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
                 src="https://i.imgur.com/7szM0kT.jpeg" 
@@ -85,11 +85,11 @@ export default function Sobre() {
             <div className="p-8 flex-1 flex flex-col">
               <h2 className="text-5xl font-black uppercase tracking-tighter mb-2">HENRIZ</h2>
               <div className="flex flex-wrap gap-2 mb-6">
-                 <span className="bg-[#ff3e3e] text-white px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.henriz.role1')}</span>
+                 <span className="bg-[#00DF59] text-black px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.henriz.role1')}</span>
                  <span className="border border-white/30 px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.henriz.role2')}</span>
                  <span className="border border-white/30 px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.henriz.role3')}</span>
               </div>
-              <div className="text-sm font-mono text-gray-400 mb-6 uppercase border-l-4 border-[#ff3e3e] pl-4">
+              <div className="text-sm font-mono text-gray-400 mb-6 uppercase border-l-4 border-[#00DF59] pl-4">
                 {t('sobre.henriz.loc')}
               </div>
               <p className="text-gray-300 font-bold leading-relaxed mb-6">
@@ -98,7 +98,7 @@ export default function Sobre() {
               
               <div className="mt-auto pt-6 border-t font-mono border-white/20">
                 <p className="text-xs text-gray-500 italic">
-                  <span className="text-red-500 not-italic font-bold">{t('sobre.henriz.note_title')}</span> {t('sobre.henriz.note')}
+                  <span className="text-[#00DF59] not-italic font-bold">{t('sobre.henriz.note_title')}</span> {t('sobre.henriz.note')}
                 </p>
               </div>
             </div>
@@ -106,11 +106,11 @@ export default function Sobre() {
 
           {/* GEBRIEL */}
           <div className="bg-[#111] border-4 border-white flex flex-col relative group mt-12 md:mt-0">
-             <div className="absolute top-0 right-0 bg-white text-black px-4 py-1 font-black uppercase text-xl z-20 border-b-4 border-l-4 border-white group-hover:bg-[#00ffff] group-hover:text-black transition-colors">
+             <div className="absolute top-0 right-0 bg-white text-black px-4 py-1 font-black uppercase text-xl z-20 border-b-4 border-l-4 border-white group-hover:bg-[#FFE600] group-hover:text-black transition-colors">
               02
             </div>
             
-            {/* Foto Placeholder */}
+            {/* Foto */}
             <div className="w-full aspect-[4/3] bg-[#222] border-b-4 border-white relative overflow-hidden flex items-center justify-center transition-all duration-500">
               <img 
                 src="https://i.imgur.com/BHaiolL.png" 
@@ -125,9 +125,9 @@ export default function Sobre() {
             <div className="p-8 flex-1 flex flex-col">
               <h2 className="text-5xl font-black uppercase tracking-tighter mb-2">GEBRIEL</h2>
               <div className="flex flex-wrap gap-2 mb-6">
-                 <span className="bg-[#00ffff] text-black px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.gebriel.role1')}</span>
+                 <span className="bg-[#FFE600] text-black px-2 py-1 text-xs font-bold font-mono uppercase">{t('sobre.gebriel.role1')}</span>
               </div>
-              <div className="text-sm font-mono text-gray-400 mb-6 uppercase border-l-4 border-[#00ffff] pl-4">
+              <div className="text-sm font-mono text-gray-400 mb-6 uppercase border-l-4 border-[#FFE600] pl-4">
                 {t('sobre.gebriel.loc')}
               </div>
               <p className="text-gray-300 font-bold leading-relaxed mb-6">
@@ -136,7 +136,7 @@ export default function Sobre() {
               
               <div className="mt-auto pt-6 border-t font-mono border-white/20">
                 <p className="text-xs text-gray-500 italic">
-                  <span className="text-teal-400 not-italic font-bold">{t('sobre.gebriel.note_title')}</span> {t('sobre.gebriel.note.p1')}
+                  <span className="text-[#FFE600] not-italic font-bold">{t('sobre.gebriel.note_title')}</span> {t('sobre.gebriel.note.p1')}
                 </p>
               </div>
             </div>
@@ -154,29 +154,29 @@ export default function Sobre() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {/* DSCPLS */}
-           <a href="https://instagram.com/discipulosabanda" target="_blank" rel="noopener noreferrer" className="group bg-white text-black p-8 border-4 border-transparent hover:border-black hover:bg-black hover:text-white transition-all shadow-[8px_8px_0_#ff3e3e] hover:shadow-[12px_12px_0_#00ffff]">
+           <a href="https://instagram.com/discipulosabanda" target="_blank" rel="noopener noreferrer" className="group bg-white text-black p-8 border-4 border-transparent hover:border-black hover:bg-black hover:text-white transition-all shadow-[8px_8px_0_#00DF59] hover:shadow-[12px_12px_0_#FFE600]">
               <div className="text-sm font-mono font-bold uppercase mb-4 text-gray-500 group-hover:text-gray-400">{t('sobre.net_ig1')}</div>
               <h3 className="text-4xl font-black uppercase tracking-tighter">@DISCIPULOSA<br/>BANDA</h3>
            </a>
            
-           <a href="https://youtube.com/@ABandaDISCIPULOS" target="_blank" rel="noopener noreferrer" className="group bg-[#ff0000] text-white p-8 border-4 border-transparent hover:border-white transition-all shadow-[8px_8px_0_#000]">
-              <div className="text-sm font-mono font-bold uppercase mb-4 text-white/70 group-hover:text-white">{t('sobre.net_yt')}</div>
+           <a href="https://youtube.com/@ABandaDISCIPULOS" target="_blank" rel="noopener noreferrer" className="group bg-[#00DF59] text-black p-8 border-4 border-transparent hover:border-white hover:bg-white hover:text-black transition-all shadow-[8px_8px_0_#000]">
+              <div className="text-sm font-mono font-bold uppercase mb-4 text-black/70 group-hover:text-black">{t('sobre.net_yt')}</div>
               <h3 className="text-4xl font-black uppercase tracking-tighter">OS DISCIPULOS</h3>
            </a>
 
-           <a href="https://tiktok.com/@discipulosabanda" target="_blank" rel="noopener noreferrer" className="group bg-black text-white p-8 border-4 border-[#ff0050] hover:bg-[#00f2fe] hover:text-black hover:border-black transition-all shadow-[8px_8px_0_#fff]">
+           <a href="https://tiktok.com/@discipulosabanda" target="_blank" rel="noopener noreferrer" className="group bg-black text-white p-8 border-4 border-[#FFE600] hover:bg-[#FFE600] hover:text-black hover:border-black transition-all shadow-[8px_8px_0_#fff]">
               <div className="text-sm font-mono font-bold uppercase mb-4 text-gray-400 group-hover:text-black/70">{t('sobre.net_tt1')}</div>
               <h3 className="text-4xl font-black uppercase tracking-tighter">{t('sobre.net_tt2')}</h3>
            </a>
 
            {/* PESSOAL */}
-           <a href="https://instagram.com/gqnzaroli" target="_blank" rel="noopener noreferrer" className="group bg-[#111] border-4 border-[#333] text-white p-8 hover:bg-[#ff3e3e] hover:border-[#ff3e3e] transition-all">
-              <div className="text-sm font-mono font-bold uppercase mb-4 text-gray-500 group-hover:text-white/80">{t('sobre.net_ig2')}</div>
+           <a href="https://instagram.com/gqnzaroli" target="_blank" rel="noopener noreferrer" className="group bg-[#111] border-4 border-[#333] text-white p-8 hover:bg-[#00DF59] hover:border-[#00DF59] hover:text-black transition-all">
+              <div className="text-sm font-mono font-bold uppercase mb-4 text-gray-500 group-hover:text-black/80">{t('sobre.net_ig2')}</div>
               <h3 className="text-3xl font-black uppercase tracking-tighter mb-2">HENRIZ</h3>
-              <p className="font-mono text-sm text-gray-400 group-hover:text-white">@gqnzaroli</p>
+              <p className="font-mono text-sm text-gray-400 group-hover:text-black">@gqnzaroli</p>
            </a>
 
-           <a href="https://instagram.com/o.garibel" target="_blank" rel="noopener noreferrer" className="group bg-[#111] border-4 border-[#333] text-white p-8 hover:bg-[#00ffff] hover:border-[#00ffff] hover:text-black transition-all">
+           <a href="https://instagram.com/o.garibel" target="_blank" rel="noopener noreferrer" className="group bg-[#111] border-4 border-[#333] text-white p-8 hover:bg-[#FFE600] hover:border-[#FFE600] hover:text-black transition-all">
               <div className="text-sm font-mono font-bold uppercase mb-4 text-gray-500 group-hover:text-black/80">{t('sobre.net_ig2')}</div>
               <h3 className="text-3xl font-black uppercase tracking-tighter mb-2">GEBRIEL</h3>
               <p className="font-mono text-sm text-gray-400 group-hover:text-black">@o.garibel</p>

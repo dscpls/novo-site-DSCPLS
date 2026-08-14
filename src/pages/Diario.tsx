@@ -69,32 +69,32 @@ export default function Diario() {
     >
       <div className="flex items-center gap-4 mb-12">
         <h1 className="text-3xl tracking-[0.2em] font-light text-white">{t('diario.title')}</h1>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-red-500/50 to-transparent"></div>
+        <div className="h-[2px] flex-1 bg-white/20"></div>
         {isAdmin ? (
-          <button onClick={logoutAdmin} className="text-xs text-red-500 hover:text-red-400 border border-red-500/30 px-3 py-1">{t('diario.logout_btn')}</button>
+          <button onClick={logoutAdmin} className="text-xs text-[#FFE600] hover:text-white border border-[#FFE600]/30 px-3 py-1 font-mono">{t('diario.logout_btn')}</button>
         ) : (
-          <a href="/admin" className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1 cursor-pointer">{t('diario.admin_btn')}</a>
+          <a href="/admin" className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1 cursor-pointer font-mono">{t('diario.admin_btn')}</a>
         )}
       </div>
 
       {isAdmin && (
         <div className="bg-[#111] border border-[#222] p-6 mb-12 space-y-4">
-          <h2 className="text-red-500 text-sm tracking-widest">{">"} {t('diario.new_entry')}</h2>
+          <h2 className="text-[#00DF59] text-sm tracking-widest font-mono">{">"} {t('diario.new_entry')}</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input 
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder={t('diario.entry_title')}
-              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-red-500 transition-colors"
+              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-[#00DF59] transition-colors"
             />
             <textarea 
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={t('diario.entry_msg')}
               rows={5}
-              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-red-500 transition-colors resize-none"
+              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-[#00DF59] transition-colors resize-none"
             />
-            <button type="submit" className="bg-red-900/50 text-white py-3 border border-red-500 hover:bg-red-500 transition-colors tracking-widest text-sm">
+            <button type="submit" className="bg-[#00DF59]/20 text-[#00DF59] py-3 border border-[#00DF59] hover:bg-[#00DF59] hover:text-black transition-colors tracking-widest text-sm font-bold uppercase font-mono">
               {t('diario.publish')}
             </button>
           </form>
@@ -103,10 +103,10 @@ export default function Diario() {
 
       <div className="space-y-12">
         {entries.length === 0 ? (
-          <p className="text-gray-600 text-center uppercase tracking-widest text-sm">Nenhum registro encontrado no vazio.</p>
+          <p className="text-gray-600 text-center uppercase tracking-widest text-sm font-mono">Nenhum registro encontrado no vazio.</p>
         ) : (
           entries.map(entry => (
-            <div key={entry.id} className="border-l-2 border-[#ff3e3e] pl-6 py-2 relative group">
+            <div key={entry.id} className="border-l-2 border-[#00DF59] pl-6 py-2 relative group">
               {isAdmin && (
                 <button 
                   onClick={() => handleDelete(entry.id)}
@@ -117,7 +117,7 @@ export default function Diario() {
                 </button>
               )}
               <h3 className="text-white text-xl font-medium tracking-wide mb-1">{entry.title}</h3>
-              <p className="text-xs text-gray-500 tracking-widest mb-4">
+              <p className="text-xs text-[#FFE600] font-mono tracking-widest mb-4">
                 {entry.createdAt?.toDate ? entry.createdAt.toDate().toLocaleDateString('pt-BR') : 'Agora'}
               </p>
               <div className="text-gray-300 font-light leading-relaxed whitespace-pre-wrap">

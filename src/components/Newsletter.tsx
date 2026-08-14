@@ -37,7 +37,7 @@ export default function Newsletter() {
   };
 
   return (
-    <div className="w-full bg-[#ff3e3e] border-y-4 border-white my-10 flex flex-col md:flex-row items-stretch justify-between font-sans shadow-lg shadow-red-500/10">
+    <div className="w-full bg-[#FFE600] border-y-4 border-white my-10 flex flex-col md:flex-row items-stretch justify-between font-sans shadow-lg shadow-yellow-500/10">
       <div className="w-full md:w-1/2 p-8 md:p-12 text-black border-b-4 md:border-b-0 md:border-r-4 border-white flex flex-col justify-center">
         <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-4 whitespace-pre-line">
           {t('news.title')}
@@ -63,7 +63,7 @@ export default function Newsletter() {
             <button 
               type="submit" 
               disabled={status === 'loading'}
-              className="flex-1 bg-[#ff3e3e] sm:bg-transparent text-black sm:border-y-4 sm:border-r-4 border-black px-6 py-4 font-black uppercase text-base sm:text-lg hover:bg-white transition-colors tracking-widest disabled:opacity-50 min-w-max"
+              className="flex-1 bg-[#00DF59] sm:bg-transparent text-black sm:border-y-4 sm:border-r-4 border-black px-6 py-4 font-black uppercase text-base sm:text-lg hover:bg-white transition-colors tracking-widest disabled:opacity-50 min-w-max"
             >
               {status === 'loading' ? t('news.wait') : (status === 'error' ? 'ERRO' : t('news.subscribe'))}
             </button>
@@ -71,12 +71,12 @@ export default function Newsletter() {
         )}
       </div>
 
-      <div className="w-full md:w-1/2 min-h-[300px] bg-[#050505] p-10 flex flex-col justify-center items-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.2)_0%,transparent_70%)] pointer-events-none"></div>
-        <div className="font-mono text-[#ff3e3e] text-xs md:text-sm tracking-[0.3em] uppercase opacity-70 z-10 text-center space-y-4 max-w-full">
-          <p>{"// LOG_INTERNO_TEMPLATE"}</p>
+      <div className="w-full md:w-1/2 min-h-[300px] bg-[#0c0907] p-10 flex flex-col justify-center items-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,223,89,0.2)_0%,transparent_70%)] pointer-events-none"></div>
+        <div className="font-mono text-[#00DF59] text-xs md:text-sm tracking-[0.3em] uppercase opacity-80 z-10 text-center space-y-4 max-w-full">
+          <p>{"// LOG_INTERNO_LIXO_BRASILEIRO"}</p>
           <p>{t('news.log_title')}</p>
-          <p className="max-w-md w-full bg-black/50 p-4 border border-[#ff3e3e]/30 inline-block text-left text-xs sm:text-sm break-words sm:break-normal whitespace-pre-line">
+          <p className="max-w-md w-full bg-black/70 p-4 border border-[#00DF59]/40 inline-block text-left text-xs sm:text-sm break-words sm:break-normal whitespace-pre-line text-white">
             {t('news.log_body')}
           </p>
         </div>

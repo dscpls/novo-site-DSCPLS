@@ -126,9 +126,9 @@ export default function PongGame() {
       }
 
       // Draw Paddles
-      ctx.fillStyle = '#ff3e3e';
+      ctx.fillStyle = '#00DF59';
       ctx.fillRect(20, paddle1.y, paddle1.width, paddle1.height);
-      ctx.fillStyle = '#00ffff';
+      ctx.fillStyle = '#FFE600';
       ctx.fillRect(800 - 20 - paddle2.width, paddle2.y, paddle2.width, paddle2.height);
 
       // Draw Ball
@@ -156,12 +156,12 @@ export default function PongGame() {
   return (
     <div className="bg-[#111] border border-[#222] rounded-lg p-6 flex flex-col items-center mt-12 w-full">
       <h2 className="text-xl text-gray-300 font-medium tracking-widest mb-4">DSCPLS GLITCH PONG</h2>
-      <p className="text-sm text-gray-500 mb-8 max-w-md text-center">
-        P1 [W/S] | P2 [Setas]. Multijogador Retrô.
+      <p className="text-sm text-gray-500 mb-8 max-w-md text-center font-mono">
+        P1 (<span className="text-[#00DF59] font-bold">W/S</span>) | P2 (<span className="text-[#FFE600] font-bold">Setas</span>). Multijogador Retrô.
       </p>
 
       <div className="flex justify-center w-full max-w-3xl mb-4 text-white">
-        {!isPlaying && <button onClick={startGame} className="text-[#00ffff] hover:underline">INICIAR JOGO</button>}
+        {!isPlaying && <button onClick={startGame} className="text-[#00DF59] font-bold hover:underline">INICIAR JOGO</button>}
         {isPlaying && <button onClick={() => setIsPlaying(false)} className="text-gray-500 hover:text-white">PARAR</button>}
       </div>
 

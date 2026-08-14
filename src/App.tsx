@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
+import Radio from './pages/Radio';
 import Home from './pages/Home';
 import Sobre from './pages/Sobre';
 import Discografia from './pages/Discografia';
@@ -20,8 +21,10 @@ function AnimatedRoutes() {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Home />} />
+      <Routes location={location}>
+        <Route path="/" element={<Radio />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/inicio" element={<Home />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/discografia" element={<Discografia />} />
         <Route path="/jogos" element={<Jogos />} />
@@ -40,14 +43,11 @@ function GlobalWordTrigger() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.pathname !== '/') return;
-
     let keySeq = '';
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       
       const key = e.key.toLowerCase();
-      // Need only printable characters to make it easier to type "fases" or "eros"
       if (key.length === 1) {
         keySeq = (keySeq + key).slice(-10);
         if (keySeq.includes('fases') || keySeq.includes('eros')) {
