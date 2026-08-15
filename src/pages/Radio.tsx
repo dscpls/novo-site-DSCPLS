@@ -58,12 +58,12 @@ const RADIO_TAGS = [
   {
     id: 'tag-1',
     url: 'https://audio.jukehost.co.uk/01a00228-831d-723d-b3a1-5456ae3d9a68',
-    cutoff: 0, // toca até o final
+    triggerSongAt: 0.5, // aos 0.5s (meio segundo) a música principal já começa a tocar
   },
   {
     id: 'tag-2',
     url: 'https://audio.jukehost.co.uk/01a00228-8b0d-7205-8d72-2643c0e7dffe',
-    cutoff: 3.0, // corta aos 3 segundos
+    triggerSongAt: 1.2, // aos 1.2s a música principal já começa a tocar
   },
 ];
 
@@ -143,20 +143,17 @@ export default function Radio() {
       return;
     }
 
-    let tagFinished = false;
+    let songStarted = false;
 
-    const finishTagAndPlaySong = () => {
-      if (tagFinished) return;
-      tagFinished = true;
+    const startSong = () => {
+      if (songStarted) return;
+      songStarted = true;
+      isTransitioningRef.current = false;
 
       if (fallbackTimeoutRef.current) {
         clearTimeout(fallbackTimeoutRef.current);
         fallbackTimeoutRef.current = null;
       }
-
-      tagAudio.pause();
-      tagAudio.onended = null;
-      tagAudio.ontimeupdate = null;
 
       // Start playing main song directly without delay
       if (audioRef.current && powerOn) {
@@ -166,15 +163,11 @@ export default function Radio() {
         if (playPromise !== undefined) {
           playPromise.then(() => {
             setIsPlaying(true);
-            isTransitioningRef.current = false;
           }).catch((err) => {
             console.log('Direct play resolved/handled:', err);
             setIsPlaying(false);
-            isTransitioningRef.current = false;
           });
         }
-      } else {
-        isTransitioningRef.current = false;
       }
     };
 
@@ -183,23 +176,31 @@ export default function Radio() {
     tagAudio.currentTime = 0;
     tagAudio.load();
 
-    tagAudio.onended = finishTagAndPlaySong;
+    tagAudio.onended = () => {
+      startSong();
+      tagAudio.pause();
+      tagAudio.onended = null;
+      tagAudio.ontimeupdate = null;
+    };
 
-    if (selectedTag.cutoff > 0) {
+    // If tag has an early song trigger (e.g. 1.2s), start music while jingle is in motion
+    if (selectedTag.triggerSongAt && selectedTag.triggerSongAt > 0) {
       tagAudio.ontimeupdate = () => {
-        if (tagAudio.currentTime >= selectedTag.cutoff) {
-          finishTagAndPlaySong();
+        if (tagAudio.currentTime >= selectedTag.triggerSongAt) {
+          startSong();
         }
       };
-    }
 
-    // Safety timeout in case of network lag on tag
-    const maxSafetyMs = selectedTag.cutoff > 0 ? (selectedTag.cutoff * 1000 + 400) : 6000;
-    fallbackTimeoutRef.current = setTimeout(() => {
-      if (!tagFinished) {
-        finishTagAndPlaySong();
-      }
-    }, maxSafetyMs);
+      // Exact timer fallback at 1.2s to prevent reliance on browser timeupdate intervals
+      fallbackTimeoutRef.current = setTimeout(() => {
+        startSong();
+      }, selectedTag.triggerSongAt * 1000);
+    } else {
+      // Safety timeout for full-duration tag in case of network lag
+      fallbackTimeoutRef.current = setTimeout(() => {
+        startSong();
+      }, 6000);
+    }
 
     const tagPromise = tagAudio.play();
     if (tagPromise !== undefined) {
@@ -207,7 +208,7 @@ export default function Radio() {
         setIsPlaying(true);
       }).catch((e) => {
         console.log('Tag playback skipped directly to song:', e);
-        finishTagAndPlaySong();
+        startSong();
       });
     }
   };
