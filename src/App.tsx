@@ -88,7 +88,7 @@ function Footer() {
             onTouchEnd={handleTouchEnd}
             className="cursor-text"
           >
-            GROOVE
+            LSU
           </span>
         </span>
         <span>ALL RIGHTS RESERVED</span>

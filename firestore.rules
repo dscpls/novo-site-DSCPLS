@@ -31,6 +31,12 @@ service cloud.firestore {
       allow read, update, delete: if true; // Used by Admin panel
     }
 
+    // Radio Voicemail / Fan Interludes for Album
+    match /radio_messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if true; // Used and managed by Admin panel
+    }
+
     match /diario/{entryId} {
       allow get: if isValidId(entryId);
       allow list: if true;

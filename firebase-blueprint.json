@@ -10,12 +10,34 @@
         "createdAt": { "type": "number" }
       },
       "required": ["title", "content", "createdAt"]
+    },
+    "radioMessage": {
+      "title": "Radio Message",
+      "description": "Voicemail / radio audio message recorded by fans for album interludes",
+      "type": "object",
+      "properties": {
+        "senderName": { "type": "string" },
+        "contact": { "type": "string" },
+        "location": { "type": "string" },
+        "notes": { "type": "string" },
+        "audioData": { "type": "string" },
+        "audioMimeType": { "type": "string" },
+        "durationSeconds": { "type": "number" },
+        "acceptedTerms": { "type": "boolean" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["senderName", "contact", "audioData", "acceptedTerms", "createdAt"]
     }
   },
   "firestore": {
     "diario/{entryId}": {
       "schema": { "$ref": "#/entities/diaryEntry" },
       "description": "Diary entries visible to the public, created by the admin."
+    },
+    "radio_messages/{messageId}": {
+      "schema": { "$ref": "#/entities/radioMessage" },
+      "description": "Fan radio audio messages recorded for album interludes."
     }
   }
 }

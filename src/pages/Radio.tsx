@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, VolumeX, Radio as RadioIcon, MessageSquare, ArrowRight, Disc3, Sparkles } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import AudioVisualizer from '../components/AudioVisualizer';
+import RadioMessageModal from '../components/RadioMessageModal';
 
 // =========================================================================
 // 📻 RÁDIO LIXO BRASILEIRO - ROTAÇÃO DE FAIXAS (JUKEHOST)
@@ -508,6 +510,15 @@ export default function Radio() {
                   </AnimatePresence>
                 </div>
 
+                {/* Audio Visualizer Spectrum Bar */}
+                <div className="relative z-20 my-2 bg-[#020503] border border-[#00DF59]/30 rounded p-1.5 shadow-inner">
+                  <div className="flex justify-between items-center text-[9px] font-mono text-[#00DF59]/80 mb-1 px-1">
+                    <span>VFD SPECTRUM ANALYZER</span>
+                    <span className="text-[#FFE600] font-bold">{isPlaying && powerOn ? 'BROADCASTING' : 'STANDBY'}</span>
+                  </div>
+                  <AudioVisualizer isPlaying={isPlaying} powerOn={powerOn} barCount={28} />
+                </div>
+
                 {/* Progress bar inside screen */}
                 <div className="relative z-20 mt-1">
                   <div className="w-full bg-[#0d170f] h-2 rounded-full overflow-hidden border border-[#00DF59]/40">
@@ -632,51 +643,12 @@ export default function Radio() {
       </div>
 
       {/* =========================================================================
-          📞 MODAL: "MANDE UM RECADO!"
+          📞 MODAL: "MANDE UM RECADO!" (GRAVAÇÃO DE ÁUDIO PARA INTERLÚDIOS)
          ========================================================================= */}
-      <AnimatePresence>
-        {showRecadoModal && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/85">
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="w-full max-w-lg bg-[#0e0c0a] border-4 border-[#FFE600] p-6 md:p-8 rounded-lg shadow-2xl relative overflow-hidden"
-            >
-              <div className="relative z-10 space-y-4">
-                <div className="flex items-center justify-between border-b-2 border-[#FFE600]/30 pb-3">
-                  <span className="font-mono text-xs font-bold text-[#FFE600] tracking-widest uppercase flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-600"></span>
-                    {t('radio.modal_hotline')}
-                  </span>
-                  <span className="font-mono text-xs text-red-500 font-bold">{t('radio.modal_closed_badge')}</span>
-                </div>
-
-                <div className="py-2">
-                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white mb-3">
-                    {t('radio.modal_closed_title')}
-                  </h3>
-                  <p className="text-gray-300 font-mono text-sm leading-relaxed mb-4">
-                    {t('radio.modal_closed_p1_before')}<strong className="text-[#00DF59]">{t('radio.modal_closed_p1_brand')}</strong>{t('radio.modal_closed_p1_after')}
-                  </p>
-                  <p className="text-gray-400 font-mono text-xs leading-relaxed border-l-4 border-[#FFE600] pl-3 py-1">
-                    {t('radio.modal_closed_p2')}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-white/10 flex justify-end">
-                  <button 
-                    onClick={() => setShowRecadoModal(false)}
-                    className="px-6 py-2.5 bg-[#FFE600] text-black font-black uppercase text-xs md:text-sm tracking-widest hover:bg-white transition-colors"
-                  >
-                    {t('radio.modal_return')}
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <RadioMessageModal 
+        isOpen={showRecadoModal} 
+        onClose={() => setShowRecadoModal(false)} 
+      />
 
     </div>
   );

@@ -1,7 +1,9 @@
 {
   "name": "DSCPLS website oficial",
   "description": "Site oficial da banda DISCÍPULOS (DSCPLS) — Fase LIXO BRASILEIRO com transmissão da Rádio ao vivo, discografia, sobre, jogos e diário.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": [
+    "microphone"
+  ],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]

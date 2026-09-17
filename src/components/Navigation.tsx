@@ -20,14 +20,16 @@ export default function Navigation() {
     <motion.header
       layout
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
-      className="w-full flex px-6 pt-8 pb-6 relative z-50 justify-between max-w-7xl mx-auto flex-col xl:flex-row items-center gap-6"
+      className={`w-full flex px-6 pt-8 pb-6 relative z-50 max-w-7xl mx-auto items-center ${
+        isRadioLanding ? 'justify-center' : 'justify-between flex-col xl:flex-row gap-6'
+      }`}
     >
       <motion.div
         layout
         className="flex items-center"
       >
         <Link 
-          to="/" 
+          to={isRadioLanding ? "/" : "/"} 
           onClick={handleLogoClick}
           className="relative inline-block cursor-crosshair group"
         >
@@ -41,10 +43,11 @@ export default function Navigation() {
       </motion.div>
 
       <AnimatePresence>
-        {navRevealed && (
+        {!isRadioLanding && navRevealed && (
           <motion.nav
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className="flex flex-col xl:flex-row items-center xl:items-center gap-4 xl:gap-6 text-base md:text-xl tracking-tighter uppercase font-bold mt-4 xl:mt-0"
           >
