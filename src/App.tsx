@@ -78,20 +78,32 @@ function Footer() {
   };
 
   return (
-    <footer className="text-center opacity-40 text-[9px] tracking-[2px] mt-10 py-6 border-t border-white/10 max-w-7xl mx-auto w-full px-6 flex-shrink-0">
-      <div className="flex justify-between w-full">
-        <span>
-          <span onClick={() => navigate('/quiz')} className="cursor-pointer hover:text-white transition-colors">©</span> 
-          <span> 2026 </span>
+    <footer className="w-full border-t border-[#FFFFFF]/10 mt-20 py-8 px-6 font-mono text-[11px] tracking-[0.2em] uppercase text-[#E0E0E0]/60 max-w-7xl mx-auto flex-shrink-0">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+        <div className="flex items-center gap-3">
+          <span 
+            onClick={() => navigate('/quiz')} 
+            className="cursor-pointer hover:text-[#00DF59] transition-colors"
+            title="Quiz"
+          >
+            ©
+          </span> 
+          <span className="tabular-nums">2026</span>
           <span 
             onTouchStart={handleTouchStart} 
             onTouchEnd={handleTouchEnd}
-            className="cursor-text"
+            className="font-bold text-[#E0E0E0] hover:text-[#FFE600] transition-colors cursor-text"
           >
             LSU
           </span>
-        </span>
-        <span>ALL RIGHTS RESERVED</span>
+          <span aria-hidden="true" className="text-[#FFFFFF]/20">/</span>
+          <span>DISCÍPULOS (DSCPLS)</span>
+        </div>
+        <div className="flex items-center gap-4 text-[10px] text-[#E0E0E0]/40">
+          <span>ALL RIGHTS RESERVED</span>
+          <span aria-hidden="true">·</span>
+          <span>LIXO BRASILEIRO</span>
+        </div>
       </div>
     </footer>
   );
@@ -105,12 +117,12 @@ export default function App() {
       <BrowserRouter>
         <GlobalWordTrigger />
         {/* Background grain/noise globally */}
-        <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise"></div>
+        <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise opacity-40"></div>
         
         {!crtActive && (
-          <div className="main-layout flex flex-col min-h-screen bg-gradient-radial from-[#1a1a1a] to-[#050505] text-[#e0e0e0] font-sans">
+          <div className="main-layout flex flex-col min-h-screen bg-[#080706] text-[#E0E0E0] font-sans">
             <Navigation />
-            <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-8 relative">
+            <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 relative">
               <AnimatedRoutes />
             </main>
             <Footer />

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, HelpCircle } from 'lucide-react';
 
 export default function Faq() {
   const { t } = useLanguage();
+  const [openSection, setOpenSection] = useState<'loja' | 'banda'>('loja');
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const lojaFaqs = Array.from({ length: 10 }).map((_, i) => ({
     q: t(`faq.loja.q${i + 1}` as any),
@@ -16,88 +18,113 @@ export default function Faq() {
     a: t(`faq.banda.a${i + 1}` as any)
   }));
 
-  const [openSection, setOpenSection] = useState<'loja' | 'banda'>('loja');
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const currentFaqs = openSection === 'loja' ? lojaFaqs : bandaFaqs;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="max-w-4xl mx-auto pt-10 pb-40 px-6"
-    >
-      <div className="flex items-center gap-4 mb-14">
-        <h1 className="text-4xl md:text-6xl tracking-tighter font-black text-white uppercase">{t('faq.title')}</h1>
-        <div className="h-[4px] flex-1 bg-white/20"></div>
+    <div className="w-full max-w-4xl mx-auto pb-24 space-y-12">
+      
+      {/* Header */}
+      <div className="border-b-2 border-[#FFFFFF]/15 pb-6">
+        <div className="font-mono text-xs text-[#00DF59] uppercase tracking-[0.25em] mb-2 flex items-center gap-2">
+          <HelpCircle size={14} />
+          <span>DÚVIDAS & INFORMAÇÕES OFICIAIS</span>
+        </div>
+        <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
+          {t('faq.title')}
+        </h1>
       </div>
 
-      <div className="flex gap-4 mb-10 border-b-4 border-white/20 pb-4">
-         <button 
-           onClick={() => { setOpenSection('loja'); setOpenIndex(null); }}
-           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'loja' ? 'text-[#00DF59]' : 'text-gray-500 hover:text-white'}`}
-         >
-            {t('faq.section.loja')}
-         </button>
-         <span className="text-2xl text-white/20 font-black">/</span>
-         <button 
-           onClick={() => { setOpenSection('banda'); setOpenIndex(null); }}
-           className={`text-2xl font-black uppercase tracking-widest transition-colors ${openSection === 'banda' ? 'text-[#FFE600]' : 'text-gray-500 hover:text-white'}`}
-         >
-            {t('faq.section.banda')}
-         </button>
+      {/* Section Switcher Tabs */}
+      <div className="flex items-center gap-2 border-b-2 border-[#FFFFFF]/15 pb-2 font-mono text-xs uppercase">
+        <button
+          onClick={() => { setOpenSection('loja'); setOpenIndex(null); }}
+          className={`px-4 py-2 border-b-2 transition-all font-bold tracking-wider ${
+            openSection === 'loja'
+              ? 'border-[#00DF59] text-[#00DF59] bg-[#00DF59]/5'
+              : 'border-transparent text-[#E0E0E0]/60 hover:text-white'
+          }`}
+        >
+          01. {t('faq.section.loja')} (10)
+        </button>
+        <button
+          onClick={() => { setOpenSection('banda'); setOpenIndex(null); }}
+          className={`px-4 py-2 border-b-2 transition-all font-bold tracking-wider ${
+            openSection === 'banda'
+              ? 'border-[#FFE600] text-[#FFE600] bg-[#FFE600]/5'
+              : 'border-transparent text-[#E0E0E0]/60 hover:text-white'
+          }`}
+        >
+          02. {t('faq.section.banda')} (10)
+        </button>
       </div>
 
-      <div className="space-y-4">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={openSection}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col gap-4"
-          >
-            {(openSection === 'loja' ? lojaFaqs : bandaFaqs).map((faq, index) => (
-              <div 
-                key={index} 
-                className={`bg-[#111] border-2 transition-colors duration-300 ${openIndex === index ? (openSection === 'loja' ? 'border-[#00DF59]' : 'border-[#FFE600]') : 'border-white/10 hover:border-white/30'}`}
+      {/* Accordion Questions List */}
+      <div className="space-y-3">
+        {currentFaqs.map((faq, index) => {
+          const isOpen = openIndex === index;
+          return (
+            <div 
+              key={index}
+              className={`border-2 transition-colors ${
+                isOpen 
+                  ? (openSection === 'loja' ? 'border-[#00DF59] bg-[#111111]' : 'border-[#FFE600] bg-[#111111]')
+                  : 'border-[#FFFFFF]/15 bg-[#0e0d0c] hover:border-[#FFFFFF]/35'
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => toggleAccordion(index)}
+                aria-expanded={isOpen}
+                className="w-full p-5 sm:p-6 text-left flex items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00DF59]"
               >
-                <button
-                  className="w-full text-left p-6 flex items-center justify-between focus:outline-none"
-                  onClick={() => toggleAccordion(index)}
-                >
-                  <h3 className="text-lg md:text-xl font-bold text-white uppercase pr-8 tracking-wide">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-xs text-[#E0E0E0]/40 tabular-nums">
+                    {(index + 1).toString().padStart(2, '0')}.
+                  </span>
+                  <h2 className="font-sans font-bold text-base sm:text-lg text-white leading-snug">
                     {faq.q}
-                  </h3>
-                  <div className="shrink-0 text-white/50">
-                    {openIndex === index ? <Minus size={24} /> : <Plus size={24} />}
-                  </div>
-                </button>
-                <AnimatePresence>
-                  {openIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className={`p-6 pt-0 text-base md:text-lg font-mono text-gray-300 leading-relaxed border-t-2 ${openSection === 'loja' ? 'border-[#00DF59]/30' : 'border-[#FFE600]/30'} mt-2`}>
-                        {faq.a}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+                  </h2>
+                </div>
+                <div className="shrink-0 mt-0.5 text-[#E0E0E0]/70">
+                  {isOpen ? <Minus size={18} /> : <Plus size={18} />}
+                </div>
+              </button>
+
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-5 sm:px-6 pb-6 pt-2 font-mono text-xs sm:text-sm text-[#E0E0E0]/90 leading-relaxed border-t border-[#FFFFFF]/10 pl-11">
+                      {faq.a}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
       </div>
-    </motion.div>
+
+      {/* Bottom Contact Reminder */}
+      <div className="p-6 border border-[#FFFFFF]/15 bg-[#111111] font-mono text-xs text-[#E0E0E0]/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <span>AINDA TEM DÚVIDAS NÃO LISTADAS?</span>
+        <a 
+          href="mailto:discipulosabanda@gmail.com" 
+          className="text-[#00DF59] hover:underline uppercase font-bold"
+        >
+          discipulosabanda@gmail.com ↗
+        </a>
+      </div>
+
+    </div>
   );
 }

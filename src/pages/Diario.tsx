@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import { useAdminAuth } from '../lib/authUtils';
 import { useLanguage } from '../contexts/LanguageContext';
+import { BookOpen, Plus, Trash2, LogOut, Lock } from 'lucide-react';
 
 interface DiaryEntry {
   id: string;
@@ -17,6 +18,7 @@ export default function Diario() {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Diario() {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
     
+    setSubmitting(true);
     try {
       await addDoc(collection(db, 'diario'), {
         title: title.trim(),
@@ -45,88 +48,145 @@ export default function Diario() {
       setContent('');
     } catch (error) {
       console.error(error);
-      alert("Erro ao publicar.");
+      alert("Erro ao publicar no diário.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Apagar registro?")) return;
+    if (!window.confirm("Confirmar exclusão deste registro?")) return;
     try {
       await deleteDoc(doc(db, 'diario', id));
     } catch (error) {
       console.error(error);
-      alert("Erro ao deletar.");
+      alert("Erro ao deletar registro.");
     }
   };
 
+  const formatDate = (ts: any) => {
+    if (!ts) return 'HOJE';
+    if (ts.toDate) {
+      const d = ts.toDate();
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    return 'HOJE';
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-4xl mx-auto pt-10 pb-40"
-    >
-      <div className="flex items-center gap-4 mb-12">
-        <h1 className="text-3xl tracking-[0.2em] font-light text-white">{t('diario.title')}</h1>
-        <div className="h-[2px] flex-1 bg-white/20"></div>
-        {isAdmin ? (
-          <button onClick={logoutAdmin} className="text-xs text-[#FFE600] hover:text-white border border-[#FFE600]/30 px-3 py-1 font-mono">{t('diario.logout_btn')}</button>
-        ) : (
-          <a href="/admin" className="text-xs text-gray-500 hover:text-white border border-gray-500/30 px-3 py-1 cursor-pointer font-mono">{t('diario.admin_btn')}</a>
-        )}
+    <div className="w-full max-w-4xl mx-auto pb-24 space-y-12">
+      
+      {/* Header */}
+      <div className="border-b-2 border-[#FFFFFF]/15 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <div className="font-mono text-xs text-[#00DF59] uppercase tracking-[0.25em] mb-2 flex items-center gap-2">
+              <BookOpen size={14} />
+              <span>CADERNO DE CAMPO & ATUALIZAÇÕES</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
+              {t('diario.title')}
+            </h1>
+          </div>
+
+          <div className="font-mono text-xs">
+            {isAdmin ? (
+              <button
+                onClick={logoutAdmin}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#FFE600]/40 text-[#FFE600] hover:bg-[#FFE600] hover:text-black transition-colors uppercase font-bold"
+              >
+                <LogOut size={13} />
+                <span>{t('diario.logout_btn')}</span>
+              </button>
+            ) : (
+              <a
+                href="/admin"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#FFFFFF]/15 text-[#E0E0E0]/50 hover:text-white hover:border-white transition-colors uppercase"
+              >
+                <Lock size={12} />
+                <span>{t('diario.admin_btn')}</span>
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
+      {/* Admin Publish Box */}
       {isAdmin && (
-        <div className="bg-[#111] border border-[#222] p-6 mb-12 space-y-4">
-          <h2 className="text-[#00DF59] text-sm tracking-widest font-mono">{">"} {t('diario.new_entry')}</h2>
+        <section className="border-2 border-[#00DF59] bg-[#111111] p-6 space-y-4">
+          <div className="font-mono text-xs text-[#00DF59] uppercase tracking-wider font-bold flex items-center gap-2">
+            <Plus size={14} />
+            <span>NOVA ENTRADA NO DIÁRIO</span>
+          </div>
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input 
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder={t('diario.entry_title')}
-              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-[#00DF59] transition-colors"
+              className="bg-[#080706] border border-[#FFFFFF]/20 text-white p-3 font-mono text-sm focus:outline-none focus:border-[#00DF59] transition-colors"
+              required
             />
             <textarea 
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={t('diario.entry_msg')}
               rows={5}
-              className="bg-[#050505] border border-[#333] text-white p-3 focus:outline-none focus:border-[#00DF59] transition-colors resize-none"
+              className="bg-[#080706] border border-[#FFFFFF]/20 text-white p-3 font-sans text-sm focus:outline-none focus:border-[#00DF59] transition-colors resize-none leading-relaxed"
+              required
             />
-            <button type="submit" className="bg-[#00DF59]/20 text-[#00DF59] py-3 border border-[#00DF59] hover:bg-[#00DF59] hover:text-black transition-colors tracking-widest text-sm font-bold uppercase font-mono">
-              {t('diario.publish')}
+            <button 
+              type="submit" 
+              disabled={submitting}
+              className="bg-[#00DF59] text-black py-3 font-mono text-xs uppercase font-bold tracking-widest hover:bg-[#FFE600] transition-colors self-start px-6 disabled:opacity-50"
+            >
+              {submitting ? 'PUBLICANDO...' : t('diario.publish')}
             </button>
           </form>
-        </div>
+        </section>
       )}
 
-      <div className="space-y-12">
+      {/* Diary Entries List */}
+      <div className="space-y-8">
         {entries.length === 0 ? (
-          <p className="text-gray-600 text-center uppercase tracking-widest text-sm font-mono">Nenhum registro encontrado no vazio.</p>
+          <div className="p-12 border-2 border-dashed border-[#FFFFFF]/15 text-center font-mono text-xs text-[#E0E0E0]/50 uppercase tracking-widest">
+            Nenhum registro encontrado no diário.
+          </div>
         ) : (
-          entries.map(entry => (
-            <div key={entry.id} className="border-l-2 border-[#00DF59] pl-6 py-2 relative group">
-              {isAdmin && (
-                <button 
-                  onClick={() => handleDelete(entry.id)}
-                  className="absolute -left-10 top-2 text-gray-600 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                  title={t('diario.delete')}
-                >
-                  ✕
-                </button>
-              )}
-              <h3 className="text-white text-xl font-medium tracking-wide mb-1">{entry.title}</h3>
-              <p className="text-xs text-[#FFE600] font-mono tracking-widest mb-4">
-                {entry.createdAt?.toDate ? entry.createdAt.toDate().toLocaleDateString('pt-BR') : 'Agora'}
-              </p>
-              <div className="text-gray-300 font-light leading-relaxed whitespace-pre-wrap">
+          entries.map((entry, idx) => (
+            <article 
+              key={entry.id} 
+              className="border-2 border-[#FFFFFF]/15 bg-[#111111] p-6 sm:p-8 space-y-4 relative group"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#FFFFFF]/10 pb-3">
+                <span className="font-mono text-xs text-[#FFE600] uppercase tracking-widest tabular-nums">
+                  REGISTRO #{entries.length - idx} · {formatDate(entry.createdAt)}
+                </span>
+                
+                {isAdmin && (
+                  <button 
+                    onClick={() => handleDelete(entry.id)}
+                    className="text-red-400 hover:text-red-300 p-1 font-mono text-xs uppercase flex items-center gap-1"
+                    title={t('diario.delete')}
+                  >
+                    <Trash2 size={13} />
+                    <span>EXCLUIR</span>
+                  </button>
+                )}
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+                {entry.title}
+              </h2>
+
+              <div className="text-base sm:text-lg text-[#E0E0E0]/85 font-sans leading-relaxed whitespace-pre-wrap max-w-[70ch]">
                 {entry.content}
               </div>
-            </div>
+            </article>
           ))
         )}
       </div>
-    </motion.div>
+
+    </div>
   );
 }

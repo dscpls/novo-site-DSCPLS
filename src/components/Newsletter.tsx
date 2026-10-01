@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { db } from '../lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useLanguage } from '../contexts/LanguageContext';
+import { ArrowRight, Check, AlertCircle } from 'lucide-react';
 
 export default function Newsletter() {
   const { t } = useLanguage();
@@ -10,79 +11,104 @@ export default function Newsletter() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email.trim()) return;
 
     setStatus('loading');
     
     try {
-      // Using ISO string instead of serverTimestamp to prevent infinite hanging when offline
       await addDoc(collection(db, 'newsletter_subs'), {
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         createdAt: new Date().toISOString()
       });
       
       setStatus('success');
       setEmail('');
-      
-      setTimeout(() => setStatus('idle'), 5000);
+      setTimeout(() => setStatus('idle'), 6000);
     } catch (error) {
       console.error(error);
-      if(error instanceof Error && error.message.includes('the client is offline')) {
-         alert("Você precisa estar online ou com o firebase configurado para se inscrever na newsletter.")
-      }
       setStatus('error');
-      // Show error briefly before resetting
-      setTimeout(() => setStatus('idle'), 3000);
+      setTimeout(() => setStatus('idle'), 4000);
     }
   };
 
   return (
-    <div className="w-full bg-[#FFE600] border-y-4 border-white my-10 flex flex-col md:flex-row items-stretch justify-between font-sans shadow-lg shadow-yellow-500/10">
-      <div className="w-full md:w-1/2 p-8 md:p-12 text-black border-b-4 md:border-b-0 md:border-r-4 border-white flex flex-col justify-center">
-        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-4 whitespace-pre-line">
-          {t('news.title')}
-        </h2>
-        <p className="text-base md:text-lg font-bold tracking-tight mb-8">
-          {t('news.desc')}
-        </p>
+    <section className="w-full my-16 border-y-2 border-[#FFFFFF]/15 bg-[#111111]">
+      <div className="grid grid-cols-1 lg:grid-cols-12">
         
-        {status === 'success' ? (
-          <div className="bg-black text-white p-6 border-4 border-black font-mono text-sm shadow-[8px_8px_0_0_rgba(0,0,0,1)] uppercase">
-            {t('news.success')}
+        {/* Left Column: Editorial Headline & Purpose */}
+        <div className="lg:col-span-7 p-8 md:p-12 lg:border-r-2 lg:border-[#FFFFFF]/15 flex flex-col justify-between">
+          <div>
+            <div className="font-mono text-xs text-[#FFE600] uppercase tracking-[0.25em] mb-4">
+              BOLETIM DE COMUNICAÇÃO OFICIAL
+            </div>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white leading-none mb-6">
+              {t('news.title')}
+            </h2>
+            <p className="text-[#E0E0E0]/80 font-sans text-base md:text-lg max-w-xl leading-relaxed">
+              {t('news.desc')}
+            </p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full bg-black sm:bg-transparent shadow-none sm:shadow-[8px_8px_0_0_rgba(0,0,0,1)] border-4 border-black sm:border-none group">
-            <input 
-              type="email" 
-              placeholder={t('news.placeholder')}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="flex-[2] min-w-0 bg-black text-white px-4 py-4 outline-none border-b-4 sm:border-y-4 sm:border-l-4 sm:border-r-0 border-black text-base tracking-widest uppercase font-bold placeholder:text-gray-600 focus:bg-[#111]"
-            />
-            <button 
-              type="submit" 
-              disabled={status === 'loading'}
-              className="flex-1 bg-[#00DF59] sm:bg-transparent text-black sm:border-y-4 sm:border-r-4 border-black px-6 py-4 font-black uppercase text-base sm:text-lg hover:bg-white transition-colors tracking-widest disabled:opacity-50 min-w-max"
-            >
-              {status === 'loading' ? t('news.wait') : (status === 'error' ? 'ERRO' : t('news.subscribe'))}
-            </button>
-          </form>
-        )}
-      </div>
 
-      <div className="w-full md:w-1/2 min-h-[300px] bg-[#0c0907] p-10 flex flex-col justify-center items-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,223,89,0.2)_0%,transparent_70%)] pointer-events-none"></div>
-        <div className="font-mono text-[#00DF59] text-xs md:text-sm tracking-[0.3em] uppercase opacity-80 z-10 text-center space-y-4 max-w-full">
-          <p>{"// LOG_INTERNO_LIXO_BRASILEIRO"}</p>
-          <p>{t('news.log_title')}</p>
-          <p className="max-w-md w-full bg-black/70 p-4 border border-[#00DF59]/40 inline-block text-left text-xs sm:text-sm break-words sm:break-normal whitespace-pre-line text-white">
-            {t('news.log_body')}
-          </p>
+          <div className="mt-8 font-mono text-xs text-[#E0E0E0]/50 tracking-wider">
+            CANAL DIRETO COM HENRIZ & GEBRIEL · SEM INTERMEDIÁRIOS
+          </div>
         </div>
-        {/* Grain overlay for side block */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;utf8,%3CSVG xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%22 height=%22100%22 filter=%22url(%23n)%22/%3E%3C/SVG%3E')]"></div>
+
+        {/* Right Column: Interaction Form */}
+        <div className="lg:col-span-5 p-8 md:p-12 bg-[#080706] flex flex-col justify-center">
+          {status === 'success' ? (
+            <div className="border border-[#00DF59] bg-[#00DF59]/10 p-6 flex items-start gap-4">
+              <Check className="text-[#00DF59] shrink-0 mt-0.5" size={20} />
+              <div>
+                <div className="font-mono text-xs font-bold text-[#00DF59] uppercase tracking-wider mb-1">
+                  CONFIRMADO
+                </div>
+                <div className="font-mono text-sm text-[#E0E0E0]">
+                  {t('news.success')}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <label htmlFor="newsletter-email" className="font-mono text-xs uppercase tracking-widest text-[#E0E0E0]/70">
+                Endereço de e-mail:
+              </label>
+
+              <div className="flex flex-col sm:flex-row gap-0 border-2 border-[#FFFFFF]/20 focus-within:border-[#00DF59] transition-colors">
+                <input 
+                  id="newsletter-email"
+                  type="email" 
+                  placeholder={t('news.placeholder')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="flex-1 bg-transparent text-white px-4 py-3.5 outline-none font-mono text-sm uppercase placeholder:text-[#E0E0E0]/30"
+                />
+                <button 
+                  type="submit" 
+                  disabled={status === 'loading'}
+                  className="bg-[#00DF59] hover:bg-[#FFE600] text-black px-6 py-3.5 font-bold font-mono text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shrink-0 disabled:opacity-50"
+                >
+                  <span>{status === 'loading' ? t('news.wait') : t('news.subscribe')}</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+
+              {status === 'error' && (
+                <div className="flex items-center gap-2 text-xs font-mono text-red-400 mt-2">
+                  <AlertCircle size={14} />
+                  <span>Erro ao registrar. Tente novamente em instantes.</span>
+                </div>
+              )}
+
+              <p className="font-mono text-[11px] text-[#E0E0E0]/40 tracking-wide mt-2">
+                Enviamos apenas comunicados de novos lançamentos, drops da loja e transmissões especiais.
+              </p>
+            </form>
+          )}
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 }

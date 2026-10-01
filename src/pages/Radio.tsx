@@ -19,7 +19,7 @@ export interface RadioTrack {
 export const RADIO_PLAYLIST: RadioTrack[] = [
   {
     id: 'santinho',
-    title: 'SANTINHO / cartas para alguém do passado',
+    title: 'SANTINHO / carta pra alguém do passado',
     artist: 'DISCÍPULOS',
     audioUrl: 'https://audio.jukehost.co.uk/01a0020d-c0c2-7383-816c-415eb5d518d0',
   },
