@@ -27,7 +27,9 @@ export default function PongGame() {
       if (!AudioContext) return;
       const actx = new AudioContext();
       const osc = actx.createOscillator();
-      const gain = actx.createGain();
+      const gain = ctx.createGain ? actx.createGain() : (actx as any).createGain();
+      osc.connect(gain);
+      gain.connect(actx.destination);
       osc.type = 'square';
       osc.frequency.setValueAtTime(freq, actx.currentTime);
       gain.gain.setValueAtTime(0.1, actx.currentTime);
@@ -58,27 +60,15 @@ export default function PongGame() {
       ball.x = 400;
       ball.y = 200;
       ball.dx = -ball.dx;
-      ball.dy = 5 * (Math.random() > 0.5 ? 1 : -1);
+      ball.dy = (Math.random() - 0.5) * 8;
     };
 
     const loop = () => {
-      // Clear
-      ctx.fillStyle = '#050505';
-      ctx.fillRect(0, 0, 800, 400);
+      ctx.clearRect(0, 0, 800, 400);
 
-      // Draw dashed center line
-      ctx.setLineDash([10, 15]);
-      ctx.beginPath();
-      ctx.moveTo(400, 0);
-      ctx.lineTo(400, 400);
-      ctx.strokeStyle = '#333';
-      ctx.stroke();
-
-      // Move P1
+      // Move Paddles
       if (keys.w && paddle1.y > 0) paddle1.y -= 7;
       if (keys.s && paddle1.y < 400 - paddle1.height) paddle1.y += 7;
-
-      // Move P2
       if (keys.up && paddle2.y > 0) paddle2.y -= 7;
       if (keys.down && paddle2.y < 400 - paddle2.height) paddle2.y += 7;
 
@@ -86,34 +76,31 @@ export default function PongGame() {
       ball.x += ball.dx;
       ball.y += ball.dy;
 
-      // Wall Bounce
-      if (ball.y <= 0 || ball.y + ball.radius * 2 >= 400) {
-        ball.dy *= -1;
+      // Ball Wall Collision
+      if (ball.y <= 0 || ball.y >= 400) {
+        ball.dy = -ball.dy;
         playBeep(200);
       }
 
-      // Paddle Collsion
+      // Ball Paddle Collision
       if (
         ball.x <= 20 + paddle1.width &&
-        ball.y + ball.radius * 2 >= paddle1.y &&
+        ball.y >= paddle1.y &&
         ball.y <= paddle1.y + paddle1.height
       ) {
-        ball.dx *= -1.05; // speed up slightly
-        ball.x = 20 + paddle1.width;
+        ball.dx = Math.abs(ball.dx) * 1.05;
         playBeep(400);
       }
-
       if (
-        ball.x + ball.radius * 2 >= 800 - 20 - paddle2.width &&
-        ball.y + ball.radius * 2 >= paddle2.y &&
+        ball.x >= 800 - 20 - paddle2.width &&
+        ball.y >= paddle2.y &&
         ball.y <= paddle2.y + paddle2.height
       ) {
-        ball.dx *= -1.05;
-        ball.x = 800 - 20 - paddle2.width - ball.radius * 2;
+        ball.dx = -Math.abs(ball.dx) * 1.05;
         playBeep(400);
       }
 
-      // Score
+      // Scoring
       if (ball.x <= 0) {
         paddle2.score++;
         playBeep(100);
@@ -132,14 +119,14 @@ export default function PongGame() {
       ctx.fillRect(800 - 20 - paddle2.width, paddle2.y, paddle2.width, paddle2.height);
 
       // Draw Ball
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(ball.x, ball.y, ball.radius * 2, ball.radius * 2);
 
       // Draw Score
-      ctx.fillStyle = '#333';
-      ctx.font = '40px monospace';
-      ctx.fillText(paddle1.score.toString(), 300, 50);
-      ctx.fillText(paddle2.score.toString(), 480, 50);
+      ctx.fillStyle = '#444444';
+      ctx.font = '32px monospace';
+      ctx.fillText(paddle1.score.toString(), 340, 50);
+      ctx.fillText(paddle2.score.toString(), 440, 50);
 
       animationId = requestAnimationFrame(loop);
     };
@@ -154,24 +141,46 @@ export default function PongGame() {
   }, [isPlaying]);
 
   return (
-    <div className="bg-[#111] border border-[#222] rounded-lg p-6 flex flex-col items-center mt-12 w-full">
-      <h2 className="text-xl text-gray-300 font-medium tracking-widest mb-4">DSCPLS GLITCH PONG</h2>
-      <p className="text-sm text-gray-500 mb-8 max-w-md text-center font-mono">
-        P1 (<span className="text-[#00DF59] font-bold">W/S</span>) | P2 (<span className="text-[#FFE600] font-bold">Setas</span>). Multijogador Retrô.
-      </p>
+    <div className="w-full flex flex-col space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#FFFFFF]/10 pb-3">
+        <p className="font-mono text-xs text-[#E0E0E0]/80">
+          Jogador 1 (<span className="text-[#00DF59] font-bold">W / S</span>) e Jogador 2 (<span className="text-[#FFE600] font-bold">Setas</span>)
+        </p>
 
-      <div className="flex justify-center w-full max-w-3xl mb-4 text-white">
-        {!isPlaying && <button onClick={startGame} className="text-[#00DF59] font-bold hover:underline">INICIAR JOGO</button>}
-        {isPlaying && <button onClick={() => setIsPlaying(false)} className="text-gray-500 hover:text-white">PARAR</button>}
+        <div>
+          {!isPlaying ? (
+            <button
+              onClick={startGame}
+              className="bg-[#00DF59] text-black font-mono font-bold text-xs uppercase px-4 py-2 hover:bg-[#FFE600] transition-colors"
+            >
+              Iniciar jogo
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsPlaying(false)}
+              className="border border-[#FFFFFF]/20 text-[#E0E0E0] hover:text-white font-mono text-xs uppercase px-4 py-2 transition-colors"
+            >
+              Parar
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="w-full max-w-3xl bg-[#050505] border border-[#333] relative overflow-hidden rounded-md shadow-[0_0_20px_#000]">
+      <div className="w-full bg-[#050505] border border-[#FFFFFF]/15 aspect-[2/1] relative overflow-hidden">
         {!isPlaying ? (
-          <div className="aspect-[2/1] flex items-center justify-center bg-black/60 z-10 backdrop-blur-sm">
-            <span className="text-gray-400 tracking-widest text-sm">PRESSIONE "INICIAR" PARA JOGAR</span>
+          <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+            <span className="font-mono text-xs text-[#E0E0E0]/60 uppercase tracking-wider mb-3">
+              Dois jogadores no mesmo teclado
+            </span>
+            <button
+              onClick={startGame}
+              className="bg-[#00DF59] text-black font-mono font-bold text-xs uppercase px-6 py-2.5 hover:bg-[#FFE600] transition-colors"
+            >
+              Iniciar
+            </button>
           </div>
         ) : (
-          <canvas ref={canvasRef} width="800" height="400" className="w-full h-auto block" />
+          <canvas ref={canvasRef} width="800" height="400" className="w-full h-full block" />
         )}
       </div>
     </div>

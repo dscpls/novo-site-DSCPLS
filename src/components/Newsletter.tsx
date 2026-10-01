@@ -36,21 +36,14 @@ export default function Newsletter() {
       <div className="grid grid-cols-1 lg:grid-cols-12">
         
         {/* Left Column: Editorial Headline & Purpose */}
-        <div className="lg:col-span-7 p-8 md:p-12 lg:border-r-2 lg:border-[#FFFFFF]/15 flex flex-col justify-between">
+        <div className="lg:col-span-7 p-8 md:p-12 lg:border-r-2 lg:border-[#FFFFFF]/15 flex flex-col justify-center">
           <div>
-            <div className="font-mono text-xs text-[#FFE600] uppercase tracking-[0.25em] mb-4">
-              BOLETIM DE COMUNICAÇÃO OFICIAL
-            </div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white leading-none mb-6">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none mb-6">
               {t('news.title')}
             </h2>
             <p className="text-[#E0E0E0]/80 font-sans text-base md:text-lg max-w-xl leading-relaxed">
               {t('news.desc')}
             </p>
-          </div>
-
-          <div className="mt-8 font-mono text-xs text-[#E0E0E0]/50 tracking-wider">
-            CANAL DIRETO COM HENRIZ & GEBRIEL · SEM INTERMEDIÁRIOS
           </div>
         </div>
 

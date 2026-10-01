@@ -1,7 +1,6 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { ExternalLink, Users, Calendar, MapPin, Instagram, Youtube, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 export default function Sobre() {
   const { t } = useLanguage();
@@ -9,23 +8,19 @@ export default function Sobre() {
   return (
     <div className="w-full pb-24 space-y-16">
       
-      {/* Editorial Page Title & Meta Header */}
+      {/* Header */}
       <div className="border-b-2 border-[#FFFFFF]/15 pb-6">
-        <div className="font-mono text-xs text-[#00DF59] uppercase tracking-[0.25em] mb-2 flex items-center gap-2">
-          <Users size={14} />
-          <span>DOSSIÊ DA BANDA · ORIGEM & INTEGRANTES</span>
-        </div>
         <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
           {t('sobre.title')}
         </h1>
       </div>
 
-      {/* Main Narrative / History: Two-column editorial broadsheet layout */}
+      {/* Narrative Section */}
       <section className="space-y-10">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           
-          {/* Left Column: Lead Essay */}
+          {/* Main Narrative Text */}
           <div className="lg:col-span-7 space-y-6 text-[#E0E0E0] font-sans text-base sm:text-lg leading-relaxed">
             <p className="font-medium text-white text-lg sm:text-xl leading-relaxed border-l-2 border-[#00DF59] pl-4">
               {t('sobre.p1')}
@@ -41,44 +36,35 @@ export default function Sobre() {
             </p>
           </div>
 
-          {/* Right Column: Historical Photo & Archival Note */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Archival Photo with short factual caption */}
+          <div className="lg:col-span-5 space-y-3">
             <div className="border-2 border-[#FFFFFF]/20 bg-[#111111] p-3 shadow-xl">
               <div className="aspect-[4/3] bg-black overflow-hidden relative">
                 <img 
                   src="https://i.imgur.com/6if7kHL.jpeg" 
-                  alt="Henriz e Gebriel - Encontro na Liberdade, SP"
+                  alt="Henriz e Gebriel na Liberdade, São Paulo"
                   className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    // Fallback to local image if Imgur is unavailable
                     e.currentTarget.src = "/henriz.jpg";
                   }}
                 />
               </div>
-              <div className="pt-3 px-1 flex items-center justify-between font-mono text-[11px] text-[#E0E0E0]/70 uppercase tracking-widest">
-                <span>{t('sobre.img_caption')}</span>
-                <span className="text-[#FFE600]">23.03.2026</span>
-              </div>
             </div>
 
-            <div className="border-l-2 border-[#FFFFFF]/20 pl-4 py-2 font-mono text-xs text-[#E0E0E0]/60 space-y-1">
-              <div>LOCALIZAÇÃO: LIBERDADE, SÃO PAULO, BRASIL</div>
-              <div>OCASIÃO: LOLLAPALOOZA BRASIL (SHOW DE TYLER, THE CREATOR)</div>
-              <div>REGISTRO: PRIMEIRO ENCONTRO FÍSICO APÓS 8 ANOS DE PARCERIA DIGITAL</div>
-            </div>
+            <p className="font-mono text-xs text-[#E0E0E0]/70">
+              Henriz e Gebriel na Liberdade, São Paulo, 23 de março de 2026.
+            </p>
           </div>
 
         </div>
 
-        {/* Narrative continuation */}
+        {/* Story Continuation */}
         <div className="border-t-2 border-[#FFFFFF]/10 pt-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-[#E0E0E0]/85 text-base leading-relaxed">
           <div>
-            <span className="font-mono text-xs text-[#FFE600] uppercase tracking-wider block mb-2">01. O ENCONTRO</span>
             <p>{t('sobre.p5')}</p>
           </div>
           <div>
-            <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider block mb-2">02. A METODOLOGIA</span>
             <p>{t('sobre.p6')}</p>
           </div>
         </div>
@@ -86,31 +72,19 @@ export default function Sobre() {
       </section>
 
       {/* =========================================================================
-          MEMBROS DA BANDA (HENRIZ & GEBRIEL)
+          MEMBROS DA BANDA
          ========================================================================= */}
       <section className="space-y-8 pt-8 border-t-2 border-[#FFFFFF]/15">
         
-        <div>
-          <span className="font-mono text-xs text-[#FFE600] uppercase tracking-[0.25em] block mb-1">
-            FORMAÇÃO DO DUO
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
-            {t('sobre.members')}
-          </h2>
-        </div>
+        <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
+          {t('sobre.members')}
+        </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* HENRIZ */}
           <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
             <div>
-              
-              {/* Member Top Bar */}
-              <div className="p-4 border-b-2 border-[#FFFFFF]/15 bg-[#080706] flex items-center justify-between font-mono text-xs uppercase tracking-wider">
-                <span className="font-bold text-[#00DF59]">MEMBER // 01</span>
-                <span className="text-[#E0E0E0]/60">CAMPO GRANDE, MS</span>
-              </div>
-
               {/* Photo Area */}
               <div className="aspect-[16/10] bg-black border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
                 <img 
@@ -138,16 +112,14 @@ export default function Sobre() {
                   </div>
                 </div>
 
-                <div className="font-mono text-xs text-[#E0E0E0]/60 flex items-center gap-2">
-                  <MapPin size={13} className="text-[#00DF59]" />
-                  <span>{t('sobre.henriz.loc')}</span>
+                <div className="font-mono text-xs text-[#E0E0E0]/60">
+                  {t('sobre.henriz.loc')}
                 </div>
 
                 <p className="text-sm sm:text-base text-[#E0E0E0]/85 font-sans leading-relaxed">
                   {t('sobre.henriz.desc')}
                 </p>
               </div>
-
             </div>
 
             {/* Note Quote */}
@@ -162,13 +134,6 @@ export default function Sobre() {
           {/* GEBRIEL */}
           <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
             <div>
-              
-              {/* Member Top Bar */}
-              <div className="p-4 border-b-2 border-[#FFFFFF]/15 bg-[#080706] flex items-center justify-between font-mono text-xs uppercase tracking-wider">
-                <span className="font-bold text-[#FFE600]">MEMBER // 02</span>
-                <span className="text-[#E0E0E0]/60">SUZANO, SP</span>
-              </div>
-
               {/* Photo Area */}
               <div className="aspect-[16/10] bg-black border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
                 <img 
@@ -196,16 +161,14 @@ export default function Sobre() {
                   </div>
                 </div>
 
-                <div className="font-mono text-xs text-[#E0E0E0]/60 flex items-center gap-2">
-                  <MapPin size={13} className="text-[#FFE600]" />
-                  <span>{t('sobre.gebriel.loc')}</span>
+                <div className="font-mono text-xs text-[#E0E0E0]/60">
+                  {t('sobre.gebriel.loc')}
                 </div>
 
                 <p className="text-sm sm:text-base text-[#E0E0E0]/85 font-sans leading-relaxed">
                   {t('sobre.gebriel.desc')}
                 </p>
               </div>
-
             </div>
 
             {/* Note Quote */}
@@ -222,17 +185,12 @@ export default function Sobre() {
       </section>
 
       {/* =========================================================================
-          A REDE / CANAIS DE COMUNICAÇÃO
+          A REDE
          ========================================================================= */}
       <section className="space-y-6 pt-8 border-t-2 border-[#FFFFFF]/15">
-        <div>
-          <span className="font-mono text-xs text-[#00DF59] uppercase tracking-[0.25em] block mb-1">
-            CANAIS & CONTATOS
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            {t('sobre.network')}
-          </h2>
-        </div>
+        <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white">
+          {t('sobre.network')}
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           
@@ -295,7 +253,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                HENRIZ (PESSOAL)
+                Henriz (Pessoal)
               </div>
               <div className="font-bold text-base text-white group-hover:text-[#00DF59] transition-colors">
                 @gqnzaroli
@@ -312,7 +270,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                GEBRIEL (PESSOAL)
+                Gebriel (Pessoal)
               </div>
               <div className="font-bold text-base text-white group-hover:text-[#FFE600] transition-colors">
                 @o.garibel
@@ -327,7 +285,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                CONTATO / BOOKING
+                Contato
               </div>
               <div className="font-mono text-sm font-bold text-white group-hover:text-white transition-colors truncate">
                 discipulosabanda@gmail.com

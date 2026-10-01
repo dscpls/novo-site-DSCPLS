@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Volume2, VolumeX, Radio as RadioIcon, MessageSquare, ArrowRight, Disc3, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, MessageSquare, ArrowRight, Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import AudioVisualizer from '../components/AudioVisualizer';
 import RadioMessageModal from '../components/RadioMessageModal';
 
 // =========================================================================
-// 📻 RÁDIO LIXO BRASILEIRO - ROTAÇÃO DE FAIXAS (JUKEHOST)
+// RÁDIO LIXO BRASILEIRO - ROTAÇÃO DE FAIXAS
 // =========================================================================
 export interface RadioTrack {
   id: string;
@@ -55,22 +54,22 @@ export const RADIO_PLAYLIST: RadioTrack[] = [
   },
 ];
 
-// Transições / Vinhetas da Rádio Lixo Brasileiro
+// Vinhetas da Rádio
 const RADIO_TAGS = [
   {
     id: 'tag-1',
     url: 'https://audio.jukehost.co.uk/01a00228-831d-723d-b3a1-5456ae3d9a68',
-    triggerSongAt: 0.5, // aos 0.5s (meio segundo) a música principal já começa a tocar
+    triggerSongAt: 0.5,
   },
   {
     id: 'tag-2',
     url: 'https://audio.jukehost.co.uk/01a00228-8b0d-7205-8d72-2643c0e7dffe',
-    triggerSongAt: 1.2, // aos 1.2s a música principal já começa a tocar
+    triggerSongAt: 1.2,
   },
 ];
 
 export default function Radio() {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
   const [currentTrackIdx, setCurrentTrackIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -79,18 +78,15 @@ export default function Radio() {
   const [audioProgress, setAudioProgress] = useState(0);
   const [currentTimeStr, setCurrentTimeStr] = useState('00:00');
   const [durationStr, setDurationStr] = useState('00:00');
-  const [powerOn, setPowerOn] = useState(true);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const tagAudioRef = useRef<HTMLAudioElement | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const recadoBtnRef = useRef<HTMLButtonElement | null>(null);
   const isTransitioningRef = useRef(false);
   const fallbackTimeoutRef = useRef<any>(null);
 
   const currentTrack = RADIO_PLAYLIST[currentTrackIdx];
-  const STATION_FREQ = '94.7 FM';
 
-  // Helper to format time seconds
   const formatTime = (secs: number) => {
     if (isNaN(secs) || secs < 0) return '00:00';
     const m = Math.floor(secs / 60);
@@ -98,11 +94,7 @@ export default function Radio() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Change to target track with seamless tag transition
   const changeToTrack = (targetIndex: number) => {
-    if (!powerOn) return;
-    
-    // Clear any previous fallback timeout
     if (fallbackTimeoutRef.current) {
       clearTimeout(fallbackTimeoutRef.current);
       fallbackTimeoutRef.current = null;
@@ -110,7 +102,6 @@ export default function Radio() {
 
     isTransitioningRef.current = true;
 
-    // Immediately stop both audios
     if (audioRef.current) {
       audioRef.current.pause();
     }
@@ -120,25 +111,21 @@ export default function Radio() {
       tagAudioRef.current.ontimeupdate = null;
     }
 
-    // Set UI directly to new track
     setCurrentTrackIdx(targetIndex);
     setAudioProgress(0);
     setCurrentTimeStr('00:00');
 
-    // Preload next track URL onto main audio element
     if (audioRef.current) {
       audioRef.current.src = RADIO_PLAYLIST[targetIndex].audioUrl;
       audioRef.current.load();
     }
 
-    // Truly random selection among available jingles/tags
     const chosenTagIdx = Math.floor(Math.random() * RADIO_TAGS.length);
     const selectedTag = RADIO_TAGS[chosenTagIdx];
 
     const tagAudio = tagAudioRef.current;
     if (!tagAudio) {
-      // Direct play if tag element unavailable
-      if (audioRef.current && powerOn) {
+      if (audioRef.current) {
         audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
       }
       isTransitioningRef.current = false;
@@ -157,62 +144,40 @@ export default function Radio() {
         fallbackTimeoutRef.current = null;
       }
 
-      // Start playing main song directly without delay
-      if (audioRef.current && powerOn) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.volume = isMuted ? 0 : volume;
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
+      if (audioRef.current) {
+        audioRef.current.play()
+          .then(() => {
             setIsPlaying(true);
-          }).catch((err) => {
-            console.log('Direct play resolved/handled:', err);
+          })
+          .catch((err) => {
+            console.warn('Playback error:', err);
             setIsPlaying(false);
           });
-        }
       }
     };
 
     tagAudio.src = selectedTag.url;
-    tagAudio.volume = isMuted ? 0 : volume;
     tagAudio.currentTime = 0;
-    tagAudio.load();
+    tagAudio.volume = isMuted ? 0 : volume;
+
+    tagAudio.ontimeupdate = () => {
+      if (tagAudio.currentTime >= selectedTag.triggerSongAt) {
+        tagAudio.ontimeupdate = null;
+        startSong();
+      }
+    };
 
     tagAudio.onended = () => {
       startSong();
-      tagAudio.pause();
-      tagAudio.onended = null;
-      tagAudio.ontimeupdate = null;
     };
 
-    // If tag has an early song trigger (e.g. 1.2s), start music while jingle is in motion
-    if (selectedTag.triggerSongAt && selectedTag.triggerSongAt > 0) {
-      tagAudio.ontimeupdate = () => {
-        if (tagAudio.currentTime >= selectedTag.triggerSongAt) {
-          startSong();
-        }
-      };
+    fallbackTimeoutRef.current = setTimeout(() => {
+      startSong();
+    }, 4000);
 
-      // Exact timer fallback at 1.2s to prevent reliance on browser timeupdate intervals
-      fallbackTimeoutRef.current = setTimeout(() => {
-        startSong();
-      }, selectedTag.triggerSongAt * 1000);
-    } else {
-      // Safety timeout for full-duration tag in case of network lag
-      fallbackTimeoutRef.current = setTimeout(() => {
-        startSong();
-      }, 6000);
-    }
-
-    const tagPromise = tagAudio.play();
-    if (tagPromise !== undefined) {
-      tagPromise.then(() => {
-        setIsPlaying(true);
-      }).catch((e) => {
-        console.log('Tag playback skipped directly to song:', e);
-        startSong();
-      });
-    }
+    tagAudio.play().catch(() => {
+      startSong();
+    });
   };
 
   const handleNextTrack = () => {
@@ -225,81 +190,50 @@ export default function Radio() {
     changeToTrack(prevIdx);
   };
 
-  const handleTogglePower = () => {
-    if (powerOn) {
-      if (audioRef.current) audioRef.current.pause();
-      if (tagAudioRef.current) tagAudioRef.current.pause();
-      setIsPlaying(false);
-      setPowerOn(false);
-    } else {
-      setPowerOn(true);
-      if (audioRef.current) {
-        if (!audioRef.current.src || audioRef.current.src === '') {
-          audioRef.current.src = currentTrack.audioUrl;
-          audioRef.current.load();
-        }
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(err => {
-          console.log('Autoplay blocked:', err);
-        });
-      }
-    }
-  };
-
   const handleTogglePlay = () => {
-    if (!powerOn) {
-      setPowerOn(true);
-    }
+    const audio = audioRef.current;
+    if (!audio) return;
+
     if (isPlaying) {
-      if (audioRef.current) audioRef.current.pause();
+      audio.pause();
       if (tagAudioRef.current) tagAudioRef.current.pause();
       setIsPlaying(false);
     } else {
-      // If tag is in progress, resume tag; otherwise play main track
-      if (isTransitioningRef.current && tagAudioRef.current && !tagAudioRef.current.ended) {
-        tagAudioRef.current.play().then(() => {
+      audio.play()
+        .then(() => {
           setIsPlaying(true);
-        }).catch(() => {});
-      } else if (audioRef.current) {
-        if (!audioRef.current.src || !audioRef.current.src.includes('jukehost')) {
-          audioRef.current.src = currentTrack.audioUrl;
-          audioRef.current.load();
-        }
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch(err => {
-          console.log('Play failed:', err);
+        })
+        .catch((err) => {
+          console.warn('Play interrupted:', err);
         });
-      }
     }
   };
 
-  // Sync volume to both audios
+  // Sync volume
   useEffect(() => {
-    const activeVol = isMuted ? 0 : volume;
     if (audioRef.current) {
-      audioRef.current.volume = activeVol;
+      audioRef.current.volume = isMuted ? 0 : volume;
     }
     if (tagAudioRef.current) {
-      tagAudioRef.current.volume = activeVol;
+      tagAudioRef.current.volume = isMuted ? 0 : volume;
     }
   }, [volume, isMuted]);
 
-  // Handle main track events
+  // Audio listeners
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const handleTimeUpdate = () => {
-      if (!audio.duration || isTransitioningRef.current) return;
-      setAudioProgress((audio.currentTime / audio.duration) * 100);
-      setCurrentTimeStr(formatTime(audio.currentTime));
-      setDurationStr(formatTime(audio.duration));
+      if (audio.duration && !isNaN(audio.duration)) {
+        const prog = (audio.currentTime / audio.duration) * 100;
+        setAudioProgress(prog);
+        setCurrentTimeStr(formatTime(audio.currentTime));
+        setDurationStr(formatTime(audio.duration));
+      }
     };
 
     const handleEnded = () => {
-      // Auto-advance to next track on the radio with tag transition
       handleNextTrack();
     };
 
@@ -318,11 +252,11 @@ export default function Radio() {
       audio.removeEventListener('ended', handleEnded);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
-  }, [currentTrackIdx, powerOn]);
+  }, [currentTrackIdx]);
 
-  // Initial setup on mount
+  // Initial playback on mount
   useEffect(() => {
-    if (audioRef.current && powerOn) {
+    if (audioRef.current) {
       audioRef.current.src = RADIO_PLAYLIST[0].audioUrl;
       audioRef.current.load();
       audioRef.current.play().then(() => {
@@ -336,292 +270,167 @@ export default function Radio() {
       if (fallbackTimeoutRef.current) {
         clearTimeout(fallbackTimeoutRef.current);
       }
-      if (audioCtxRef.current) {
-        try { audioCtxRef.current.close(); } catch (_) {}
-      }
     };
   }, []);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-[82vh] py-4 relative select-none">
+    <div className="w-full flex flex-col items-center justify-center min-h-[75vh] py-6 relative select-none">
       
-      {/* Crisp Solid Dark Background (No glowing/vibe gradients) */}
-      <div className="fixed inset-0 pointer-events-none z-[-1] bg-[#090706]"></div>
-
       {/* Hidden audio elements */}
-      <audio
-        ref={audioRef}
-        src={currentTrack.audioUrl}
-        preload="auto"
-      />
-      <audio
-        ref={tagAudioRef}
-        preload="auto"
-      />
-
-      {/* TOP BADGE: LIXO BRASILEIRO BROADCAST STATUS */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="inline-flex items-center gap-2 bg-[#120d09] border-2 border-[#FFE600] px-4 py-1.5 rounded-full shadow-md">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#00DF59]"></span>
-          <span className="text-[#FFE600] font-mono font-bold text-xs tracking-[0.25em] uppercase">
-            {t('radio.live_badge')}{STATION_FREQ}
-          </span>
-        </div>
-      </div>
+      <audio ref={audioRef} src={currentTrack.audioUrl} preload="auto" />
+      <audio ref={tagAudioRef} preload="auto" />
 
       {/* =========================================================================
-          📻 THE VINTAGE WOODEN RADIO CHASSIS
+          📻 PHYSICAL RADIO CHASSIS
          ========================================================================= */}
-      <div className="w-full max-w-4xl relative">
+      <div className="w-full max-w-3xl">
         
-        {/* Outer Wooden Radio Cabinet */}
-        <div className="relative rounded-2xl p-4 md:p-8 bg-[#22130a] border-[8px] md:border-[12px] border-[#382012] shadow-2xl">
+        {/* Outer Wooden Body */}
+        <div className="bg-[#24150c] border-[6px] border-[#382012] p-5 sm:p-7 shadow-xl">
           
-          {/* Brass Corner Accents / Screws */}
-          <div className="absolute top-2 left-2 w-4 h-4 rounded-full bg-[#b38b4d] border border-[#543b1b] flex items-center justify-center text-[8px] text-black font-bold">+</div>
-          <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#b38b4d] border border-[#543b1b] flex items-center justify-center text-[8px] text-black font-bold">+</div>
-          <div className="absolute bottom-2 left-2 w-4 h-4 rounded-full bg-[#b38b4d] border border-[#543b1b] flex items-center justify-center text-[8px] text-black font-bold">+</div>
-          <div className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-[#b38b4d] border border-[#543b1b] flex items-center justify-center text-[8px] text-black font-bold">+</div>
+          {/* Radio Top: Brass Nameplate (Appears once) */}
+          <div className="flex items-center justify-between border-b-2 border-[#3d2415] pb-4 mb-5">
+            <div className="bg-[#b88c42] text-black px-4 py-1 font-mono font-bold text-xs uppercase tracking-[0.2em] shadow-sm">
+              RÁDIO LIXO BRASILEIRO
+            </div>
 
-          {/* Top Brand Nameplate (Solid Gold/Brass Style) */}
-          <div className="flex justify-center mb-6">
-            <div className="bg-[#b88c42] text-black px-6 md:px-10 py-1.5 rounded-sm border-2 border-[#f5dfa8] flex items-center gap-3">
-              <RadioIcon size={18} className="text-black" />
-              <span className="font-black text-xs md:text-sm tracking-[0.3em] uppercase">
-                {t('radio.brand_title')}{STATION_FREQ}
-              </span>
+            <div className="font-mono text-xs text-[#d6a858]/80 tabular-nums">
+              FAIXA {currentTrackIdx + 1} DE {RADIO_PLAYLIST.length}
             </div>
           </div>
 
-          {/* Main Front Panel: Speaker Grille + Digital VFD Screen */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#140e09] p-4 md:p-6 rounded-xl border-4 border-[#2b180d]">
+          {/* Radio Interior: Speaker + Main Area */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
             
-            {/* LEFT: Vintage Speaker Grille with Speaker Cone */}
-            <div className="lg:col-span-5 relative bg-[#100c08] rounded-lg border-2 border-[#3d2415] p-6 flex flex-col justify-between overflow-hidden min-h-[220px]">
-              
-              {/* Speaker Emblem */}
-              <div className="relative z-10 flex items-center justify-between text-[#d6a858] font-mono text-[10px] tracking-widest uppercase">
-                <span>{t('radio.hifi')}</span>
-                <span>LB-2026</span>
-              </div>
-
-              {/* Speaker Cone */}
-              <div className="relative z-10 my-auto flex items-center justify-center">
-                <motion.div 
-                  animate={isPlaying && powerOn ? { scale: [1, 1.03, 0.98, 1.02, 1] } : { scale: 1 }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut" }}
-                  className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-[#3a2517] bg-[#0a0705] flex items-center justify-center shadow-inner"
-                >
-                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-[#4d3220] bg-[#17100a] flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-black border border-[#d6a858]/30 flex items-center justify-center">
-                      <Disc3 size={16} className={`text-[#00DF59] ${isPlaying && powerOn ? 'animate-spin' : ''}`} />
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Speaker base status */}
-              <div className="relative z-10 flex justify-between items-center text-[10px] font-mono text-[#d6a858] tracking-wider">
-                <span className="flex items-center gap-1.5">
-                  <span className={`w-2 h-2 rounded-full ${powerOn ? 'bg-[#00DF59]' : 'bg-red-900'}`}></span>
-                  {powerOn ? t('radio.signal_stable') : t('radio.power_off')}
-                </span>
-                <span>{t('radio.track_label')} {currentTrackIdx + 1} {t('radio.of')} {RADIO_PLAYLIST.length}</span>
+            {/* Desktop Left / Mobile Bottom: Compact Speaker Grill */}
+            <div className="order-2 md:order-1 md:col-span-4 bg-[#140e09] border border-[#3d2415] p-4 flex flex-col items-center justify-center relative overflow-hidden min-h-[160px]">
+              {/* Speaker mesh texture */}
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-[#2b180d] bg-[#0c0805] flex items-center justify-center">
+                <div className={`w-14 h-14 rounded-full border-2 border-[#472c1a] bg-[#1a110a] flex items-center justify-center ${isPlaying ? 'scale-105' : 'scale-100'} transition-transform duration-300`}>
+                  <div className="w-6 h-6 rounded-full bg-black/80"></div>
+                </div>
               </div>
             </div>
 
-            {/* RIGHT: Tuning Scale Dial + VFD Glowing Display */}
-            <div className="lg:col-span-7 flex flex-col justify-between gap-4">
+            {/* Desktop Right / Mobile Top: Tuning Scale + Display + Controls */}
+            <div className="order-1 md:order-2 md:col-span-8 flex flex-col justify-between gap-4">
               
-              {/* Analog Dial Scale (Fixed at 94.7 FM) */}
-              <div className="relative bg-[#090705] border-2 border-[#3d2415] rounded-lg p-3 overflow-hidden">
-                <div className="flex justify-between text-[11px] font-mono font-bold text-[#FFE600] mb-1 tracking-widest">
-                  <span>FM</span>
+              {/* Single Analog Tuning Scale (94.7 FM appears strictly once) */}
+              <div className="bg-[#0e0906] border border-[#3d2415] px-3.5 py-2">
+                <div className="flex justify-between font-mono text-[11px] text-[#FFE600] font-bold tracking-wider">
                   <span>88</span>
                   <span>92</span>
-                  <span className="text-[#00DF59] font-black underline decoration-2 underline-offset-2">94.7</span>
+                  <span className="text-[#00DF59] font-black underline decoration-2 underline-offset-2">94.7 FM</span>
                   <span>98</span>
-                  <span>102</span>
-                  <span>106</span>
+                  <span>104</span>
                   <span>108</span>
-                  <span>MHz</span>
                 </div>
-                
-                {/* Dial ruler tick marks */}
-                <div className="h-6 w-full relative flex items-center bg-[#110d08] border-y border-[#3a2213] overflow-hidden">
-                  <div className="absolute inset-0 flex justify-between px-2 items-center opacity-40">
-                    {Array.from({ length: 45 }).map((_, idx) => (
-                      <div key={idx} className={`w-[1px] ${idx % 5 === 0 ? 'h-4 bg-[#FFE600]' : 'h-2 bg-[#d6a858]'}`}></div>
-                    ))}
-                  </div>
+                {/* Scale Needle Indicator */}
+                <div className="relative w-full h-1.5 bg-[#20140b] mt-1.5">
+                  <div className="absolute top-0 bottom-0 left-[34%] w-0.5 bg-[#00DF59]"></div>
+                </div>
+              </div>
 
-                  {/* Frequency Needle (Locked at 94.7 FM) */}
+              {/* Single Integrated Digital Display (Track, Artist, Time, Visualizer) */}
+              <div className="bg-[#050403] border-2 border-[#2b180d] p-4 space-y-3">
+                <div className="flex flex-col gap-1">
+                  <div className="font-mono text-sm sm:text-base font-bold text-[#00DF59] tracking-tight leading-snug break-words">
+                    {currentTrack.title}
+                  </div>
+                  <div className="font-mono text-xs text-[#d6a858]/90">
+                    {currentTrack.artist}
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="w-full bg-[#17100a] h-1.5 overflow-hidden">
                   <div 
-                    className="absolute top-0 bottom-0 w-[3px] bg-[#00DF59] z-20"
-                    style={{ left: '33.5%' }}
-                  >
-                    <div className="w-2.5 h-2 -ml-1 bg-[#FFE600] rounded-sm"></div>
-                  </div>
+                    className="h-full bg-[#00DF59] transition-all duration-200"
+                    style={{ width: `${audioProgress}%` }}
+                  ></div>
                 </div>
-              </div>
 
-              {/* Glowing VFD / Digital Screen */}
-              <div className="relative bg-[#040605] border-2 border-[#00DF59] rounded-lg p-4 md:p-5 overflow-hidden flex flex-col justify-between min-h-[145px]">
-                
-                {/* CRT Scanline Texture */}
-                <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,rgba(0,223,89,0.03),rgba(0,223,89,0.03)_1px,transparent_1px,transparent_3px)] pointer-events-none z-10"></div>
-
-                {/* Display Header */}
-                <div className="relative z-20 flex justify-between items-center text-xs font-mono">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[#00DF59] font-bold tracking-widest uppercase">
-                      {t('radio.station_title')}
-                    </span>
-                    <span className="text-[#FFE600] font-black">{STATION_FREQ}</span>
-                  </div>
-                  <span className={`px-2 py-0.5 text-[10px] font-bold font-mono tracking-widest rounded ${powerOn ? 'bg-[#00DF59] text-black' : 'bg-red-900 text-white'}`}>
-                    {powerOn ? t('radio.live') : t('radio.offline')}
+                {/* Bottom row of display: Times + Audio Spectrum Bars */}
+                <div className="flex items-center justify-between gap-3 pt-1">
+                  <span className="font-mono text-xs text-[#FFE600] tabular-nums">
+                    {currentTimeStr} / {durationStr}
                   </span>
-                </div>
 
-                {/* Center: Current Track Title */}
-                <div className="relative z-20 my-2">
-                  <AnimatePresence mode="wait">
-                    {powerOn ? (
-                      <motion.div
-                        key={currentTrack.id}
-                        initial={{ opacity: 0, y: 3 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -3 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="text-[#00DF59] text-lg md:text-2xl font-black uppercase tracking-tight leading-snug">
-                          {currentTrack.title}
-                        </div>
-                        <div className="text-[#FFE600] font-mono text-xs md:text-sm font-bold tracking-widest uppercase mt-0.5">
-                          {currentTrack.artist}
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <div className="text-gray-600 font-mono text-sm uppercase">
-                        {t('radio.receiver_off')}
-                      </div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Audio Visualizer Spectrum Bar */}
-                <div className="relative z-20 my-2 bg-[#020503] border border-[#00DF59]/30 rounded p-1.5 shadow-inner">
-                  <div className="flex justify-between items-center text-[9px] font-mono text-[#00DF59]/80 mb-1 px-1">
-                    <span>VFD SPECTRUM ANALYZER</span>
-                    <span className="text-[#FFE600] font-bold">{isPlaying && powerOn ? 'BROADCASTING' : 'STANDBY'}</span>
-                  </div>
-                  <AudioVisualizer isPlaying={isPlaying} powerOn={powerOn} barCount={28} />
-                </div>
-
-                {/* Progress bar inside screen */}
-                <div className="relative z-20 mt-1">
-                  <div className="w-full bg-[#0d170f] h-2 rounded-full overflow-hidden border border-[#00DF59]/40">
-                    <div 
-                      className="bg-[#00DF59] h-full transition-[width] duration-200"
-                      style={{ width: `${audioProgress}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono text-[#00DF59] mt-1">
-                    <span>{currentTimeStr}</span>
-                    <span>{t('radio.continuous')}</span>
-                    <span>{durationStr}</span>
+                  {/* Discreet Audio Visualizer */}
+                  <div className="w-28 sm:w-36 h-5">
+                    <AudioVisualizer isPlaying={isPlaying} powerOn={true} barCount={18} />
                   </div>
                 </div>
-
               </div>
 
-            </div>
+              {/* Grouped Controls: Previous, Play/Pause (Priority), Next + Volume + Recado */}
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                
+                {/* Playback Controls (Grouped Together) */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handlePrevTrack}
+                    aria-label="Faixa anterior"
+                    className="p-2.5 bg-[#17100a] hover:bg-[#2b180d] text-[#FFE600] border border-[#3d2415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
+                  >
+                    <SkipBack size={16} />
+                  </button>
 
-          </div>
+                  {/* Main Play/Pause Button (Highest Visual Priority) */}
+                  <button
+                    onClick={handleTogglePlay}
+                    aria-label={isPlaying ? "Pausar rádio" : "Tocar rádio"}
+                    className="flex items-center gap-2 bg-[#00DF59] hover:bg-[#FFE600] text-black font-mono font-bold text-xs uppercase px-5 py-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
+                    {isPlaying ? <Pause size={16} fill="black" /> : <Play size={16} fill="black" />}
+                    <span>{isPlaying ? 'PAUSAR' : 'TOCAR'}</span>
+                  </button>
 
-          {/* Bottom Physical Controls Panel (Knobs, Switch, Buttons) */}
-          <div className="mt-6 pt-5 border-t-2 border-[#472c1a] flex flex-wrap items-center justify-between gap-4">
-            
-            {/* Left: Volume, Power, Play/Pause */}
-            <div className="flex items-center gap-3 flex-wrap">
-              {/* Power Switch */}
-              <button 
-                onClick={handleTogglePower}
-                className={`px-4 py-2 rounded font-mono text-xs font-black uppercase tracking-wider transition-all border-2 flex items-center gap-2 ${
-                  powerOn 
-                    ? 'bg-[#00DF59] border-[#00DF59] text-black' 
-                    : 'bg-[#2b180d] border-[#472c1a] text-gray-400 hover:text-white'
-                }`}
-              >
-                <span className={`w-2 h-2 rounded-full ${powerOn ? 'bg-black' : 'bg-red-500'}`}></span>
-                {powerOn ? t('radio.power_on') : t('radio.turn_on')}
-              </button>
+                  <button
+                    onClick={handleNextTrack}
+                    aria-label="Próxima faixa"
+                    className="p-2.5 bg-[#17100a] hover:bg-[#2b180d] text-[#FFE600] border border-[#3d2415] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFE600]"
+                  >
+                    <SkipForward size={16} />
+                  </button>
+                </div>
 
-              {/* Play / Pause Toggle */}
-              <button 
-                onClick={handleTogglePlay}
-                disabled={!powerOn}
-                className="px-4 py-2 bg-[#1f150e] hover:bg-[#332014] disabled:opacity-40 text-white font-mono text-xs font-bold uppercase tracking-wider border-2 border-[#472c1a] rounded transition-colors"
-              >
-                {isPlaying ? t('radio.pause') : t('radio.play')}
-              </button>
+                {/* Volume Slider */}
+                <div className="flex items-center gap-2 bg-[#140e09] px-3 py-2 border border-[#3d2415]">
+                  <button
+                    onClick={() => setIsMuted(!isMuted)}
+                    aria-label={isMuted ? "Ativar som" : "Silenciar som"}
+                    className="text-[#FFE600] hover:text-white transition-colors"
+                  >
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                  </button>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    aria-label="Volume da rádio"
+                    value={isMuted ? 0 : volume}
+                    onChange={(e) => {
+                      setVolume(parseFloat(e.target.value));
+                      if (isMuted) setIsMuted(false);
+                    }}
+                    className="w-16 sm:w-20 accent-[#00DF59] cursor-pointer"
+                  />
+                </div>
 
-              {/* Mute Toggle & Volume Slider */}
-              <div className="flex items-center gap-2 bg-[#140e09] px-3 py-1.5 rounded border border-[#3d2415]">
-                <button 
-                  onClick={() => setIsMuted(!isMuted)} 
-                  className="text-[#FFE600] hover:text-white transition-colors"
-                  title={isMuted ? t('radio.unmute') : t('radio.mute')}
+                {/* Mandar Recado Action */}
+                <button
+                  ref={recadoBtnRef}
+                  onClick={() => setShowRecadoModal(true)}
+                  aria-label="Mandar um recado para o álbum"
+                  className="inline-flex items-center gap-1.5 border border-[#00DF59]/50 hover:border-[#00DF59] text-[#00DF59] hover:bg-[#00DF59]/10 font-mono text-xs uppercase px-3 py-2 transition-colors"
                 >
-                  {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                  <MessageSquare size={14} />
+                  <span>Mandar recado</span>
                 </button>
-                <input 
-                  type="range" 
-                  min="0" 
-                  max="1" 
-                  step="0.05"
-                  value={isMuted ? 0 : volume}
-                  onChange={(e) => {
-                    setVolume(parseFloat(e.target.value));
-                    if (isMuted) setIsMuted(false);
-                  }}
-                  className="w-16 md:w-24 accent-[#00DF59] cursor-pointer"
-                />
+
               </div>
-            </div>
-
-            {/* Right: Track Skip & Recado Button */}
-            <div className="flex items-center gap-3">
-              
-              {/* Previous Track */}
-              <button 
-                onClick={handlePrevTrack}
-                disabled={!powerOn}
-                className="px-3 py-2 bg-[#1f150e] hover:bg-[#332014] disabled:opacity-40 text-[#FFE600] font-mono text-xs font-bold uppercase tracking-wider border-2 border-[#472c1a] rounded transition-colors"
-                title={t('radio.prev_title')}
-              >
-                {t('radio.prev')}
-              </button>
-
-              {/* Next Track Button */}
-              <button 
-                onClick={handleNextTrack}
-                disabled={!powerOn}
-                className="px-5 py-2.5 bg-[#FFE600] text-black font-black text-xs md:text-sm tracking-widest uppercase rounded hover:bg-[#00DF59] active:scale-95 disabled:opacity-40 transition-all flex items-center gap-2 border-2 border-white"
-              >
-                <span>{t('radio.next')}</span>
-                <ArrowRight size={16} />
-              </button>
-
-              {/* Easter Egg Button: "MANDE UM RECADO!" */}
-              <button 
-                onClick={() => setShowRecadoModal(true)}
-                className="px-4 py-2.5 bg-[#17100a] hover:bg-[#241910] text-[#00DF59] hover:text-[#FFE600] border-2 border-[#00DF59] font-mono text-xs font-black uppercase tracking-wider rounded transition-all flex items-center gap-2 active:scale-95"
-              >
-                <MessageSquare size={16} />
-                <span>{t('radio.message_btn')}</span>
-              </button>
 
             </div>
 
@@ -631,23 +440,22 @@ export default function Radio() {
 
       </div>
 
-      {/* Discrete bottom link to return to the normal site experience */}
-      <div className="mt-8 text-center">
+      {/* Discrete return link */}
+      <div className="mt-8">
         <Link 
           to="/home" 
-          className="group inline-flex items-center gap-3 text-gray-400 hover:text-white font-mono text-xs md:text-sm tracking-[0.2em] uppercase border-b border-white/20 hover:border-[#00DF59] pb-1 transition-all"
+          className="inline-flex items-center gap-2 text-[#E0E0E0]/60 hover:text-white font-mono text-xs uppercase tracking-wider transition-colors"
         >
           <span>{t('radio.back_to_site')}</span>
-          <ArrowRight size={16} className="text-[#00DF59] group-hover:translate-x-1 transition-transform" />
+          <ArrowRight size={14} />
         </Link>
       </div>
 
-      {/* =========================================================================
-          📞 MODAL: "MANDE UM RECADO!" (GRAVAÇÃO DE ÁUDIO PARA INTERLÚDIOS)
-         ========================================================================= */}
+      {/* Recado Recording Modal */}
       <RadioMessageModal 
         isOpen={showRecadoModal} 
-        onClose={() => setShowRecadoModal(false)} 
+        onClose={() => setShowRecadoModal(false)}
+        triggerRef={recadoBtnRef}
       />
 
     </div>

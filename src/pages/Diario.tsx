@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
 import { db } from '../lib/firebase';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import { useAdminAuth } from '../lib/authUtils';
 import { useLanguage } from '../contexts/LanguageContext';
-import { BookOpen, Plus, Trash2, LogOut, Lock } from 'lucide-react';
+import { Plus, Trash2, LogOut } from 'lucide-react';
 
 interface DiaryEntry {
   id: string;
@@ -16,20 +15,33 @@ interface DiaryEntry {
 export default function Diario() {
   const { isAdmin, logoutAdmin } = useAdminAuth();
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
+    setIsLoading(true);
+    setHasError(false);
     const q = query(collection(db, 'diario'), orderBy('createdAt', 'desc'));
-    const unsub = onSnapshot(q, (snapshot) => {
-      const posts: DiaryEntry[] = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as DiaryEntry[];
-      setEntries(posts);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const posts: DiaryEntry[] = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as DiaryEntry[];
+        setEntries(posts);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error('Error fetching diary entries:', error);
+        setHasError(true);
+        setIsLoading(false);
+      }
+    );
     return () => unsub();
   }, []);
 
@@ -65,49 +77,33 @@ export default function Diario() {
   };
 
   const formatDate = (ts: any) => {
-    if (!ts) return 'HOJE';
+    if (!ts) return 'Hoje';
     if (ts.toDate) {
       const d = ts.toDate();
       return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
-    return 'HOJE';
+    return 'Hoje';
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto pb-24 space-y-12">
+    <div className="w-full max-w-3xl mx-auto pb-24 space-y-12">
       
-      {/* Header */}
+      {/* Header (No public admin login link, admin actions only when logged in) */}
       <div className="border-b-2 border-[#FFFFFF]/15 pb-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="font-mono text-xs text-[#00DF59] uppercase tracking-[0.25em] mb-2 flex items-center gap-2">
-              <BookOpen size={14} />
-              <span>CADERNO DE CAMPO & ATUALIZAÇÕES</span>
-            </div>
-            <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
-              {t('diario.title')}
-            </h1>
-          </div>
+        <div className="flex items-end justify-between gap-4">
+          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white">
+            {t('diario.title')}
+          </h1>
 
-          <div className="font-mono text-xs">
-            {isAdmin ? (
-              <button
-                onClick={logoutAdmin}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#FFE600]/40 text-[#FFE600] hover:bg-[#FFE600] hover:text-black transition-colors uppercase font-bold"
-              >
-                <LogOut size={13} />
-                <span>{t('diario.logout_btn')}</span>
-              </button>
-            ) : (
-              <a
-                href="/admin"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#FFFFFF]/15 text-[#E0E0E0]/50 hover:text-white hover:border-white transition-colors uppercase"
-              >
-                <Lock size={12} />
-                <span>{t('diario.admin_btn')}</span>
-              </a>
-            )}
-          </div>
+          {isAdmin && (
+            <button
+              onClick={logoutAdmin}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#FFE600]/40 text-[#FFE600] hover:bg-[#FFE600] hover:text-black transition-colors font-mono text-xs uppercase font-bold"
+            >
+              <LogOut size={13} />
+              <span>{t('diario.logout_btn')}</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -116,7 +112,7 @@ export default function Diario() {
         <section className="border-2 border-[#00DF59] bg-[#111111] p-6 space-y-4">
           <div className="font-mono text-xs text-[#00DF59] uppercase tracking-wider font-bold flex items-center gap-2">
             <Plus size={14} />
-            <span>NOVA ENTRADA NO DIÁRIO</span>
+            <span>Nova entrada no diário</span>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -140,42 +136,48 @@ export default function Diario() {
               disabled={submitting}
               className="bg-[#00DF59] text-black py-3 font-mono text-xs uppercase font-bold tracking-widest hover:bg-[#FFE600] transition-colors self-start px-6 disabled:opacity-50"
             >
-              {submitting ? 'PUBLICANDO...' : t('diario.publish')}
+              {submitting ? 'Publicando...' : t('diario.publish')}
             </button>
           </form>
         </section>
       )}
 
-      {/* Diary Entries List */}
-      <div className="space-y-8">
-        {entries.length === 0 ? (
-          <div className="p-12 border-2 border-dashed border-[#FFFFFF]/15 text-center font-mono text-xs text-[#E0E0E0]/50 uppercase tracking-widest">
-            Nenhum registro encontrado no diário.
+      {/* Diary Entries List - Clean broadsheet spacing & simple dividers */}
+      <div className="space-y-12">
+        {isLoading ? (
+          <div className="py-12 text-center font-mono text-xs text-[#E0E0E0]/60 uppercase tracking-wider">
+            Carregando registros...
+          </div>
+        ) : hasError ? (
+          <div className="py-12 text-center font-mono text-xs text-red-400 uppercase tracking-wider">
+            Erro ao carregar o diário. Verifique sua conexão.
+          </div>
+        ) : entries.length === 0 ? (
+          <div className="py-12 text-center font-mono text-xs text-[#E0E0E0]/50 uppercase tracking-wider">
+            Nenhum registro encontrado.
           </div>
         ) : (
-          entries.map((entry, idx) => (
+          entries.map((entry) => (
             <article 
               key={entry.id} 
-              className="border-2 border-[#FFFFFF]/15 bg-[#111111] p-6 sm:p-8 space-y-4 relative group"
+              className="border-b border-[#FFFFFF]/15 pb-10 space-y-3 relative"
             >
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#FFFFFF]/10 pb-3">
-                <span className="font-mono text-xs text-[#FFE600] uppercase tracking-widest tabular-nums">
-                  REGISTRO #{entries.length - idx} · {formatDate(entry.createdAt)}
-                </span>
+              <div className="flex items-center justify-between gap-4 font-mono text-xs text-[#E0E0E0]/60">
+                <time className="tabular-nums text-[#FFE600]">{formatDate(entry.createdAt)}</time>
                 
                 {isAdmin && (
                   <button 
                     onClick={() => handleDelete(entry.id)}
-                    className="text-red-400 hover:text-red-300 p-1 font-mono text-xs uppercase flex items-center gap-1"
+                    className="text-red-400 hover:text-red-300 font-mono text-xs uppercase flex items-center gap-1"
                     title={t('diario.delete')}
                   >
                     <Trash2 size={13} />
-                    <span>EXCLUIR</span>
+                    <span>Excluir</span>
                   </button>
                 )}
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
                 {entry.title}
               </h2>
 

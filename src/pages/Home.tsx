@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { Play, ExternalLink, Radio as RadioIcon, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Newsletter from '../components/Newsletter';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -9,63 +8,54 @@ export default function Home() {
   const { t } = useLanguage();
 
   return (
-    <div className="w-full flex flex-col gap-20 pb-20">
+    <div className="w-full flex flex-col gap-16 pb-20">
       
       {/* =========================================================================
           1. DESTAQUE PRINCIPAL: SANTINHO / carta pra alguém do passado
          ========================================================================= */}
       <section className="w-full border-2 border-[#FFFFFF]/15 bg-[#111111]">
         
-        {/* Editorial Top Ribbon */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-b-2 border-[#FFFFFF]/15 bg-[#080706] font-mono text-xs uppercase tracking-widest">
+        {/* Release Top Ribbon */}
+        <div className="flex items-center justify-between px-6 py-3 border-b-2 border-[#FFFFFF]/15 bg-[#080706] font-mono text-xs uppercase tracking-wider">
           <div className="flex items-center gap-3">
             <span className="inline-block w-2.5 h-2.5 bg-[#00DF59]"></span>
             <span className="font-bold text-[#00DF59]">{t('home.hero.badge')}</span>
             <span aria-hidden="true" className="text-[#FFFFFF]/20">/</span>
-            <span className="text-[#E0E0E0]/60">MARÇO 2026</span>
-          </div>
-          <div className="text-[#E0E0E0]/50 text-[11px] hidden sm:block">
-            CATÁLOGO: DSCPLS-008 · STEREO HI-FI
+            <span className="text-[#E0E0E0]/80">15 de julho de 2026</span>
           </div>
         </div>
 
-        {/* Main Release Grid: Cover + Editorial Info + Player */}
+        {/* Main Release Grid: Cover + Info + Video */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           
-          {/* Cover Art Column (Strict 1:1 Aspect Ratio, Original Resolution & Colors) */}
+          {/* Cover Art Column (Strict 1:1 Aspect Ratio, Served locally with fallback) */}
           <div className="lg:col-span-5 p-6 sm:p-8 md:p-10 flex flex-col items-center justify-center border-b-2 lg:border-b-0 lg:border-r-2 border-[#FFFFFF]/15 bg-[#080706]">
             <div className="w-full max-w-[420px] aspect-square border-2 border-[#FFFFFF]/20 relative overflow-hidden bg-black shadow-2xl">
               <img 
-                src="https://images.genius.com/e96155e60bf3aee39d248c77ca496b94.1000x1000x1.png" 
-                alt="SANTINHO / carta pra alguém do passado - DISCÍPULOS"
+                src="/santinho.png" 
+                alt="SANTINHO / carta pra alguém do passado"
                 className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.genius.com/e96155e60bf3aee39d248c77ca496b94.1000x1000x1.png";
+                }}
               />
-            </div>
-            <div className="w-full max-w-[420px] mt-4 flex items-center justify-between font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-widest">
-              <span>ARTE OFICIAL</span>
-              <span>1000 × 1000 PX</span>
             </div>
           </div>
 
           {/* Release Information & Actions Column */}
           <div className="lg:col-span-7 p-6 sm:p-8 md:p-10 flex flex-col justify-between">
             <div>
-              <div className="font-mono text-xs text-[#FFE600] uppercase tracking-[0.2em] mb-3">
-                DISCÍPULOS // NOVO SINGLE OFICIAL
-              </div>
-              
-              {/* Mandatory exact title with lowercase second half */}
+              {/* Exact casing preserved */}
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.05] mb-6">
                 SANTINHO <span className="text-[#00DF59]">/</span> <span className="font-bold text-[#E0E0E0] normal-case">carta pra alguém do passado</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-[#E0E0E0]/80 leading-relaxed max-w-2xl mb-8">
+              <p className="text-base sm:text-lg text-[#E0E0E0]/85 leading-relaxed max-w-2xl mb-8">
                 {t('home.hero.desc')}
               </p>
 
               {/* Action Buttons: Spotify Primary, YouTube Secondary */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-10">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-8">
                 <a 
                   href="https://open.spotify.com/intl-pt/album/3B8IoTNh5fDSwRqj48BXbU?si=fPTPcYqFRAC5j_Pie0rcKw" 
                   target="_blank" 
@@ -89,13 +79,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Embedded 16:9 Video Player in its own crisp frame */}
+            {/* Embedded 16:9 Player */}
             <div className="pt-6 border-t-2 border-[#FFFFFF]/15">
               <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 mb-3">
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                  VIDEOCLIPE OFICIAL (YOUTUBE)
-                </span>
+                <span>YOUTUBE</span>
                 <a 
                   href="https://youtu.be/ylupN-eLKq4"
                   target="_blank"
@@ -109,7 +96,7 @@ export default function Home() {
                 <iframe 
                   className="w-full h-full"
                   src="https://www.youtube.com/embed/ylupN-eLKq4" 
-                  title="SANTINHO / carta pra alguém do passado - DISCÍPULOS" 
+                  title="SANTINHO / carta pra alguém do passado" 
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                   allowFullScreen
                 ></iframe>
@@ -123,20 +110,17 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          2. RÁDIO LIXO BRASILEIRO EDITORIAL CALLOUT (94.7 FM)
+          2. RÁDIO LIXO BRASILEIRO
          ========================================================================= */}
       <section className="w-full border-2 border-[#FFE600]/40 bg-[#111111] p-6 sm:p-8 md:p-10 relative overflow-hidden">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2 font-mono text-xs text-[#FFE600] uppercase tracking-widest">
-              <RadioIcon size={16} />
-              <span>TRANSMISSÃO CONTÍNUA // 94.7 FM</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white">
-              RÁDIO LIXO BRASILEIRO
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white flex items-center gap-3">
+              <RadioIcon size={24} className="text-[#FFE600]" />
+              <span>RÁDIO LIXO BRASILEIRO</span>
             </h2>
             <p className="text-sm sm:text-base text-[#E0E0E0]/80 font-sans">
-              Programação com faixas inéditas, versões demo e canal aberto para gravação de mensagens de voz dos ouvintes para compor os interlúdios do novo álbum.
+              Programação com faixas inéditas, versões demo e espaço para gravação de mensagens de voz dos ouvintes para compor os interlúdios do novo álbum.
             </p>
           </div>
 
@@ -159,124 +143,69 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          3. LANÇAMENTOS ANTERIORES: BRIGAS FÚTEIS & flores
+          3. LANÇAMENTO SECUNDÁRIO: BRIGAS FÚTEIS
          ========================================================================= */}
       <section className="w-full space-y-6">
         <div className="flex items-baseline justify-between border-b-2 border-[#FFFFFF]/15 pb-4">
-          <div>
-            <span className="font-mono text-xs text-[#00DF59] uppercase tracking-widest block mb-1">
-              ARQUIVO AUDIOVISUAL
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
-              LANÇAMENTOS RECENTES
-            </h2>
-          </div>
+          <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
+            BRIGAS FÚTEIS
+          </h2>
           <Link 
             to="/discografia"
             className="font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 hover:text-[#00DF59] transition-colors flex items-center gap-1"
           >
-            <span>VER DISCOGRAFIA</span>
+            <span>DISCOGRAFIA COMPLETA</span>
             <ArrowRight size={13} />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* BRIGAS FÚTEIS */}
-          <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
-            <div className="p-6 md:p-8 space-y-4">
-              <div className="flex items-center justify-between font-mono text-xs text-[#E0E0E0]/60 uppercase">
-                <span className="text-[#00DF59] font-bold">SINGLE // 2026</span>
-                <span>FEV 2026</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
-                BRIGAS FÚTEIS
-              </h3>
-              <p className="text-sm text-[#E0E0E0]/80 leading-relaxed font-sans">
-                O single que marcou a entrada na nova fase sonora do grupo. Assista ao videoclipe oficial gravado em plano sequência.
+        <div className="border-2 border-[#FFFFFF]/15 bg-[#111111] grid grid-cols-1 lg:grid-cols-12 gap-0">
+          <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-[#FFFFFF]/15">
+            <div className="space-y-4">
+              <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider block">
+                SINGLE, 2026
+              </span>
+              <p className="text-sm sm:text-base text-[#E0E0E0]/80 leading-relaxed font-sans">
+                {t('home.hero.desc_brigas') || 'O single "BRIGAS FÚTEIS" está disponível nas plataformas de streaming.'}
               </p>
             </div>
-
-            <div className="p-6 md:p-8 pt-0 space-y-4">
-              <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative">
-                <iframe 
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/_RHGBo6Mqpg" 
-                  title="BRIGAS FÚTEIS" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen
-                ></iframe>
-              </div>
-              <div className="pt-2">
-                <a 
-                  href="https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-mono text-xs font-bold text-[#00DF59] hover:text-[#FFE600] uppercase tracking-wider transition-colors"
-                >
-                  <span>OUVIR NO SPOTIFY</span>
-                  <ArrowUpRight size={14} />
-                </a>
-              </div>
+            <div className="pt-6">
+              <a 
+                href="https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 font-mono text-xs font-bold bg-[#00DF59] text-black px-5 py-3 uppercase tracking-wider hover:bg-[#FFE600] transition-colors"
+              >
+                <Play size={14} fill="black" />
+                <span>OUVIR NO SPOTIFY</span>
+                <ArrowUpRight size={14} />
+              </a>
             </div>
-          </article>
+          </div>
 
-          {/* flores */}
-          <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
-            <div className="p-6 md:p-8 space-y-4">
-              <div className="flex items-center justify-between font-mono text-xs text-[#E0E0E0]/60 uppercase">
-                <span className="text-[#FFE600] font-bold">SINGLE // 2025</span>
-                <span>DEZ 2025</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
-                flores
-              </h3>
-              <p className="text-sm text-[#E0E0E0]/80 leading-relaxed font-sans">
-                Uma peça conceitual que transita entre o intimismo acústico e a percussão acelerada. Uma ponte entre os álbuns Fases e RDPDNG.
-              </p>
+          <div className="lg:col-span-7 p-6 sm:p-8 bg-[#080706]">
+            <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative shadow-md">
+              <iframe 
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/_RHGBo6Mqpg" 
+                title="BRIGAS FÚTEIS" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
             </div>
-
-            <div className="p-6 md:p-8 pt-0 space-y-4">
-              <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative">
-                <iframe 
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/WtwCkBN3i-M" 
-                  title="flores" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen
-                ></iframe>
-              </div>
-              <div className="pt-2">
-                <a 
-                  href="https://open.spotify.com/album/4Ts0gwYGzmMU77jnjyNJiZ?si=DmnYfHfbR3ath9Ur4kAbEA" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 font-mono text-xs font-bold text-[#FFE600] hover:text-[#00DF59] uppercase tracking-wider transition-colors"
-                >
-                  <span>OUVIR NO SPOTIFY</span>
-                  <ArrowUpRight size={14} />
-                </a>
-              </div>
-            </div>
-          </article>
-
+          </div>
         </div>
       </section>
 
       {/* =========================================================================
-          4. CAMISETAS & MERCHANDISING OFICIAL (DSCPLS.SHOP)
+          4. CAMISETAS (DSCPLS.SHOP)
          ========================================================================= */}
       <section className="w-full space-y-8">
         
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b-2 border-[#FFFFFF]/15 pb-4 gap-4">
-          <div>
-            <span className="font-mono text-xs text-[#FFE600] uppercase tracking-widest block mb-1">
-              DROP OFICIAL DE PRODUTOS
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
-              {t('home.merch.title')}
-            </h2>
-          </div>
+          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white">
+            {t('home.merch.title')}
+          </h2>
           <a 
             href="https://dscpls.shop" 
             target="_blank" 
@@ -288,7 +217,7 @@ export default function Home() {
           </a>
         </div>
 
-        {/* Real Band Products Grid without generic blue-grey backgrounds */}
+        {/* Real Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
           {/* Camiseta 1 */}
@@ -307,7 +236,6 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <span className="font-mono text-[11px] text-[#00DF59] uppercase tracking-wider mb-1 block">ESTAMPA 01</span>
               <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.namna')}
               </h3>
@@ -330,7 +258,6 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <span className="font-mono text-[11px] text-[#FFE600] uppercase tracking-wider mb-1 block">ESTAMPA 02</span>
               <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
                 {t('home.merch.eamo')}
               </h3>
@@ -353,7 +280,6 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <span className="font-mono text-[11px] text-[#00DF59] uppercase tracking-wider mb-1 block">ESTAMPA 03</span>
               <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.eros')}
               </h3>
@@ -377,9 +303,6 @@ export default function Home() {
             </div>
             <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="font-mono text-[11px] text-[#FFE600] uppercase tracking-wider block">
-                  {t('home.merch.groove')}
-                </span>
                 <h3 className="font-sans font-bold text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
                   {t('home.merch.heroes')}
                 </h3>
@@ -406,17 +329,12 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <span className="font-mono text-[11px] text-[#00DF59] uppercase tracking-wider mb-1 block">ESTAMPA 04</span>
               <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.world')}
               </h3>
             </div>
           </a>
 
-        </div>
-
-        <div className="font-mono text-xs text-[#E0E0E0]/60 text-center tracking-widest uppercase">
-          {t('home.merch.available')}
         </div>
 
       </section>

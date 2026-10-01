@@ -1,6 +1,6 @@
 {
   "name": "DSCPLS website oficial",
-  "description": "Site oficial da banda DISCÍPULOS (DSCPLS) — Fase LIXO BRASILEIRO com transmissão da Rádio ao vivo, discografia, sobre, jogos e diário.",
+  "description": "Site oficial da banda DISCÍPULOS (DSCPLS), com transmissão da Rádio ao vivo, discografia, sobre, jogos e diário.",
   "requestFramePermissions": [
     "microphone"
   ],

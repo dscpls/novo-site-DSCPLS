@@ -45,14 +45,6 @@ export default function Navigation() {
               className="h-7 sm:h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 active:scale-95"
             />
           </Link>
-
-          {/* Quick context badge for Radio mode */}
-          {isRadioLanding && (
-            <span className="hidden sm:inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-[#00DF59] uppercase border border-[#00DF59]/30 px-2 py-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00DF59] animate-pulse"></span>
-              94.7 FM
-            </span>
-          )}
         </div>
 
         {/* Radio Mode: Direct access to main site right in the first frame */}

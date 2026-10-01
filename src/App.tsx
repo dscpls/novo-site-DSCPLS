@@ -109,12 +109,21 @@ function Footer() {
   );
 }
 
+function TitleEnforcer() {
+  const location = useLocation();
+  useEffect(() => {
+    document.title = 'DSCPLS';
+  }, [location.pathname]);
+  return null;
+}
+
 export default function App() {
   const [crtActive, setCrtActive] = useState(false);
 
   return (
     <LanguageProvider>
       <BrowserRouter>
+        <TitleEnforcer />
         <GlobalWordTrigger />
         {/* Background grain/noise globally */}
         <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise opacity-40"></div>
