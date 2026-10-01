@@ -19,6 +19,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+    }
+  }, [lang]);
+
   const changeLang = (l: Language) => {
     setLang(l);
     localStorage.setItem('dscpls_lang', l);

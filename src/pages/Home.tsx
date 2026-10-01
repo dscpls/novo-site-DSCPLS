@@ -4,6 +4,66 @@ import { Play, ExternalLink, Radio as RadioIcon, ArrowUpRight, ArrowRight } from
 import Newsletter from '../components/Newsletter';
 import { useLanguage } from '../contexts/LanguageContext';
 
+function MerchCard({
+  title,
+  imgSrc,
+  alt,
+  link = "https://dscpls.shop",
+  span2 = false,
+}: {
+  title: string;
+  imgSrc: string;
+  alt: string;
+  link?: string;
+  span2?: boolean;
+}) {
+  const { t } = useLanguage();
+  const [hasError, setHasError] = React.useState(false);
+
+  return (
+    <a 
+      href={link} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className={`group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col ${
+        span2 ? 'sm:col-span-2' : ''
+      }`}
+    >
+      <div className={`${span2 ? 'aspect-video md:aspect-[21/9]' : 'aspect-square'} bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15 relative`}>
+        {!hasError ? (
+          <img 
+            src={imgSrc} 
+            alt={alt} 
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            referrerPolicy="no-referrer" 
+            onError={() => setHasError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 space-y-2 border border-dashed border-[#FFFFFF]/20">
+            <span className="font-mono text-[10px] text-[#FFE600] border border-[#FFE600]/40 px-2 py-0.5 uppercase tracking-wider">
+              CATÁLOGO OFICIAL · DSCPLS.SHOP
+            </span>
+            <div className="font-title font-bold text-sm sm:text-base text-white uppercase tracking-tight">
+              {title}
+            </div>
+            <span className="font-mono text-[11px] text-[#00DF59] uppercase tracking-wider">
+              {t('home.merch.store')}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
+          {title}
+        </h3>
+        <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider mt-3 inline-block">
+          {t('home.merch.store')}
+        </span>
+      </div>
+    </a>
+  );
+}
+
 export default function Home() {
   const { t } = useLanguage();
 
@@ -21,7 +81,7 @@ export default function Home() {
             <span className="inline-block w-2.5 h-2.5 bg-[#00DF59]"></span>
             <span className="font-bold text-[#00DF59]">{t('home.hero.badge')}</span>
             <span aria-hidden="true" className="text-[#FFFFFF]/20">/</span>
-            <span className="text-[#E0E0E0]/80">15 de julho de 2026</span>
+            <span className="text-[#E0E0E0]/80">{t('home.hero.release_date')}</span>
           </div>
         </div>
 
@@ -82,14 +142,14 @@ export default function Home() {
             {/* Embedded 16:9 Player (Music on YouTube) */}
             <div className="pt-6 border-t-2 border-[#FFFFFF]/15">
               <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 mb-3">
-                <span>MÚSICA NO YOUTUBE</span>
+                <span>{t('home.hero.yt_audio_badge')}</span>
                 <a 
                   href="https://youtu.be/ylupN-eLKq4"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  OUVIR NO YT ↗
+                  {t('home.hero.yt_listen')}
                 </a>
               </div>
               <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative shadow-md">
@@ -117,10 +177,10 @@ export default function Home() {
           <div className="space-y-2 max-w-2xl">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white flex items-center gap-3">
               <RadioIcon size={24} className="text-[#FFE600]" />
-              <span>RÁDIO LIXO BRASILEIRO</span>
+              <span>{t('home.radio.title')}</span>
             </h2>
             <p className="text-sm sm:text-base text-[#E0E0E0]/80 font-sans">
-              Programação com faixas inéditas, versões demo e espaço para gravação de mensagens de voz dos ouvintes para compor os interlúdios do novo álbum.
+              {t('home.radio.desc')}
             </p>
           </div>
 
@@ -129,14 +189,15 @@ export default function Home() {
               to="/" 
               className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#00DF59] text-black font-mono font-bold text-xs uppercase px-6 py-4 tracking-wider transition-colors"
             >
-              <span>SINTONIZAR RÁDIO</span>
+              <span>{t('home.radio.tune')}</span>
               <ArrowRight size={15} />
             </Link>
             <Link 
-              to="/" 
+              to="/?modal=recado" 
+              state={{ openModal: true }}
               className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 border-2 border-[#FFFFFF]/25 hover:border-white text-white font-mono text-xs uppercase px-5 py-4 tracking-wider transition-colors"
             >
-              <span>GRAVAR RECADO</span>
+              <span>{t('home.radio.record')}</span>
             </Link>
           </div>
         </div>
@@ -159,7 +220,7 @@ export default function Home() {
             to="/discografia"
             className="font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 hover:text-[#00DF59] transition-colors flex items-center gap-1"
           >
-            <span>DISCOGRAFIA COMPLETA</span>
+            <span>{t('home.brigas.all_disc')}</span>
             <ArrowRight size={13} />
           </Link>
         </div>
@@ -170,9 +231,17 @@ export default function Home() {
               <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider block">
                 {t('home.brigas.badge')} · SINGLE, 2026
               </span>
-              <p className="text-sm sm:text-base text-[#E0E0E0]/90 leading-relaxed font-sans">
-                {t('home.brigas.synopsis')}
-              </p>
+              <div className="space-y-3">
+                <p className="font-mono text-xs text-[#FFE600] uppercase tracking-wider font-bold">
+                  {t('home.brigas.check_video')}
+                </p>
+                <p className="text-sm sm:text-base text-[#E0E0E0]/95 leading-relaxed font-sans">
+                  "{t('home.brigas.synopsis')}"
+                </p>
+                <p className="text-xs sm:text-sm font-mono text-[#00DF59] font-medium tracking-wide">
+                  {t('home.brigas.teaser')}
+                </p>
+              </div>
             </div>
             <div className="pt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <a 
@@ -182,7 +251,7 @@ export default function Home() {
                 className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold bg-[#00DF59] text-black px-5 py-3 uppercase tracking-wider hover:bg-[#FFE600] transition-colors"
               >
                 <Play size={14} fill="black" />
-                <span>OUVIR NO SPOTIFY</span>
+                <span>{t('home.brigas.spotify')}</span>
                 <ArrowUpRight size={14} />
               </a>
 
@@ -207,7 +276,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="hover:text-white transition-colors"
               >
-                ABRIR NO YT ↗
+                {t('home.brigas.open_yt')}
               </a>
             </div>
             <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative shadow-md">
@@ -247,119 +316,40 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
           {/* Camiseta 1 */}
-          <a 
-            href="https://dscpls.shop" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col"
-          >
-            <div className="aspect-square bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15">
-              <img 
-                src="https://media.discordapp.net/attachments/1137467200245088317/1495844838644519085/1f357468-5c18-4605-a53e-fae85249b41d.png?ex=69e7b990&is=69e66810&hm=b561ec4548f6823c7d086bd4179ddad4aac4fa4dea1cfec600043bcacce942b6&animated=true" 
-                alt="não acredito mais no amor" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer" 
-              />
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
-                {t('home.merch.namna')}
-              </h3>
-            </div>
-          </a>
+          <MerchCard
+            title={t('home.merch.namna')}
+            imgSrc="https://media.discordapp.net/attachments/1137467200245088317/1495844838644519085/1f357468-5c18-4605-a53e-fae85249b41d.png?ex=69e7b990&is=69e66810&hm=b561ec4548f6823c7d086bd4179ddad4aac4fa4dea1cfec600043bcacce942b6&animated=true"
+            alt="Camiseta não acredito mais no amor"
+          />
 
           {/* Camiseta 2 */}
-          <a 
-            href="https://dscpls.shop" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col"
-          >
-            <div className="aspect-square bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15">
-              <img 
-                src="https://media.discordapp.net/attachments/1137467200245088317/1495844839391232211/9c174e84-4762-4315-88da-1da6695100a2.png?ex=69e7b991&is=69e66811&hm=8d264c34c2847300f518d4c4aec9d602ab188448b6b7b653931ec84a7937d64b&animated=true" 
-                alt="eu AMO a DISCÍPULOS" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer" 
-              />
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
-                {t('home.merch.eamo')}
-              </h3>
-            </div>
-          </a>
+          <MerchCard
+            title={t('home.merch.eamo')}
+            imgSrc="https://media.discordapp.net/attachments/1137467200245088317/1495844839391232211/9c174e84-4762-4315-88da-1da6695100a2.png?ex=69e7b991&is=69e66811&hm=8d264c34c2847300f518d4c4aec9d602ab188448b6b7b653931ec84a7937d64b&animated=true"
+            alt="Camiseta eu AMO a DISCÍPULOS"
+          />
 
           {/* Camiseta 3 */}
-          <a 
-            href="https://dscpls.shop" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col"
-          >
-            <div className="aspect-square bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15">
-              <img 
-                src="https://media.discordapp.net/attachments/1137467200245088317/1495844839693090947/834d206c-119f-42ce-a04b-7d4b0000e2b3.png?ex=69e7b991&is=69e66811&hm=0487b45089585c5e77a44e003ea3b7b92922b035bf66f36c49c578eace9ebe62&animated=true" 
-                alt="eros - caligrafia" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer" 
-              />
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
-                {t('home.merch.eros')}
-              </h3>
-            </div>
-          </a>
+          <MerchCard
+            title={t('home.merch.eros')}
+            imgSrc="https://media.discordapp.net/attachments/1137467200245088317/1495844839693090947/834d206c-119f-42ce-a04b-7d4b0000e2b3.png?ex=69e7b991&is=69e66811&hm=0487b45089585c5e77a44e003ea3b7b92922b035bf66f36c49c578eace9ebe62&animated=true"
+            alt="Camiseta eros - caligrafia"
+          />
 
-          {/* Camiseta 4 (Coleção GROOVE) */}
-          <a 
-            href="https://dscpls.shop" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col sm:col-span-2"
-          >
-            <div className="aspect-video md:aspect-[21/9] bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15">
-              <img 
-                src="https://media.discordapp.net/attachments/1137467200245088317/1495844840070582272/bace7562-6def-4e1d-9c72-6891a6473cd3.png?ex=69e7b991&is=69e66811&hm=3533e5aa508990e9f82d5240394018622e89f6b9ed9c8eb6ea2bbc63a3892f98&animated=true" 
-                alt="Coleção GROOVE" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer" 
-              />
-            </div>
-            <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h3 className="font-title font-bold text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
-                  {t('home.merch.heroes')}
-                </h3>
-              </div>
-              <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider shrink-0">
-                VER PRODUTO ↗
-              </span>
-            </div>
-          </a>
+          {/* Camiseta 4 (Todos os meus heróis eram canibais) */}
+          <MerchCard
+            title={t('home.merch.heroes')}
+            imgSrc="https://media.discordapp.net/attachments/1137467200245088317/1495844840070582272/bace7562-6def-4e1d-9c72-6891a6473cd3.png?ex=69e7b991&is=69e66811&hm=3533e5aa508990e9f82d5240394018622e89f6b9ed9c8eb6ea2bbc63a3892f98&animated=true"
+            alt="Camiseta Todos os meus heróis eram canibais"
+            span2={true}
+          />
 
           {/* Camiseta 5 */}
-          <a 
-            href="https://dscpls.shop" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-white transition-colors flex flex-col"
-          >
-            <div className="aspect-square bg-[#080706] p-6 flex items-center justify-center overflow-hidden border-b-2 border-[#FFFFFF]/15">
-              <img 
-                src="https://media.discordapp.net/attachments/1137467200245088317/1495844840410452038/758267f3-c583-46ce-8b7e-f9c91caa082f.png?ex=69e7b991&is=69e66811&hm=0937917753cb7f32131486dfb77937cfc271ab58a454c3dbd0f106bf9171d496&animated=true" 
-                alt="o mundo é da DSCPLS" 
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer" 
-              />
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
-                {t('home.merch.world')}
-              </h3>
-            </div>
-          </a>
+          <MerchCard
+            title={t('home.merch.world')}
+            imgSrc="https://media.discordapp.net/attachments/1137467200245088317/1495844840410452038/758267f3-c583-46ce-8b7e-f9c91caa082f.png?ex=69e7b991&is=69e66811&hm=0937917753cb7f32131486dfb77937cfc271ab58a454c3dbd0f106bf9171d496&animated=true"
+            alt="Camiseta o mundo é da DSCPLS"
+          />
 
         </div>
 

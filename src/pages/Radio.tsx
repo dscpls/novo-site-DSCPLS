@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Volume2, VolumeX, MessageSquare, ArrowRight, Play, Pause, SkipBack, SkipForward } from 'lucide-react';
+import { Volume2, VolumeX, MessageSquare, ArrowRight, ArrowUpRight, Play, Pause, SkipBack, SkipForward } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import AudioVisualizer from '../components/AudioVisualizer';
 import RadioMessageModal from '../components/RadioMessageModal';
@@ -440,8 +440,17 @@ export default function Radio() {
 
       </div>
 
-      {/* Discrete return link */}
-      <div className="mt-8">
+      {/* Discrete bottom links */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
+        <a 
+          href="https://instagram.com/radiolixobrasileiro" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[#FFE600]/80 hover:text-[#FFE600] font-mono text-xs uppercase tracking-wider transition-colors"
+        >
+          <span>Instagram @radiolixobrasileiro</span>
+          <ArrowUpRight size={13} />
+        </a>
         <Link 
           to="/home" 
           className="inline-flex items-center gap-2 text-[#E0E0E0]/60 hover:text-white font-mono text-xs uppercase tracking-wider transition-colors"

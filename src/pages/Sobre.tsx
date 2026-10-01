@@ -53,7 +53,7 @@ export default function Sobre() {
             </div>
 
             <p className="font-mono text-xs text-[#E0E0E0]/70">
-              Henriz e Gebriel na Liberdade, São Paulo, 23 de março de 2026.
+              {t('sobre.duo_caption')}
             </p>
           </div>
 
@@ -80,17 +80,17 @@ export default function Sobre() {
           {t('sobre.members')}
         </h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* HENRIZ */}
           <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
             <div>
-              {/* Photo Area */}
-              <div className="aspect-[16/10] bg-black border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
+              {/* Photo Area: Portrait proportion showing Henriz clearly in the lower/mid region */}
+              <div className="aspect-[3/4] sm:aspect-[4/5] bg-[#0c0c0c] border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
                 <img 
                   src="/henriz.jpg" 
                   alt="Henriz"
-                  className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover object-[center_65%] grayscale hover:grayscale-0 transition-all duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "https://i.imgur.com/7szM0kT.jpeg";
                   }}
@@ -134,12 +134,12 @@ export default function Sobre() {
           {/* GEBRIEL */}
           <article className="border-2 border-[#FFFFFF]/15 bg-[#111111] flex flex-col justify-between">
             <div>
-              {/* Photo Area */}
-              <div className="aspect-[16/10] bg-black border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
+              {/* Photo Area: Preserving full face (eyes, nose, mouth, chin) */}
+              <div className="aspect-[3/4] sm:aspect-[4/5] bg-[#0c0c0c] border-b-2 border-[#FFFFFF]/15 overflow-hidden relative">
                 <img 
                   src="/gebriel.webp" 
                   alt="Gebriel"
-                  className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover object-[center_25%] grayscale hover:grayscale-0 transition-all duration-500"
                   onError={(e) => {
                     e.currentTarget.src = "https://i.imgur.com/BHaiolL.png";
                   }}
@@ -155,9 +155,9 @@ export default function Sobre() {
                   <div className="flex flex-wrap gap-2 font-mono text-xs uppercase text-[#E0E0E0]/70">
                     <span className="text-[#FFE600] font-bold">{t('sobre.gebriel.role1')}</span>
                     <span aria-hidden="true">·</span>
-                    <span>LIRICISTA</span>
+                    <span>{t('sobre.gebriel.role2')}</span>
                     <span aria-hidden="true">·</span>
-                    <span>DIREITO USP</span>
+                    <span>{t('sobre.gebriel.role3')}</span>
                   </div>
                 </div>
 
@@ -222,10 +222,27 @@ export default function Sobre() {
                 {t('sobre.net_yt')}
               </div>
               <div className="font-bold text-lg text-white group-hover:text-red-400 transition-colors">
-                OS DISCIPULOS
+                DISCÍPULOS
               </div>
             </div>
             <ArrowUpRight size={18} className="text-[#E0E0E0]/40 group-hover:text-red-400 transition-colors" />
+          </a>
+
+          <a
+            href="https://instagram.com/radiolixobrasileiro"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-5 border-2 border-[#FFFFFF]/15 bg-[#111111] hover:border-[#FFE600] transition-colors flex items-center justify-between group"
+          >
+            <div>
+              <div className="font-mono text-[11px] text-[#FFE600] uppercase tracking-wider mb-1">
+                {t('sobre.net_radio_ig')}
+              </div>
+              <div className="font-bold text-lg text-white group-hover:text-[#FFE600] transition-colors">
+                @radiolixobrasileiro
+              </div>
+            </div>
+            <ArrowUpRight size={18} className="text-[#E0E0E0]/40 group-hover:text-[#FFE600] transition-colors" />
           </a>
 
           <a
@@ -253,7 +270,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                Henriz (Pessoal)
+                Henriz ({t('sobre.personal')})
               </div>
               <div className="font-bold text-base text-white group-hover:text-[#00DF59] transition-colors">
                 @gqnzaroli
@@ -270,7 +287,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                Gebriel (Pessoal)
+                Gebriel ({t('sobre.personal')})
               </div>
               <div className="font-bold text-base text-white group-hover:text-[#FFE600] transition-colors">
                 @o.garibel
@@ -285,7 +302,7 @@ export default function Sobre() {
           >
             <div>
               <div className="font-mono text-[11px] text-[#E0E0E0]/60 uppercase tracking-wider mb-1">
-                Contato
+                {t('sobre.contact')}
               </div>
               <div className="font-mono text-sm font-bold text-white group-hover:text-white transition-colors truncate">
                 discipulosabanda@gmail.com
