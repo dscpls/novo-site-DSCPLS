@@ -1,10 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700;800&family=VT323&display=swap');
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'DSCPLS-Body';
+  src: url('https://files.catbox.moe/g0e8v6.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DSCPLS-Body';
+  src: url('https://files.catbox.moe/g0e8v6.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-vt323: 'VT323', monospace;
-  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-title: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'DSCPLS-Body', 'IBM Plex Mono', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'DSCPLS-Body', 'IBM Plex Mono', ui-monospace, monospace;
+  --font-body: 'DSCPLS-Body', 'IBM Plex Mono', ui-sans-serif, system-ui, sans-serif;
   --bg-noise: url('data:image/svg+xml;utf8,%3CSVG xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23n)" opacity="0.08"/%3E%3C/SVG%3E');
 }
 
@@ -32,8 +51,36 @@
 @layer base {
   body {
     @apply bg-[#080706] text-[#e0e0e0];
-    font-family: var(--font-sans);
+    font-family: 'DSCPLS-Body', 'IBM Plex Mono', ui-sans-serif, system-ui, sans-serif;
     overflow-x: hidden;
+  }
+
+  /* Titles and subtitles preserve Space Grotesk */
+  h1, h2, h3, h4, h5, h6,
+  .font-title,
+  .font-heading,
+  [data-heading="true"] {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif !important;
+  }
+
+  /* All non-title, non-subtitle content uses the custom font */
+  p, 
+  span:not(h1 *):not(h2 *):not(h3 *):not(h4 *):not(h5 *):not(h6 *):not(.font-title):not(.font-heading),
+  a:not(h1 *):not(h2 *):not(h3 *):not(h4 *):not(h5 *):not(h6 *):not(.font-title):not(.font-heading),
+  button:not(h1 *):not(h2 *):not(h3 *):not(h4 *):not(.font-title):not(.font-heading),
+  input, 
+  textarea, 
+  select, 
+  label, 
+  li, 
+  td, 
+  th, 
+  blockquote, 
+  pre, 
+  code,
+  time,
+  small {
+    font-family: 'DSCPLS-Body', 'IBM Plex Mono', ui-sans-serif, system-ui, sans-serif;
   }
 }
 

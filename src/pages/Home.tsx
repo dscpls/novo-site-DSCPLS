@@ -79,17 +79,17 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Embedded 16:9 Player */}
+            {/* Embedded 16:9 Player (Music on YouTube) */}
             <div className="pt-6 border-t-2 border-[#FFFFFF]/15">
               <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 mb-3">
-                <span>YOUTUBE</span>
+                <span>MÚSICA NO YOUTUBE</span>
                 <a 
                   href="https://youtu.be/ylupN-eLKq4"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  ABRIR NO YT ↗
+                  OUVIR NO YT ↗
                 </a>
               </div>
               <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative shadow-md">
@@ -147,9 +147,14 @@ export default function Home() {
          ========================================================================= */}
       <section className="w-full space-y-6">
         <div className="flex items-baseline justify-between border-b-2 border-[#FFFFFF]/15 pb-4">
-          <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
-            BRIGAS FÚTEIS
-          </h2>
+          <div className="flex items-baseline gap-3">
+            <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white">
+              BRIGAS FÚTEIS
+            </h2>
+            <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider">
+              {t('home.brigas.badge')}
+            </span>
+          </div>
           <Link 
             to="/discografia"
             className="font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 hover:text-[#00DF59] transition-colors flex items-center gap-1"
@@ -163,32 +168,53 @@ export default function Home() {
           <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between border-b-2 lg:border-b-0 lg:border-r-2 border-[#FFFFFF]/15">
             <div className="space-y-4">
               <span className="font-mono text-xs text-[#00DF59] uppercase tracking-wider block">
-                SINGLE, 2026
+                {t('home.brigas.badge')} · SINGLE, 2026
               </span>
-              <p className="text-sm sm:text-base text-[#E0E0E0]/80 leading-relaxed font-sans">
-                {t('home.hero.desc_brigas') || 'O single "BRIGAS FÚTEIS" está disponível nas plataformas de streaming.'}
+              <p className="text-sm sm:text-base text-[#E0E0E0]/90 leading-relaxed font-sans">
+                {t('home.brigas.synopsis')}
               </p>
             </div>
-            <div className="pt-6">
+            <div className="pt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <a 
                 href="https://open.spotify.com/intl-pt/album/7lh4Vx29QbXMNAfUEu2E5y?si=vs4YVpTSRWiPkkL4459I2Q" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 font-mono text-xs font-bold bg-[#00DF59] text-black px-5 py-3 uppercase tracking-wider hover:bg-[#FFE600] transition-colors"
+                className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold bg-[#00DF59] text-black px-5 py-3 uppercase tracking-wider hover:bg-[#FFE600] transition-colors"
               >
                 <Play size={14} fill="black" />
                 <span>OUVIR NO SPOTIFY</span>
                 <ArrowUpRight size={14} />
               </a>
+
+              <a 
+                href="https://youtu.be/wxEF5UbhZ0s" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 font-mono text-xs font-bold border-2 border-[#FFFFFF]/30 text-white hover:border-[#FFE600] hover:text-[#FFE600] px-5 py-3 uppercase tracking-wider transition-colors"
+              >
+                <span>{t('home.brigas.youtube')}</span>
+                <ExternalLink size={14} />
+              </a>
             </div>
           </div>
 
           <div className="lg:col-span-7 p-6 sm:p-8 bg-[#080706]">
+            <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider text-[#E0E0E0]/60 mb-3">
+              <span>VIDEOCLIPE OFICIAL</span>
+              <a 
+                href="https://youtu.be/wxEF5UbhZ0s"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                ABRIR NO YT ↗
+              </a>
+            </div>
             <div className="w-full aspect-video border border-[#FFFFFF]/20 bg-black overflow-hidden relative shadow-md">
               <iframe 
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/_RHGBo6Mqpg" 
-                title="BRIGAS FÚTEIS" 
+                src="https://www.youtube.com/embed/wxEF5UbhZ0s" 
+                title="BRIGAS FÚTEIS (Clipe Oficial)" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                 allowFullScreen
               ></iframe>
@@ -236,7 +262,7 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
+              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.namna')}
               </h3>
             </div>
@@ -258,7 +284,7 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
+              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
                 {t('home.merch.eamo')}
               </h3>
             </div>
@@ -280,7 +306,7 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
+              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.eros')}
               </h3>
             </div>
@@ -303,7 +329,7 @@ export default function Home() {
             </div>
             <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="font-sans font-bold text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
+                <h3 className="font-title font-bold text-base sm:text-lg uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
                   {t('home.merch.heroes')}
                 </h3>
               </div>
@@ -329,7 +355,7 @@ export default function Home() {
               />
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
-              <h3 className="font-sans font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
+              <h3 className="font-title font-bold text-sm sm:text-base uppercase tracking-tight text-white group-hover:text-[#00DF59] transition-colors">
                 {t('home.merch.world')}
               </h3>
             </div>

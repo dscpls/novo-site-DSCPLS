@@ -290,7 +290,7 @@ export default function Radio() {
           
           {/* Radio Top: Brass Nameplate (Appears once) */}
           <div className="flex items-center justify-between border-b-2 border-[#3d2415] pb-4 mb-5">
-            <div className="bg-[#b88c42] text-black px-4 py-1 font-mono font-bold text-xs uppercase tracking-[0.2em] shadow-sm">
+            <div className="bg-[#b88c42] text-black px-4 py-1 font-title font-bold text-xs uppercase tracking-[0.2em] shadow-sm">
               RÁDIO LIXO BRASILEIRO
             </div>
 
@@ -334,7 +334,7 @@ export default function Radio() {
               {/* Single Integrated Digital Display (Track, Artist, Time, Visualizer) */}
               <div className="bg-[#050403] border-2 border-[#2b180d] p-4 space-y-3">
                 <div className="flex flex-col gap-1">
-                  <div className="font-mono text-sm sm:text-base font-bold text-[#00DF59] tracking-tight leading-snug break-words">
+                  <div className="font-title text-sm sm:text-base font-bold text-[#00DF59] tracking-tight leading-snug break-words">
                     {currentTrack.title}
                   </div>
                   <div className="font-mono text-xs text-[#d6a858]/90">

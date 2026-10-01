@@ -73,7 +73,7 @@ export default function Faq() {
                 aria-expanded={isOpen}
                 className="w-full py-5 text-left flex items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00DF59]"
               >
-                <h2 className="font-sans font-bold text-base sm:text-lg text-white leading-snug">
+                <h2 className="font-title font-bold text-base sm:text-lg text-white leading-snug">
                   {faq.q}
                 </h2>
                 <div className="shrink-0 mt-0.5 text-[#E0E0E0]/70">

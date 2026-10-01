@@ -117,6 +117,60 @@ function TitleEnforcer() {
   return null;
 }
 
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+
+      const raf = requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      });
+      return () => cancelAnimationFrame(raf);
+    } else {
+      const el = document.getElementById(hash.replace('#', ''));
+      if (el) {
+        el.scrollIntoView();
+      }
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
+
+function CustomFontLoader() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'fonts' in document) {
+      try {
+        const customFont = new FontFace('DSCPLS-Body', 'url(https://files.catbox.moe/g0e8v6.ttf)', {
+          style: 'normal',
+          weight: 'normal',
+          display: 'swap'
+        });
+        customFont.load().then((loaded) => {
+          document.fonts.add(loaded);
+        }).catch(() => {
+          // Graceful fallback to defined CSS stack
+        });
+      } catch {
+        // Graceful fallback
+      }
+    }
+  }, []);
+  return null;
+}
+
 export default function App() {
   const [crtActive, setCrtActive] = useState(false);
 
@@ -124,6 +178,8 @@ export default function App() {
     <LanguageProvider>
       <BrowserRouter>
         <TitleEnforcer />
+        <ScrollToTop />
+        <CustomFontLoader />
         <GlobalWordTrigger />
         {/* Background grain/noise globally */}
         <div className="fixed inset-0 pointer-events-none z-[900] mix-blend-screen bg-noise opacity-40"></div>

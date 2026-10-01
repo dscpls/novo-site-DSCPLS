@@ -199,7 +199,7 @@ export default function Discografia() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 border border-[#FFFFFF]/25 hover:border-white text-white font-mono text-xs uppercase px-4 py-3 tracking-wider transition-colors"
                 >
-                  <span>ASSISTIR NO YOUTUBE</span>
+                  <span>OUVIR NO YOUTUBE</span>
                   <ArrowUpRight size={14} />
                 </a>
               </div>
